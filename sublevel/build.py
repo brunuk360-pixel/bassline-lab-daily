@@ -265,6 +265,39 @@ data,n=re.subn(br"</body\s*>",lambda m:('<script>'+unsigned_js+'</script>').enco
 assert n==1
 print("Unsigned beta entry included; community accounts remain separate.")
 
+# Source-dated chart data is separate from editorial picks.
+from datetime import date
+chart_feed=json.loads((root/"charts.json").read_text(encoding="utf-8"))
+assert date.fromisoformat(chart_feed["checked"])
+chart_ids=set()
+for chart in chart_feed["charts"]:
+    assert chart["id"] not in chart_ids
+    chart_ids.add(chart["id"])
+    assert chart["status"] in ("verified","snapshot")
+    assert chart["url"].startswith("https://")
+    assert date.fromisoformat(chart["checked"])
+    if chart.get("through"):
+        assert date.fromisoformat(chart["from"])<=date.fromisoformat(chart["through"])
+    assert [r["rank"] for r in chart["rows"]]==list(range(1,11)), "Chart must include exactly ranks 1–10"
+    assert len({(r["title"].casefold(),r["artist"].casefold()) for r in chart["rows"]})==10
+    assert all(r["title"].strip() and r["artist"].strip() and all(r.get(k,"https://").startswith("https://") for k in ("url","art")) for r in chart["rows"])
+for source in chart_feed["sources"]:
+    assert source[1].startswith("https://")
+    assert len(source)==2 or source[2] in chart_ids
+chart_css=(root/"charts.css").read_text(encoding="utf-8")
+chart_js=(root/"charts.js").read_text(encoding="utf-8")
+if shutil.which("node"):
+    subprocess.run(["node","--check",str(root/"charts.js")],check=True)
+    subprocess.run(["node",str(root/"charts-test.cjs")],check=True)
+chart_patch=('<style id="sublevel-charts">'+chart_css+'</style>').encode("utf-8")
+data,n=re.subn(br"</head\s*>",lambda m:chart_patch+m.group(0),data,count=1,flags=re.I)
+assert n==1
+chart_json=json.dumps(chart_feed,ensure_ascii=True).replace("<",r"\u003c")
+chart_script=('<script>window.__slCharts='+chart_json+';</script><script>'+chart_js+'</script>').encode("utf-8")
+data,n=re.subn(br"</body\s*>",lambda m:chart_script+m.group(0),data,count=1,flags=re.I)
+assert n==1
+print("Chart feed validated:",len(chart_feed["charts"]),"complete snapshots;",len(chart_feed["sources"]),"source entries.")
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
