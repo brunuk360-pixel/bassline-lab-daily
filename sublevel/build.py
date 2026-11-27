@@ -91,6 +91,40 @@ html body .shell header.top > .masthead-issue {
   html body .shell header.top.home-masthead > .masthead-issue button {font-size:inherit!important;min-height:24px!important;}
   html body .shell header.top.home-masthead > .masthead-issue svg {width:12px!important;height:12px!important;}
 }
+
+/* Editorial homepage: use imagery, spacing and hierarchy instead of card frames. */
+html body #app .night-home .ed-quick-listen,
+html body #app .night-home .ed-resume {display:none!important;}
+html body #app .night-home .ed-lead {display:block!important;grid-template-columns:minmax(0,1fr)!important;margin:0 0 10px!important;gap:0!important;}
+html body #app .night-home :is(.night-section,.motion-section,.ed-rotation,.press-news-panel,.news-list,.night-tools,.night-tool-group,.motion-highlights) {
+  border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;
+}
+html body #app .night-home :is(.night-banner,.night-feature,.night-tile) {
+  border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;
+}
+html body #app .night-home :is(.night-banner,.night-feature)::after {
+  background:linear-gradient(90deg,#080e10ed 0%,#080e10a6 38%,#080e1010 85%),
+    linear-gradient(0deg,#080e10 0%,transparent 25%,transparent 78%,#080e105e 100%)!important;
+}
+html body #app .night-home .night-banner {min-height:clamp(145px,34vw,230px)!important;}
+html body #app .night-home .stream-listen .night-feature {min-height:clamp(96px,24vw,154px)!important;}
+html body #app .night-home :is(.night-cta,.night-play) {border:0!important;box-shadow:none!important;background:transparent!important;backdrop-filter:none!important;color:#e9f4f0!important;}
+html body #app .night-home > :is(.night-section,.motion-section) {margin:18px 0 0!important;padding:0!important;}
+html body #app .night-home > .stream-listen {margin-top:0!important;}
+html body #app .night-home .ed-record {border:0!important;background:transparent!important;box-shadow:none!important;padding:10px 0!important;}
+html body #app .night-home .stream-moods .night-edits {gap:10px!important;}
+html body #app .night-home .stream-moods .night-tile {border:0!important;border-radius:0!important;box-shadow:none!important;}
+html body #app .night-home .stream-moods .night-tile::after {background:linear-gradient(0deg,#080e10 0%,#080e10a0 36%,transparent 85%)!important;}
+html body #app .night-home :is(.news-item,.news-feature,.motion-highlight,.night-tool-group button) {
+  border:0!important;border-radius:0!important;box-shadow:none!important;background-color:transparent!important;
+}
+html body #app .night-home :is(.night-tool-group button,.news-item):not(:last-child) {border-bottom:1px solid rgba(190,210,205,.11)!important;}
+html body #app .night-home :is(.night-heading,.motion-title,.home-mood-label) {margin-bottom:9px!important;}
+html body #app .night-home button:focus-visible {outline:2px solid #79c7b6!important;outline-offset:-2px;}
+@media(min-width:761px){
+  html body #app .night-home > :is(.night-section,.motion-section) {margin-top:24px!important;}
+  html body #app .night-home > .stream-listen {margin-top:0!important;}
+}
 """
 patch = ('<style id="sublevel-banner-layout-v1">\n' + css + '</style>\n').encode()
 assert b'id="sublevel-banner-layout-v1"' not in data
@@ -99,4 +133,4 @@ assert count == 1, "Missing HTML head"
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
-print("Published SUBLEVEL with geometric typography, bright artwork and crisp controls.")
+print("Published SUBLEVEL with a borderless editorial homepage.")
