@@ -220,15 +220,18 @@ assert all(edge["from"] in ids and edge["to"] in ids and edge["type"] in ("Sampl
 print("Discovery relationships validated:",len(discovery.get("connections",[])))
 discovery_css=(root/"discovery.css").read_text(encoding="utf-8")
 discovery_js=(root/"discovery.js").read_text(encoding="utf-8")
+listening_js=(root/"listening-state.js").read_text(encoding="utf-8")
 if shutil.which("node"):
     subprocess.run(["node","--check",str(root/"discovery.js")],check=True)
     print("Discovery JavaScript syntax validated.")
     subprocess.run(["node",str(root/"discovery-test.cjs")],check=True)
+    subprocess.run(["node","--check",str(root/"listening-state.js")],check=True)
+    subprocess.run(["node",str(root/"listening-test.cjs")],check=True)
 discovery_json=json.dumps(discovery,ensure_ascii=True).replace("<",r"\u003c")
 discovery_patch=('<style id="sublevel-discovery">'+discovery_css+'</style>').encode("utf-8")
 data,n=re.subn(br"</head\s*>",lambda m:discovery_patch+m.group(0),data,count=1,flags=re.I)
 assert n==1
-discovery_script=('<script>window.__slDiscovery='+discovery_json+';</script><script>'+discovery_js+'</script>').encode("utf-8")
+discovery_script=('<script>window.__slDiscovery='+discovery_json+';</script><script>'+listening_js+'</script><script>'+discovery_js+'</script>').encode("utf-8")
 data,n=re.subn(br"</body\s*>",lambda m:discovery_script+m.group(0),data,count=1,flags=re.I)
 assert n==1
 print("Discovery catalogue validated:",len(ids),"entries;",len(discovery["profiles"]),"artist profiles.")
