@@ -130,22 +130,18 @@ def load_discovery(root):
         images=dict(zip(unique,pool.map(get_art,unique)))
     data["artwork"]={row[0]:images[row[6]] for row in data["items"] if images[row[6]]}
     data["artworkSources"]={row[0]:row[6] for row in data["items"] if images[row[6]]}
-    # Exact release identities inspected in the catalogue, including source-record albums.
-    exact={
-        "burial-untrue":"02aa03a5-001b-4e5a-b3ad-23ad0fadb49c",
-        "fp-crush":"16a6b051-f1d5-43d1-86c4-e64d6bf2d172",
-        "chessboxin":"2a059e43-e66c-4d6d-9a4f-dea9a6919061",
-        "veryape":"80189394-8ca0-4a97-9d0e-aad32725de22",
-        "breathe":"b8e78689-5d29-4d04-9f3d-9ff20df135b2",
-        "breathe-remix":"f47ecfee-9883-403c-bd07-4330739a5d30",
-        "voodoo":"792a0192-4cfb-48c2-8519-288d1be81953",
-    }
-    missing=[(key,mbid) for key,mbid in exact.items() if key not in data["artwork"]]
-    with ThreadPoolExecutor(max_workers=4) as pool:
-        for (key,mbid),img in zip(missing,pool.map(lambda pair:archive_art(pair[1],"release"),missing)):
-            if img:
-                data["artwork"][key]=img
-                data["artworkSources"][key]=f"https://musicbrainz.org/release/{mbid}"
+    # Persist only reviewed artwork metadata paired with a release source.
+    # A failed lookup is not permission to assign an unverified catalogue ID.
+    reviewed=data.get("reviewedArtwork",{})
+    for row in data["items"]:
+        key=row[0]
+        if key in data["artwork"] or key not in reviewed:continue
+        item=reviewed[key]
+        art,source=item.get("art",""),item.get("source","")
+        host=urlparse(art).hostname or ""
+        if item.get("title")==row[1] and item.get("artist")==row[2] and art.startswith("https://") and source.startswith("https://") and host.endswith((".bcbits.com",".mzstatic.com",".shopify.com","coverartarchive.org")):
+            data["artwork"][key]=art
+            data["artworkSources"][key]=source
     group_cache={}
     deadline=time.monotonic()+24
     for k,(artist,title) in ALBUMS.items():
