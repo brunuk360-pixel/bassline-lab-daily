@@ -30,7 +30,7 @@ def install_photos(publish):
             image=url
             print("Section photo remote fallback:",name,type(e).__name__)
         # The original embedded artwork remains the second layer if the new image fails.
-        return f'html body #app .night-home {selector}::before {{background-image:url("{image}"),var(--night-photo)!important;background-size:cover,cover!important;background-position:center,center!important;filter:brightness(1.10) saturate(.90) contrast(1.03)!important;opacity:1!important;}}'
+        return f'html body #app .night-home {selector}::before {{background-image:url("{image}"),var(--night-photo)!important;background-size:cover,cover!important;background-repeat:no-repeat,no-repeat!important;background-position:center,center!important;filter:brightness(1.10) saturate(.90) contrast(1.03)!important;opacity:1!important;}}'
     with ThreadPoolExecutor(max_workers=5) as pool:
         css="\n".join(pool.map(fetch,PHOTOS))
     credits='<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SUBLEVEL Photography Credits</title><body style="background:#080e10;color:#edf2ee;font:16px system-ui;padding:24px;line-height:1.7"><h1>Photography credits</h1><a style="color:#79c9b7" href="./">Back to SUBLEVEL</a><ul>'
@@ -43,5 +43,40 @@ html body #app .night-home .stream-moods .night-tile::after{background:linear-gr
 html body #app .night-home .stream-moods .night-tile{min-height:clamp(120px,31vw,195px)!important}
 html body #app .night-home .stream-moods .night-tile b{color:#f6f5ef!important;font-weight:700!important;text-shadow:0 1px 2px #0008}
 html body #app .night-home .stream-moods .night-tile small{color:#d8e4df!important}
+/* One spacing rhythm across the homepage, rather than accumulated legacy margins. */
+html body #app .night-home {--sl-section-space:20px;}
+html body #app .night-home > .ed-lead{margin:0!important;padding:0!important;gap:0!important;}
+html body #app .night-home > .night-section,
+html body #app .night-home > .motion-section,
+html body #app .night-home > .night-section.stream-moods,
+html body #app .night-home > .motion-section.motion-news{
+  margin:var(--sl-section-space) 0 0!important;padding:0!important;min-height:0!important;
+}
+html body #app .night-home > .night-section.stream-listen{margin:8px 0 0!important;padding:0!important;}
+html body #app .night-home .stream-listen .ed-rotation{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:0!important;margin:0!important;padding:0!important;min-height:0!important;}
+html body #app .night-home .night-banner{min-height:clamp(130px,35vw,220px)!important;margin:0!important;padding:16px 42px 16px 14px!important;}
+html body #app .night-home .stream-listen .night-feature{min-height:clamp(100px,28vw,175px)!important;margin:0!important;padding:14px 42px 14px 14px!important;}
+html body #app .night-home .night-banner::before,
+html body #app .night-home .stream-listen .night-feature::before{inset:0!important;background-repeat:no-repeat!important;}
+html body #app .night-home .stream-listen .ed-record{margin:0!important;min-height:0!important;padding:10px 0!important;gap:12px!important;height:auto!important;}
+html body #app .night-home .stream-listen .ed-record img,
+html body #app .night-home .stream-listen .ed-record .cover{width:58px!important;height:58px!important;flex:0 0 58px!important;}
+html body #app .night-home .home-mood-label{margin:0 0 8px!important;padding:0!important;min-height:32px!important;}
+html body #app .night-home .home-mood-label button{min-height:36px!important;padding:4px 0!important;}
+html body #app .night-home .stream-moods .night-edits{margin:0!important;padding:0!important;gap:8px!important;}
+html body #app .night-home .stream-moods .night-tile{margin:0!important;min-height:clamp(112px,30vw,190px)!important;padding:10px!important;}
+html body #app .night-home .press-news-panel,
+html body #app .night-home .news-feature{margin:0!important;padding:0!important;}
+html body #app .night-home .news-feature .news-cover-head{position:relative!important;padding:0!important;margin:0 0 8px!important;background:transparent!important;}
+html body #app .night-home .news-feature .news-cover-head .motion-title{margin:0!important;padding:0!important;min-height:30px!important;}
+html body #app .night-home .news-feature .motion-news-filter{margin:4px 0 0!important;padding:0!important;}
+html body #app .night-home .news-feature .motion-news-filter button{min-height:42px!important;}
+html body #app .night-home .news-feature .news-item.lead summary{margin:0!important;padding:18px 12px!important;min-height:clamp(180px,52vw,320px)!important;}
+@media(min-width:800px){
+ html body #app .night-home{--sl-section-space:28px;}
+ html body #app .night-home .stream-listen .ed-rotation{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr)!important;gap:20px!important;}
+ html body #app .night-home .stream-listen .ed-record{align-self:center!important;padding:12px 0!important;}
+}
+
 """
     return css
