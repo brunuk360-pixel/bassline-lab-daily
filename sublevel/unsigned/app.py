@@ -47,9 +47,9 @@ app.jinja_env.globals["csrf"]=csrf
 def protect():
     if request.method=="POST":
         token=request.form.get("csrf","")
-        if not session.get("csrf") or not hmac.compare_digest(token,session["csrf"]):abort(403)
+        if not session.get("csrf") or not hmac.compare_digest(token.encode(),session["csrf"].encode()):abort(403)
     g.user=None
-    if request.endpoint not in ("static","health") and session.get("uid"):
+    if request.endpoint not in ("static","health") and isinstance(session.get("uid"),int):
         g.user=one("SELECT id,handle,bio,is_admin FROM members WHERE id=%s AND active",(session["uid"],))
         if not g.user:session.clear()
 @app.after_request
@@ -60,6 +60,7 @@ def headers(response):
     response.headers["Permissions-Policy"]="camera=(), microphone=(), geolocation=()"
     response.headers["Cache-Control"]="no-store"
     response.headers["X-Robots-Tag"]="noindex, nofollow"
+    response.headers["X-Frame-Options"]="DENY"
     return response
 def limit(action,maximum,identity=None):
     # Database-backed hourly budget, not reset by restarting a server.
@@ -118,7 +119,7 @@ def login():
     handle=field("handle",24,3).lower()
     limit("login-ip",30);limit("login-account",8,handle)
     password=request.form.get("password","")
-    if len(password)>128:abort(400)
+    if not 12<=len(password)<=128:abort(400)
     user=one("SELECT id,password_hash FROM members WHERE handle=%s AND active",(handle,))
     if not user or not check_password_hash(user["password_hash"],password):abort(401,"Incorrect handle or password.")
     session.clear();session["uid"]=user["id"];session.permanent=True
@@ -193,6 +194,7 @@ def unlock():
 @app.post("/moderation/<kind>/<int:item_id>")
 def moderate(kind,item_id):
     admin();action=request.form.get("action","")
+    limit("moderate",200,g.user["id"])
     if kind=="report" and action=="resolve":
         db().execute("UPDATE reports SET resolved=true WHERE id=%s",(item_id,))
     elif kind=="track" and action in ("approve","hide"):
