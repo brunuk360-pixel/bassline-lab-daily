@@ -1,0 +1,51 @@
+
+/* Editorial navigation and section identity. */
+html body #app .night-home .sl-home-index{background:#101c1c!important;border:0!important;border-top:2px solid #79c9b7!important;border-bottom:1px solid #b5cbc344!important;padding:12px 12px 9px!important;margin:12px 0 18px!important;box-shadow:none!important}
+.sl-home-index-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:7px}
+.sl-home-kicker{display:block;color:#79c9b7!important;font-size:10px!important;font-weight:700!important;letter-spacing:.12em!important;line-height:1.4!important;text-transform:uppercase}
+.sl-home-index-head strong{font-size:12px!important;color:#e1ece7!important}
+.sl-home-index-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px}
+html body #app .night-home .sl-home-index-link{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;gap:6px!important;min-height:40px!important;padding:6px 0!important;border:0!important;border-bottom:1px solid #b5cbc32a!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;color:#edf5f0!important;font-size:12px!important;font-weight:600!important;text-align:left!important;line-height:1.3!important}
+.sl-home-num,.sl-home-arr{font-size:10px;color:#79c9b7!important;font-variant-numeric:tabular-nums}
+html body #app .night-home > .sl-home-department{scroll-margin-top:18px!important;margin:20px 0 0!important;padding:0 0 6px!important}
+html body #app .night-home .sl-home-dept-title{display:flex!important;align-items:center!important;gap:11px!important;padding:12px 0 10px!important;margin:0 0 10px!important;border-top:1px solid #8fb9af66!important;border-bottom:1px solid #b5cbc32a!important;background:transparent!important}
+.sl-home-dept-num{font-size:23px!important;line-height:1!important;font-weight:700!important;color:#79c9b7!important;letter-spacing:-.04em!important;min-width:32px}
+.sl-home-dept-copy{min-width:0}
+html body #app .night-home .sl-home-dept-copy h2{font-size:clamp(21px,5.8vw,31px)!important;color:#f3f5ef!important;line-height:1.12!important;margin:3px 0 4px!important;font-weight:700!important;letter-spacing:-.045em!important}
+.sl-home-dept-copy small{font-size:12px!important;color:#b5c5c0!important;line-height:1.4!important;display:block}
+html body #app .night-home .sl-home-original-heading{display:none!important}
+html body #app .night-home .sl-home-dig{scroll-margin-top:18px!important;margin-top:20px!important;padding:12px 14px!important}
+@media(min-width:800px){.sl-home-index-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:0 18px}.sl-home-dept-num{font-size:29px!important;min-width:40px}}
+/* Rebuild chosen concept 04 as a compact, image-backed editorial strip.
+   The ivory area and its lettering are rendered together so dark-mode CSS cannot separate their contrast. */
+html body #app .weekly-page .weekly-cover.sl-issue-strip{
+ position:relative!important;display:block!important;box-sizing:border-box!important;isolation:isolate!important;overflow:hidden!important;
+ color-scheme:only dark!important;background:#0b2027 url("section-art/underground.jpg") right center/53% auto no-repeat!important;
+ padding:0!important;margin:0 0 9px!important;border:0!important;border-radius:0!important;min-height:0!important;height:auto!important;max-height:none!important;aspect-ratio:720/202!important;
+ width:100%!important;opacity:1!important;filter:none!important;
+}
+html body #app .weekly-page .weekly-cover.sl-issue-strip::before,html body #app .weekly-page .weekly-cover.sl-issue-strip::after{display:none!important;content:none!important}
+html body #app .weekly-page .weekly-cover.sl-issue-strip > :not(.sl-issue-art){position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;margin:0!important;padding:0!important}
+html body #app .weekly-page .weekly-cover.sl-issue-strip > img.sl-issue-art{position:relative!important;display:block!important;width:100%!important;height:auto!important;max-width:none!important;max-height:none!important;aspect-ratio:720/202!important;object-fit:fill!important;margin:0!important;padding:0!important;opacity:1!important;filter:none!important;mix-blend-mode:normal!important;z-index:1!important}
+html body #app .weekly-page{margin-top:8px!important}
+html body #app .weekly-index{padding:4px 0 8px!important;margin:0!important}
+html body #app .weekly-index select{min-height:40px!important;height:40px!important}
+html body #app .weekly-story{padding-top:16px!important}
+html body #app .weekly-copy{padding-top:12px!important}
+/* More compact Daily Dig and consistent editorial details. */
+.sl-d-content{padding-top:16px!important}
+.sl-d-intro{padding:0 0 12px!important;margin:0 0 12px!important}
+.sl-d-intro h1{margin:6px 0 8px!important;font-size:clamp(30px,8vw,54px)!important}
+.sl-d-intro p{margin:0!important}
+.sl-d-feed-status{margin-bottom:10px!important;padding:8px 11px!important}
+.sl-d-record{gap:12px!important;padding:12px 0!important;grid-template-columns:clamp(65px,22vw,110px) minmax(0,1fr)!important}
+.sl-d-record .sl-d-copy h3{font-size:18px!important;margin:3px 0!important}
+.sl-d-record .sl-d-copy p{margin:4px 0 6px!important}
+.sl-d-record .sl-d-actions{margin-top:6px!important;gap:6px!important}
+.sl-d-record .sl-d-button{min-height:40px!important;padding:5px 8px!important}
+.sl-d-bar{min-height:48px!important;padding-block:2px!important}
+.sl-d-record.sl-d-no-art{grid-template-columns:minmax(0,1fr)!important}
+.sl-d-record.sl-d-no-art .sl-d-copy{border-left:2px solid #79c9b766;padding-left:11px}
+html body #app .editorial-detail .sl-dossier-section,html body #app .editorial-detail .sl-dossier-discovery h3{font-size:12px!important;letter-spacing:.09em!important;color:#79c9b7!important;font-weight:700!important}
+html body #app .editorial-detail .sl-dossier-discovery{margin-top:14px!important}
+html body #app .editorial-detail .sl-research-edition{margin-top:14px!important;padding-top:12px!important}
