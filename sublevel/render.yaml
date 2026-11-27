@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: crate-music
+    runtime: static
+    repo: https://github.com/brunuk360-pixel/bassline-lab-daily
+    branch: main
+    autoDeployTrigger: off
+    renderSubdomainPolicy: enabled
+    buildCommand: python3 sublevel/build.py
+    staticPublishPath: crate-public
