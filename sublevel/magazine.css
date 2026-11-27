@@ -28,3 +28,6 @@ dialog.sl-mag-reader{position:fixed!important;inset:0!important;margin:0!importa
 .sl-mag-end{margin:40px auto 0;max-width:760px;color:#91a49f;border-top:1px solid #c3d9d125;padding-top:18px}
 @media(max-width:500px){.sl-mag-gallery{gap:9px}.sl-mag-page{padding-inline:16px}.sl-mag-bar{padding-inline:16px}.sl-mag-brand{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.sl-mag-reader *{animation:none!important}}
+
+/* Remove the weekly contents jump links; retain the edition picker and all stories. */
+html body #app .weekly-page .weekly-contents, html body #app .weekly-contents { display:none!important; }
