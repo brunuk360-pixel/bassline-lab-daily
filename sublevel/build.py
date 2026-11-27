@@ -150,7 +150,18 @@ reader=('<script>window.__sublevelMagazineImages='+photo_json+';</script><script
 data,n=re.subn(br"</body\s*>",lambda m:reader+m.group(0),data,count=1,flags=re.I)
 assert n==1
 
+
+# Editorial UX upgrades: layer on the existing site, preserving data and interactions.
+editorial_css=(root/"editorial.css").read_text(encoding="utf-8")
+editorial_js=(root/"editorial.js").read_text(encoding="utf-8")
+editorial_patch=('<style id="sublevel-editorial-v2">'+editorial_css+'</style>').encode("utf-8")
+data,n=re.subn(br"</head\s*>",lambda m:editorial_patch+m.group(0),data,count=1,flags=re.I)
+assert n==1
+editorial_script=('<script>'+editorial_js+'</script>').encode("utf-8")
+data,n=re.subn(br"</body\s*>",lambda m:editorial_script+m.group(0),data,count=1,flags=re.I)
+assert n==1
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
-print("Published SUBLEVEL with a borderless editorial homepage.")
+print("Published SUBLEVEL editorial UX upgrade.")
