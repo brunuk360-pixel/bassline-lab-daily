@@ -559,6 +559,46 @@
       "Remix album",
       "https://www.hospitalrecords.com/products/nulogic-remixes-ive-always-waited-for",
       "Tenth-anniversary remix EP, featuring Technimatic, Flava D and T>I."
+    ],
+    [
+      "soulintent-corruptions",
+      "Corruptions Of Form",
+      "Soul Intent",
+      "2026-11-27",
+      "Techstep / drum & bass",
+      "New release",
+      "https://soulintent.bandcamp.com/album/corruptions-of-form",
+      "Two long-form cuts released on Bandcamp a week ahead of the general release. Compare the title track with Final Truth; credits identify Soul Intent as producer and Compound Audio as mastering engineer."
+    ],
+    [
+      "mv-dangerous",
+      "Dangerous",
+      "MV, Vandermou, Cantsay, Dropset",
+      "2026-11-27",
+      "Neurofunk",
+      "New release",
+      "https://kosenproduction.bandcamp.com/album/dangerous-2",
+      "Five tracks on Kosen Production. Compare MV's solo recordings with the three collaborations; the release notes identify the project as dancefloor-focused neurofunk."
+    ],
+    [
+      "postal-paranoia",
+      "Paranoia / Big Up",
+      "Postal",
+      "2026-11-27",
+      "Drum & Bass / jungle",
+      "New release",
+      "https://postaldnb.bandcamp.com/album/paranoia-big-up",
+      "Two cuts from the Birmingham producer; Paranoia features B-Nabs while Big Up is a solo track. Listen for differences in the approaches to arrangement."
+    ],
+    [
+      "seba-paradox-conscious",
+      "Conscious/Life (feat. Sapele)",
+      "Seba, Paradox",
+      "2026-11-27",
+      "Jungle / liquid drum & bass",
+      "New release",
+      "https://randsrecords.bandcamp.com/album/conscious-life-feat-sapele",
+      "R&S Records pairing of a darker break-led track with a lighter vocal recording. Life credits Sapele on vocals and Pawel Kobak on flute; compare the two sides for their contrasting use of texture."
     ]
   ],
   "profiles": [
@@ -1001,5 +1041,16 @@
         "fp-crush"
       ]
     ]
-  ]
+  ],
+  "editorialFeature": {
+    "title": "One Friday, four directions in drum & bass",
+    "date": "2026-11-27",
+    "intro": "From Birmingham to R&S, this release-day guide contrasts independent techstep, neurofunk, jungle and liquid drum & bass. Notes are based on release credits and label descriptions; they are listening prompts, not measured audio analyses.",
+    "ids": [
+      "soulintent-corruptions",
+      "mv-dangerous",
+      "postal-paranoia",
+      "seba-paradox-conscious"
+    ]
+  }
 }
