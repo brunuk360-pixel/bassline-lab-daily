@@ -1,0 +1,40 @@
+/* Final responsive overrides: preserve editorial typography, improve touch and scroll. */
+html body #app .sl-chart-summary{cursor:pointer;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;color:#e5eeea;font-size:15px;font-weight:700;list-style:none}
+html body #app .sl-chart-summary::-webkit-details-marker{display:none}
+html body #app .sl-chart-summary::after{content:"+";font-size:21px;color:#79c9b7}
+html body #app :is(.sl-chart-directory,.sl-chart-room)[open]>.sl-chart-summary::after{content:"−"}
+html body #app .sl-chart-room{border-block:1px solid #79c9b755;margin:10px 0;padding:0 10px;background:#101b1c}
+html body #app .sl-chart-room>.sl-chart-panel{border:0;margin:0;padding:5px 0 15px}
+html body #app .sl-chart-panel,.sl-d-content{overflow-wrap:anywhere}
+html body #app .sl-chart-copy small{overflow-wrap:anywhere}
+html body #app .sl-chart-link{flex-shrink:0}
+html body #app .sl-chart-select{font-size:16px!important}
+.sl-discovery-dialog{scroll-padding-top:68px;scroll-padding-bottom:56px}
+.sl-discovery-dialog .sl-d-content{padding-bottom:max(24px,env(safe-area-inset-bottom));min-width:0}
+.sl-discovery-dialog .sl-d-bar{padding-top:max(7px,env(safe-area-inset-top));grid-template-columns:minmax(72px,1fr) minmax(0,2fr) minmax(44px,1fr)}
+.sl-discovery-dialog .sl-d-bar strong{overflow-wrap:anywhere}
+.sl-discovery-dialog .sl-d-content :is(button,input,select,textarea,a){max-width:100%}
+.sl-discovery-dialog .sl-d-search,.sl-discovery-dialog .sl-d-select{font-size:16px!important}
+.sl-discovery-dialog .sl-d-record.sl-d-no-art{grid-template-columns:minmax(0,1fr)!important}
+.sl-discovery-dialog .sl-d-record.sl-d-no-art .sl-d-copy{border-left:2px solid #79c9b744;padding-left:12px}
+.sl-discovery-dialog .sl-d-listen-text{width:100%;max-width:none;box-shadow:none;margin:0 0 12px}
+.sl-discovery-dialog .sl-d-listen-text .sl-d-art-missing{min-height:60px!important;aspect-ratio:auto!important}
+.sl-discovery-dialog .sl-d-queue-controls{flex-shrink:0}
+.sl-discovery-dialog .sl-d-queue-icon{min-width:44px;min-height:44px}
+.sl-discovery-dialog .sl-d-profile-title{min-height:44px}
+.sl-discovery-dialog .sl-d-content :is(button,a,input,select,textarea,summary):focus-visible,#app .sl-chart-summary:focus-visible{outline:2px solid #9bdecf;outline-offset:2px}
+@media(max-width:420px){
+.sl-discovery-dialog .sl-d-content{padding-inline:14px}
+.sl-discovery-dialog .sl-d-record{grid-template-columns:72px minmax(0,1fr);gap:10px}
+.sl-discovery-dialog .sl-d-record .sl-d-actions{gap:5px}
+.sl-discovery-dialog .sl-d-record .sl-d-actions .sl-d-button{flex:1 1 auto;min-height:44px;padding-inline:8px}
+.sl-discovery-dialog .sl-library-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.sl-discovery-dialog .sl-library-tab{padding:8px 4px;line-height:1.25}
+.sl-discovery-dialog .sl-d-queue-row{grid-template-columns:minmax(0,1fr) 138px}
+.sl-discovery-dialog .sl-d-queue-controls{gap:3px}
+.sl-discovery-dialog .sl-d-queue-icon{min-width:44px}
+html body #app .sl-chart-row{gap:6px}
+html body #app .sl-chart-link{max-width:84px;line-height:1.3}
+html body #app .sl-chart-panel>.sl-chart-link{max-width:100%}
+}
+@media(prefers-reduced-motion:reduce){.sl-discovery-dialog *,#app .sl-chart-panel *{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
