@@ -1,0 +1,13 @@
+"use strict";
+const fs=require("node:fs"),vm=require("node:vm"),a=require("node:assert/strict"),path=require("node:path");
+const src=fs.readFileSync(path.join(__dirname,"charts.js"),"utf8");
+const feed=JSON.parse(fs.readFileSync(path.join(__dirname,"charts.json"),"utf8"));
+const start=src.indexOf("function status("),end=src.indexOf("function chartPanel(",start);
+const f=vm.runInNewContext("const norm=s=>(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'');const alias={drumbass:'dnb'};"+src.slice(start,end)+";({status,sourceFor})",{feed});
+a.equal(f.status(feed.charts.find(c=>c.id==="uk-dance"),"2026-11-27"),"Current published chart period");
+a.equal(f.status(feed.charts.find(c=>c.id==="uk-dance"),"2026-12-04"),"Past chart period");
+a.match(f.status({status:"snapshot",checked:"2026-11-27"},"2026-11-27"),/not confirmed current/);
+a.match(f.status({status:"verified",checked:"2026-11-27"},"2026-11-28"),/refresh needed/);
+a.equal(f.sourceFor("Drum & Bass")[2],"dnb");
+a.equal(f.sourceFor("Unknown genre"),undefined);
+console.log("Chart checks passed: source matching and honest freshness labels.");
