@@ -298,8 +298,25 @@ data,n=re.subn(br"</body\s*>",lambda m:chart_script+m.group(0),data,count=1,flag
 assert n==1
 print("Chart feed validated:",len(chart_feed["charts"]),"complete snapshots;",len(chart_feed["sources"]),"source entries.")
 
+mobile_css=(root/"mobile-qa.css").read_text(encoding="utf-8")
+data,n=re.subn(br"</head\s*>",lambda m:('<style id="sublevel-mobile-qa">'+mobile_css+'</style>').encode("utf-8")+m.group(0),data,count=1,flags=re.I)
+assert n==1
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
 (output.parent/"record-concept-02.html").write_bytes(data)
 print("Published SUBLEVEL discovery edition.")
+
+# Diagnostic browser QA. Keep the deployment available if the build image
+# cannot run Chromium; log an explicit failure instead of claiming a pass.
+if shutil.which("npm") and shutil.which("node"):
+    try:
+        qa_dir="/tmp/sublevel-qa"
+        subprocess.run(["npm","install","--prefix",qa_dir,"--no-save","--ignore-scripts","--no-audit","--no-fund","puppeteer-core@23.8.0","@sparticuz/chromium@131.0.1"],check=True,timeout=90)
+        qa=subprocess.run(["node",str(root/"browser-qa.cjs"),str(output.parent.resolve())],timeout=75)
+        print("Browser QA diagnostic exit:",qa.returncode)
+    except (OSError,subprocess.SubprocessError) as exc:
+        print("Browser QA could not complete:",type(exc).__name__)
+else:
+    print("Browser QA unavailable: Node/npm missing.")
