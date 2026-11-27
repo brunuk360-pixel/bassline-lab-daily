@@ -223,6 +223,7 @@ discovery_js=(root/"discovery.js").read_text(encoding="utf-8")
 if shutil.which("node"):
     subprocess.run(["node","--check",str(root/"discovery.js")],check=True)
     print("Discovery JavaScript syntax validated.")
+    subprocess.run(["node",str(root/"discovery-test.cjs")],check=True)
 discovery_json=json.dumps(discovery,ensure_ascii=True).replace("<",r"\u003c")
 discovery_patch=('<style id="sublevel-discovery">'+discovery_css+'</style>').encode("utf-8")
 data,n=re.subn(br"</head\s*>",lambda m:discovery_patch+m.group(0),data,count=1,flags=re.I)
