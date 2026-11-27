@@ -7,11 +7,13 @@ const alias={"drumbass":"dnb","drumandbass":"dnb","dnb":"dnb","ukgarage":"ukgara
 const today=()=>new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
 const link=(text,url)=>{const a=make("a","sl-chart-link",text);a.href=url;a.target="_blank";a.rel="noopener noreferrer";return a};
 function status(c,now=today()){if(c.status!=="verified")return "Archived snapshot — not confirmed current";if(c.through)return now>=c.from&&now<=c.through?"Current published chart period":"Past chart period";return c.checked===now?"Verified on "+c.checked:"Last verified "+c.checked+" · refresh needed"}
-function sourceFor(genre){const key=norm(genre);return feed.sources.find(s=>norm(s[0])===key)||feed.sources.find(s=>norm(s[0])===(alias[key]||key)||s[2]===(alias[key]||key))}
+function roomFor(genre){return (feed.rooms||[]).find(r=>norm(r[0])===norm(genre))}
+function sourceFor(genre){const room=roomFor(genre);if(room)return room[1]?feed.sources.find(s=>norm(s[0])===norm(room[1])):undefined;const key=norm(genre);return feed.sources.find(s=>norm(s[0])===key)||feed.sources.find(s=>norm(s[0])===(alias[key]||key)||s[2]===(alias[key]||key))}
 function chartPanel(genre){
  const source=sourceFor(genre);const chart=source&&feed.charts.find(c=>c.id===source[2]);
  const panel=make("section","sl-chart-panel");
  panel.dataset.chartGenre=genre;panel.append(make("span","sl-chart-kicker","SUBLEVEL / CHART DESK"),make("h2",null,chart?chart.genre+" — Top 10":genre+" — chart sources"));
+ const room=roomFor(genre);if(room?.[2])panel.append(make("p","sl-chart-meta",room[2]));
  if(chart){
  panel.append(make("p","sl-chart-status",status(chart)),make("p","sl-chart-meta",chart.source+" · "+(chart.from?chart.from+" to "+chart.through:"Checked "+chart.checked)));
  if(chart.note)panel.append(make("p","sl-chart-meta",chart.note));
@@ -26,7 +28,7 @@ function chartPanel(genre){
 }
 function directory(){const panel=make("details","sl-chart-directory");panel.append(make("summary","sl-chart-summary","Current charts · choose genre"));panel.append(make("p","sl-chart-meta","Published retailer or national rankings, separate from editorial picks. "+feed.charts.filter(c=>status(c).startsWith("Verified on")||status(c)==="Current published chart period").length+" current dated lists; other sources and archives remain clearly identified."));
  const select=make("select","sl-chart-select");select.setAttribute("aria-label","Chart genre");
- for(const s of feed.sources){const o=make("option",null,s[0]);o.value=s[0];select.append(o)}select.value="UK Dance";
+ const rooms=(feed.rooms||[]).map(r=>r[0]);const names=[...rooms,...feed.sources.map(s=>s[0]).filter(n=>!rooms.some(r=>norm(r)===norm(n)))];for(const name of names){const o=make("option",null,name);o.value=name;select.append(o)}select.value=rooms[0]||"UK Dance";
  const area=make("div","sl-chart-area");const draw=()=>area.replaceChildren(chartPanel(select.value));select.addEventListener("change",draw);panel.append(select,area);draw();return panel}
 function mount(){
  const active=document.querySelector(".bottom button.active");const genreList=app.querySelector(".signature-genres");if(genreList&&!genreList.querySelector(".sl-chart-directory"))genreList.prepend(directory());else if(active?.dataset.navLabel==="Genres"&&!app.querySelector(".roomhead")&&!app.querySelector(".sl-chart-directory"))app.prepend(directory());
