@@ -83,6 +83,46 @@ def archive_art(mbid,kind="release-group"):
         return url
     except Exception:return ""
 
+
+# Apple catalogue metadata is a secondary source for identifiable releases.
+# Match both fields strictly; a search hit alone is not a cover match.
+APPLE_TARGETS={
+ "gold":("DJ Fresh","Gold Dust (Shy FX Re-Edit)","song"),
+ "fire":("The Prodigy","Firestarter (Andy C Remix)","song"),
+ "sos":("The Breeders","S.O.S.","song"),
+ "close-edit":("Art of Noise","Close (to the Edit)","song"),
+ "everlasting":("Nu:Logic","Everlasting Days","song"),
+ "together":("Logistics","Together","song"),
+ "ultra":("Fred V & Grafix","Ultraviolet","song"),
+ "apex":("London Elektricity","Just One Second (Apex Remix)","song"),
+ "burial-debut":("Burial","Burial","album"),
+ "source":("Source Direct","Dangerous Curves","album"),
+ "posij":("Posij","Chrysalis","album"),
+ "edlan":("Edlan & TENEM","Know It All / Stand Alone","album"),
+ "cloned-reality":("Cloned Clouds","Reality Check","album"),
+ "buttermere-touch":("Buttermere","Touch Typing","album"),
+}
+def apple_cover(spec):
+    artist,title,entity=spec
+    url="https://itunes.apple.com/search?"+urlencode({"term":artist+" "+title,"country":"GB","media":"music","entity":entity,"limit":12})
+    try:
+        with urlopen(Request(url,headers={"User-Agent":"SUBLEVEL Editorial/1.3","Accept":"application/json"}),timeout=4) as res:
+            obj=json.load(res)
+        for item in obj.get("results",[]):
+            name=item.get("trackName" if entity=="song" else "collectionName","")
+            if normalize(name)!=normalize(title) or normalize(item.get("artistName",""))!=normalize(artist):continue
+            art=item.get("artworkUrl100","")
+            source=item.get("trackViewUrl") or item.get("collectionViewUrl","")
+            if not (urlparse(art).scheme=="https" and (urlparse(art).hostname or "").endswith(".mzstatic.com")):continue
+            if urlparse(source).hostname not in ("music.apple.com","itunes.apple.com"):continue
+            # Larger rendering of the same catalogue image, never a different image.
+            art=re.sub(r"/100x100(bb)?\.",r"/400x400\1.",art)
+            with urlopen(Request(art,headers={"User-Agent":"Mozilla/5.0","Accept":"image/*"}),timeout=4) as img:
+                if not img.headers.get("Content-Type","").startswith("image/") or not img.read(16):continue
+            return art,source
+    except Exception:pass
+    return "",""
+
 def load_discovery(root):
     data=json.loads((root/"discovery-data.json").read_text(encoding="utf-8"))
     unique=list(dict.fromkeys(row[6] for row in data["items"]))
@@ -119,5 +159,19 @@ def load_discovery(root):
         if img:
             data["artwork"][k]=img
             data["artworkSources"][k]=f"https://musicbrainz.org/release-group/{mbid}"
+    # Bound requests per build and keep previous source coverage independent of
+    # the availability of a secondary service.
+    targets=[(k,v) for k,v in APPLE_TARGETS.items() if k not in data["artwork"] and any(row[0]==k for row in data["items"])]
+    apple_count=0
+    for offset in range(0,len(targets),3):
+        batch=targets[offset:offset+3]
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            for (key,_),(art,source) in zip(batch,pool.map(apple_cover,[v for k,v in batch])):
+                if art:
+                    data["artwork"][key]=art
+                    data["artworkSources"][key]=source
+                    apple_count+=1
+        if offset+3<len(targets):time.sleep(3.1)
+    print("Apple exact-match cover additions:",apple_count)
     print("Discovery artwork available:",len(data["artwork"]),"of",len(data["items"]))
     return data
