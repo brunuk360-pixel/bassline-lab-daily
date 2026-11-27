@@ -30,7 +30,7 @@ function remember(id){state.history=[id,...state.history.filter(x=>x!==id)].slic
 function toggle(id,key="saved"){const a=state[key];const on=a.includes(id);state[key]=on?a.filter(x=>x!==id):[id,...a];persist();announce(on?"Removed from your collection":"Saved to your collection");return !on}
 function saveButton(id,key="saved",label="Save"){const saved=state[key].includes(id);const b=button(saved?"✓ Saved":label,()=>{const on=toggle(id,key);b.textContent=on?"✓ Saved":label;b.setAttribute("aria-pressed",String(on))});b.setAttribute("aria-pressed",String(saved));return b}
 function artwork(r){if(r.art){const img=create("img","sl-d-art");img.src=r.art;img.alt=r.title+" release artwork";img.loading="lazy";img.addEventListener("error",()=>{img.replaceWith(create("div","sl-d-art sl-d-art-missing","Artwork unavailable"))},{once:true});return img}return create("div","sl-d-art sl-d-art-missing","Artwork unavailable")}
-function record(r,list){const a=create("article","sl-d-record");a.append(artwork(r));const copy=create("div","sl-d-copy");copy.append(create("span","sl-d-kicker",r.tag),create("h3",null,r.title),create("p","sl-d-muted",r.artist+" · "+r.genre),create("p",null,r.note));const actions=create("div","sl-d-actions");actions.append(button("Listen / details →",()=>startListening(r.id,list)),saveButton(r.id));copy.append(actions);a.append(copy);return a}
+function record(r,list){const a=create("article","sl-d-record");a.append(artwork(r));const copy=create("div","sl-d-copy");copy.append(create("span","sl-d-kicker",r.tag),create("h3",null,r.title),create("p","sl-d-muted",r.artist+" · "+r.genre+(r.date?" · "+r.date:"")),create("p",null,r.note));const actions=create("div","sl-d-actions");actions.append(button("Listen / details →",()=>startListening(r.id,list)),saveButton(r.id));copy.append(actions);a.append(copy);return a}
 function listRecords(list){const g=create("div","sl-d-list");list.filter(Boolean).forEach(r=>g.append(record(r,list)));return g}
 
 function catalogue(list){
@@ -57,14 +57,24 @@ function catalogue(list){
 function titleBlock(kicker,title,description){const top=create("header","sl-d-intro");top.append(create("span","sl-d-kicker",kicker),create("h1",null,title),create("p",null,description));content.append(top)}
 function section(title){content.append(create("h2","sl-d-section",title))}
 function dayKey(d){return new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(d)}
+function editionDate(){
+ const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+ const v=t=>parts.find(p=>p.type===t).value;return v("year")+"-"+v("month")+"-"+v("day");
+}
+function recentReleases(){
+ const today=editionDate(),cutoff=new Date(Date.parse(today+"T00:00:00Z")-7*86400000).toISOString().slice(0,10);
+ return records.filter(r=>/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&r.date>=cutoff&&r.date<=today&&["New release","Reissue"].includes(r.tag)).sort((a,b)=>b.date.localeCompare(a.date));
+}
 function daily(){
- const today=new Date(),parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(today);
- const v=t=>parts.find(p=>p.type===t).value;
- const key=v("year")+"-"+v("month")+"-"+v("day"),seed=Date.parse(key+"T00:00:00Z")/86400000;
- const fresh=records.filter(r=>r.date===D.edition&&key===D.edition);
- const pool=records.filter(r=>!fresh.includes(r));
- const shuffled=pool.map((r,i)=>({r,score:Math.sin((seed+13)*(i+19)*.9187)*10000%1})).sort((a,b)=>a.score-b.score).map(x=>x.r);
- return [...fresh,...shuffled].slice(0,10)
+ const key=editionDate(),seed=Date.parse(key+"T00:00:00Z")/86400000;
+ const shuffled=xs=>xs.map((r,i)=>({r,score:Math.sin((seed+13)*(i+19)*.9187)*10000%1})).sort((a,b)=>a.score-b.score).map(x=>x.r);
+ const fresh=recentReleases(),picks=[],seen=new Set();
+ const broad=g=>/drum|d&b|jungle/i.test(g)?"Bass & jungle":/garage/i.test(g)?"Garage":/techno/i.test(g)?"Techno":/house/i.test(g)?"House":/ambient/i.test(g)?"Ambient":g;
+ for(const r of shuffled(fresh)){const g=broad(r.genre);if(!seen.has(g)){picks.push(r);seen.add(g)}if(picks.length>=7)break}
+ for(const r of fresh){if(picks.length>=7)break;if(!picks.includes(r))picks.push(r)}
+ for(const r of shuffled(records.filter(r=>!fresh.includes(r)))){if(picks.length>=10)break;if(!picks.includes(r))picks.push(r)}
+ for(const r of fresh){if(picks.length>=10)break;if(!picks.includes(r))picks.push(r)}
+ return picks.slice(0,10);
 }
 function graph(profile){
  const ids=profile[3],rlist=ids.map(byId).filter(Boolean);
@@ -76,14 +86,14 @@ function render(mode,arg){
  current={mode,arg};if(notice)notice.textContent="";content.replaceChildren();heading.textContent=labels[mode]||({artist:"Artist DNA",listen:"Listening room",graph:"Connections",hub:"Discover more",label:"Label catalogue"}[mode]||"SUBLEVEL");back.textContent=stack.length?"← Back":"← Close";dialog.scrollTop=0;
  if(mode==="hub"){
  titleBlock("SUBLEVEL / DISCOVERY","Go deeper.","Explore beyond the charts, or search the entire curated catalogue.");
- const grid=create("div","sl-d-hub");modes.forEach(([id,name,desc,img])=>{const b=button("",()=>show(id),"sl-d-tile");const photo=create("img");const heroIds={daily:"edlan",artists:"allnight",samples:"fire",history:"nookie",early:"spiders",gems:"posij",journey:"photek"};photo.src=byId(heroIds[id])?.art||"section-art/"+img;photo.alt="";photo.loading="lazy";b.append(photo,create("strong",null,name),create("small",null,desc));grid.append(b)});content.append(grid);section("Browse the catalogue");content.append(catalogue(records));
+ const grid=create("div","sl-d-hub");modes.forEach(([id,name,desc,img])=>{const b=button("",()=>show(id),"sl-d-tile");const photo=create("img");const heroIds={daily:daily()[0]?.id||"edlan",artists:"allnight",samples:"fire",history:"nookie",early:"spiders",gems:"posij",journey:"photek"};photo.src=byId(heroIds[id])?.art||"section-art/"+img;photo.alt="";photo.loading="lazy";b.append(photo,create("strong",null,name),create("small",null,desc));grid.append(b)});content.append(grid);section("Browse the catalogue");content.append(catalogue(records));
  }else if(mode==="daily"){
- titleBlock("DAILY SELECTION / "+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric",timeZone:"Europe/London"}),"The Daily Dig","Ten picks rotating from our researched catalogue. New-release picks are dated; this is not a live release feed.");const list=daily();content.append(button("Start listening →",()=>startListening(list[0].id,list),"sl-d-button sl-d-primary"),listRecords(list));
+ titleBlock("DAILY SELECTION / "+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric",timeZone:"Europe/London"}),"The Daily Dig","A daily selection of recently released records and catalogue discoveries, with links to the original sources.");const list=daily();const feed=create("div","sl-d-feed-status");feed.append(create("strong",null,recentReleases().length+" releases from the last 7 days"),create("small",null,"Editorial catalogue last updated "+D.edition+" · dates from linked release pages"));content.append(feed,button("Start listening →",()=>startListening(list[0].id,list),"sl-d-button sl-d-primary"),listRecords(list));section("New release archive");content.append(catalogue(records.filter(r=>["New release","Reissue"].includes(r.tag)).sort((a,b)=>b.date.localeCompare(a.date))));
  }else if(mode==="artists"){
  titleBlock("ARTIST ARCHIVE","Artist DNA","Discover the stories and connections behind the records.");D.profiles.forEach(p=>{const a=create("article","sl-d-profile");const b=button(p[0],()=>show("artist",p[0]),"sl-d-profile-title");a.append(b,create("p","sl-d-muted",p[1]),create("p",null,p[2]),button("Explore artist →",()=>show("artist",p[0])));content.append(a)});
  }else if(mode==="artist"){
  const p=D.profiles.find(x=>x[0]===arg);if(!p){show("artists",null,true);return}
- titleBlock("ARTIST DNA",p[0],p[2]);const actions=create("div","sl-d-actions");actions.append(saveButton(p[0],"artists","Follow artist"),link("Source / artist background ↗",p[4]),link("Artist catalogue ↗",search(p[0])));content.append(actions);section("Music connections");content.append(graph(p));section("Essential and connected listening");content.append(listRecords(p[3].map(byId).filter(Boolean)));
+ titleBlock("ARTIST DNA",p[0],p[2]);const actions=create("div","sl-d-actions");actions.append(saveButton(p[0],"artists","Follow artist"),link("Source / artist background ↗",p[4]),link("Artist catalogue ↗",search(p[0])));content.append(actions);const research=D.research?.[p[0]];if(research){section("Career timeline");const t=create("div","sl-d-timeline");for(const [year,story] of research.timeline||[]){const row=create("article","sl-d-event");row.append(create("time",null,year),create("p",null,story));t.append(row)}content.append(t);if(research.listen){section("Listening guide");content.append(create("p",null,research.listen))}if(research.links?.length){const refs=create("div","sl-d-actions");for(const [name,url] of research.links)refs.append(link(name+" ↗",url));content.append(refs)}}section("Music connections");content.append(graph(p));section("Essential and connected listening");content.append(listRecords(p[3].map(byId).filter(Boolean)));
  }else if(mode==="samples"){
  titleBlock("SAMPLE DETECTIVE","Hear the connection.","A documented comparison of the sounds sampled on Firestarter. Listen on the linked services; no unauthorised audio is hosted.");
  const target=byId("original");content.append(record(target,[target,byId("fire")]));
