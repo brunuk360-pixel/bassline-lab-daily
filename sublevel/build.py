@@ -205,8 +205,33 @@ research_script=('<script>'+research_js+'</script>').encode("utf-8")
 data,n=re.subn(br"</body\s*>",lambda m:research_script+m.group(0),data,count=1,flags=re.I)
 assert n==1
 
+
+# Connected discovery rooms: curated release sources, artwork and on-device library.
+from discovery_assets import load_discovery
+import shutil
+import subprocess
+discovery=load_discovery(root)
+assert len(discovery["items"])>=10
+ids=[row[0] for row in discovery["items"]]
+assert len(ids)==len(set(ids)), "Duplicate discovery IDs"
+assert all(row[6].startswith("https://") for row in discovery["items"])
+assert all(set(profile[3]).issubset(ids) for profile in discovery["profiles"])
+discovery_css=(root/"discovery.css").read_text(encoding="utf-8")
+discovery_js=(root/"discovery.js").read_text(encoding="utf-8")
+if shutil.which("node"):
+    subprocess.run(["node","--check",str(root/"discovery.js")],check=True)
+    print("Discovery JavaScript syntax validated.")
+discovery_json=json.dumps(discovery,ensure_ascii=True).replace("<",r"\u003c")
+discovery_patch=('<style id="sublevel-discovery">'+discovery_css+'</style>').encode("utf-8")
+data,n=re.subn(br"</head\s*>",lambda m:discovery_patch+m.group(0),data,count=1,flags=re.I)
+assert n==1
+discovery_script=('<script>window.__slDiscovery='+discovery_json+';</script><script>'+discovery_js+'</script>').encode("utf-8")
+data,n=re.subn(br"</body\s*>",lambda m:discovery_script+m.group(0),data,count=1,flags=re.I)
+assert n==1
+print("Discovery catalogue validated:",len(ids),"entries;",len(discovery["profiles"]),"artist profiles.")
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
 (output.parent/"record-concept-02.html").write_bytes(data)
-print("Published SUBLEVEL unified editorial edition.")
+print("Published SUBLEVEL discovery edition.")
