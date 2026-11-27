@@ -3,7 +3,7 @@
 const D=window.__slDiscovery;
 if(!D?.items?.length)return;
 const app=document.getElementById("app");if(!app)return;
-const records=D.items.map(([id,title,artist,date,genre,tag,url,note])=>({id,title,artist,date,genre,tag,url,note,art:D.artwork?.[id]||""}));
+const records=D.items.map(([id,title,artist,date,genre,tag,url,note])=>({id,title,artist,date,genre,tag,url,note,art:D.artwork?.[id]||"",artSource:D.artworkSources?.[id]||""}));
 const byId=id=>records.find(r=>r.id===id);
 const modes=[
 ["daily","The Daily Dig","Ten selections, one new route into music.","genres.jpg"],
@@ -83,7 +83,7 @@ function render(mode,arg){
  titleBlock("ARTIST ARCHIVE","Artist DNA","Discover the stories and connections behind the records.");D.profiles.forEach(p=>{const a=create("article","sl-d-profile");const b=button(p[0],()=>show("artist",p[0]),"sl-d-profile-title");a.append(b,create("p","sl-d-muted",p[1]),create("p",null,p[2]),button("Explore artist →",()=>show("artist",p[0])));content.append(a)});
  }else if(mode==="artist"){
  const p=D.profiles.find(x=>x[0]===arg);if(!p){show("artists",null,true);return}
- titleBlock("ARTIST DNA",p[0],p[2]);const actions=create("div","sl-d-actions");actions.append(saveButton(p[0],"artists","Follow artist"),link("Source / artist background ↗",p[4]),link("Artist catalogue ↗",search(p[0])));content.append(actions);section("Music connections");content.append(graph(p));section("Essential listening");content.append(listRecords(p[3].map(byId).filter(Boolean)));
+ titleBlock("ARTIST DNA",p[0],p[2]);const actions=create("div","sl-d-actions");actions.append(saveButton(p[0],"artists","Follow artist"),link("Source / artist background ↗",p[4]),link("Artist catalogue ↗",search(p[0])));content.append(actions);section("Music connections");content.append(graph(p));section("Essential and connected listening");content.append(listRecords(p[3].map(byId).filter(Boolean)));
  }else if(mode==="samples"){
  titleBlock("SAMPLE DETECTIVE","Hear the connection.","A documented comparison of the sounds sampled on Firestarter. Listen on the linked services; no unauthorised audio is hosted.");
  const target=byId("original");content.append(record(target,[target,byId("fire")]));
@@ -130,12 +130,12 @@ file.addEventListener("change",async()=>{try{
  const label=labelsData.find(l=>l[0]===arg);if(!label)return;titleBlock("LABEL ARCHIVE",label[0],"Explore selections from this label’s catalogue.");const actions=create("div","sl-d-actions");actions.append(saveButton(label[0],"labels","Follow label"),link("Official catalogue ↗",label[1]));content.append(actions,listRecords(label[2].map(byId).filter(Boolean)));
  }else if(mode==="listen"){
  const r=byId(arg);if(!r)return;remember(r.id);
- const hero=create("div","sl-d-listen-art");hero.append(artwork(r));content.append(hero);
+ const hero=create("div","sl-d-listen-art");hero.append(artwork(r));content.append(hero);if(r.artSource)content.append(link("Artwork source ↗",r.artSource,"sl-d-art-credit"));
  titleBlock("LISTENING ROOM / "+r.tag,r.title,r.artist+" · "+r.genre+(r.date?" · "+r.date:""));content.append(create("p",null,r.note));
  const actions=create("div","sl-d-actions");actions.append(link(r.url.includes("bandcamp")?"Listen on Bandcamp ↗":"Open release / source ↗",r.url,"sl-d-button sl-d-primary"),link("Find on Spotify ↗",search(r.artist+" "+r.title)),saveButton(r.id));content.append(actions);
  content.append(create("p","sl-d-muted","Playback opens on the selected music service. No automatic audio playback is started here."));
  if(queue.length>1){const pager=create("div","sl-d-pager");const prev=button("← Previous",()=>move(-1)),next=button("Next →",()=>move(1));prev.disabled=position<=0;next.disabled=position>=queue.length-1;pager.append(prev,create("span",null,(position+1)+" / "+queue.length),next);content.append(pager)}
- const profile=D.profiles.find(p=>p[3].includes(r.id));if(profile){section("Follow the connections");content.append(graph(profile))}
+ const profile=D.profiles.find(p=>p[3].includes(r.id));if(profile){section("Follow the connections");content.append(graph(profile));content.append(button("Read artist profile →",()=>show("artist",profile[0])))}
  const related=records.filter(x=>x.id!==r.id&&x.genre===r.genre).slice(0,3);if(related.length){section("More to discover");content.append(listRecords(related))}
  }
  content.append(create("footer","sl-d-footer","SUBLEVEL / INDEPENDENT MUSIC DISCOVERY"));
