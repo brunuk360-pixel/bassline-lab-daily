@@ -111,7 +111,7 @@ function collectionStats(){
 }
 
 function render(mode,arg){
- current={mode,arg};if(notice)notice.textContent="";content.replaceChildren();heading.textContent=labels[mode]||({artist:"Artist DNA",listen:"Listening room",graph:"Connections",hub:"Discover more",label:"Label catalogue"}[mode]||"SUBLEVEL");back.textContent=stack.length?"← Back":"← Close";dialog.scrollTop=0;
+ current={mode,arg};dialog.dataset.room=mode;if(notice)notice.textContent="";content.replaceChildren();heading.textContent=labels[mode]||({artist:"Artist DNA",listen:"Listening room",graph:"Connections",hub:"Discover more",label:"Label catalogue"}[mode]||"SUBLEVEL");back.textContent=stack.length?"← Back":"← Close";dialog.scrollTop=0;
  if(mode==="hub"){
  titleBlock("SUBLEVEL / DISCOVERY","Go deeper.","Explore beyond the charts, or search the entire curated catalogue.");
  const grid=create("div","sl-d-hub");modes.forEach(([id,name,desc,img])=>{const b=button("",()=>show(id),"sl-d-tile");const photo=create("img");const heroIds={daily:daily()[0]?.id||"edlan",artists:"allnight",samples:"fire",history:"nookie",early:"spiders",gems:"posij",journey:"photek"};photo.src=byId(heroIds[id])?.art||"section-art/"+img;photo.alt="";photo.loading="lazy";b.append(photo,create("strong",null,name),create("small",null,desc));grid.append(b)});content.append(grid);section("Browse the catalogue");content.append(catalogue(records));
@@ -187,7 +187,16 @@ function show(mode,arg,replace=false){if(current&&!replace)stack.push({...curren
 function open(mode="hub"){if(!dialog){dialog=create("dialog","sl-discovery-dialog");if(typeof dialog.showModal!=="function")return;const bar=create("header","sl-d-bar");back=button("← Close",()=>{if(stack.length){const p=stack.pop();queue=p.queue||[];position=p.position||0;render(p.mode,p.arg);dialog.scrollTop=p.scroll||0}else dialog.close()},"sl-d-back");heading=create("strong",null,"Discover more");const close=button("×",()=>dialog.close(),"sl-d-close");close.setAttribute("aria-label","Close discovery");bar.append(back,heading,close);content=create("main","sl-d-content");notice=create("div","sl-d-notice");notice.setAttribute("role","status");dialog.append(bar,content,notice);document.body.append(dialog);dialog.addEventListener("close",()=>{document.body.classList.remove("sl-discovery-lock");stack=[];current=null;lastFocus?.focus?.({preventScroll:true})})}
  if(!dialog.open){lastFocus=document.activeElement;stack=[];current=null;document.body.classList.add("sl-discovery-lock");dialog.showModal()}show(mode)}
 function mount(){const home=app.querySelector(".night-home"),explore=app.querySelector(".xgrid");if(home&&!home.querySelector(".sl-d-entry")){const b=button("",()=>open("daily"),"sl-d-entry");b.append(create("span","sl-d-kicker","SUBLEVEL / DAILY DISCOVERY"),create("strong",null,"The Daily Dig"),create("small",null,"10 records to explore today →"));const lead=home.querySelector(".stream-listen");if(lead)lead.after(b);else home.append(b)}
- if(explore&&!app.querySelector(".sl-d-explore")){const panel=create("section","sl-d-explore");const b=button("Discover more →",()=>open(),"sl-d-button sl-d-primary");panel.append(create("h2",null,"Go deeper"),create("p","sl-d-muted","Artist DNA, samples, release history and your personal collection."),b);explore.before(panel)}
+ if(explore&&!app.querySelector(".sl-d-explore")){
+ const panel=create("section","sl-d-explore");
+ panel.append(create("span","sl-d-kicker","SUBLEVEL / DISCOVERY ROOMS"),create("h2",null,"Go deeper"),create("p","sl-d-muted","Choose a destination, or browse the complete catalogue."));
+ const shortcuts=create("div","sl-d-shortcuts");
+ const icons={daily:"01",artists:"02",samples:"03",history:"04",early:"05",gems:"06",journey:"07"};
+ modes.forEach(([id,name,desc])=>{
+  const b=button("",()=>open(id),"sl-d-shortcut");const copy=create("span","sl-d-shortcut-copy");copy.append(create("strong",null,name),create("small",null,desc));b.append(create("span","sl-d-shortcut-num",icons[id]),copy,create("span","sl-d-shortcut-arrow","↗"));shortcuts.append(b);
+ });
+ panel.append(shortcuts,button("Browse complete catalogue →",()=>open(),"sl-d-button sl-d-primary"));explore.before(panel);
+}
  const active=document.querySelector(".bottom button.active");const savedActive=active?.dataset.navLabel==="Saved"||active?.textContent.trim().startsWith("Saved");if(!savedActive)app.querySelector(".sl-d-journey-entry")?.remove();
  if(savedActive&&!app.querySelector(".sl-d-journey-entry")){const b=button("My Music Journey →",()=>open("journey"),"sl-d-button sl-d-journey-entry");app.prepend(b)}
  app.querySelectorAll(".editorial-detail").forEach(d=>{if(d.querySelector(".sl-d-track-link"))return;const h=d.querySelector(".sl-dossier-hero");if(!h)return;const t=h.querySelector(".sl-dossier-artist")?.textContent||"";const p=D.profiles.find(x=>t.toLowerCase().includes(x[0].toLowerCase()));if(p){const b=button("Artist DNA →",()=>{open("artists");show("artist",p[0])},"sl-d-button sl-d-track-link");h.after(b)}})
