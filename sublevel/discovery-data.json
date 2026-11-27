@@ -529,6 +529,36 @@
       "Classic",
       "https://www.officialcharts.com/artist/becky-hillchase-status/",
       "Explore the contrast between the vocal hook and the drop."
+    ],
+    [
+      "voodoo-pendulum",
+      "Voodoo People (Pendulum Mix)",
+      "The Prodigy & Pendulum",
+      "2005-10-03",
+      "Drum & Bass",
+      "Remix",
+      "https://shop.xlrecordings.com/release/346767-the-prodigy-voodoo-people-out-of-space?lang=en_US",
+      "Compare Pendulum’s 2005 remix with the original 1994 recording."
+    ],
+    [
+      "nu-album",
+      "What I've Always Waited For",
+      "Nu:Logic",
+      "2013",
+      "Liquid D&B",
+      "Classic",
+      "https://www.hospitalrecords.com/products/nulogic-what-ive-always-waited-for",
+      "The debut album by the collaborative project of Nu:Tone and Logistics, featuring Everlasting Days."
+    ],
+    [
+      "nu-remix",
+      "Remixes I've Always Waited For",
+      "Nu:Logic",
+      "2023",
+      "Drum & Bass",
+      "Remix album",
+      "https://www.hospitalrecords.com/products/nulogic-remixes-ive-always-waited-for",
+      "Tenth-anniversary remix EP, featuring Technimatic, Flava D and T>I."
     ]
   ],
   "profiles": [
@@ -553,7 +583,8 @@
         "fire",
         "breathe",
         "breathe-remix",
-        "voodoo"
+        "voodoo",
+        "voodoo-pendulum"
       ],
       "https://shop.xlrecordings.com/release/346570-the-prodigy-andy-c-firestarter-andy-c-remix"
     ],
@@ -571,8 +602,7 @@
       "Jungle · drum & bass",
       "The label’s retrospective places Source Direct among artists associated with the 1990s Speed club scene.",
       [
-        "source",
-        "photek"
+        "source"
       ],
       "https://temporecords.bandcamp.com/album/dangerous-curves"
     ],
@@ -624,6 +654,18 @@
         "disconnect"
       ],
       "https://www.officialcharts.com/artist/5228/chase-and-status/"
+    ],
+    [
+      "Nu:Logic",
+      "UK · liquid drum & bass",
+      "Nu:Tone and Logistics formed the collaborative project Nu:Logic. Their debut album in 2013 was revisited in a 2023 anniversary remix EP.",
+      [
+        "everlasting",
+        "nu-album",
+        "nu-remix",
+        "together"
+      ],
+      "https://www.hospitalrecords.com/products/nulogic-what-ive-always-waited-for"
     ]
   ],
   "edition": "2026-11-27",
@@ -684,6 +726,12 @@
       "1994-09-12",
       "Voodoo People",
       "voodoo"
+    ],
+    [
+      "2005-10-03",
+      "Voodoo People (Pendulum Mix)",
+      "voodoo-pendulum",
+      "https://shop.xlrecordings.com/release/346767-the-prodigy-voodoo-people-out-of-space?lang=en_US"
     ]
   ],
   "research": {
@@ -821,6 +869,33 @@
           "https://music.apple.com/us/album/2-ruff-vol-1/1708257502"
         ]
       ]
+    },
+    "Nu:Logic": {
+      "timeline": [
+        [
+          "2010",
+          "New Technique EP"
+        ],
+        [
+          "2013",
+          "What I've Always Waited For"
+        ],
+        [
+          "2023",
+          "Anniversary remix EP"
+        ]
+      ],
+      "listen": "Compare Everlasting Days with the remixes; explore Logistics separately to hear one half of the duo.",
+      "links": [
+        [
+          "Original album",
+          "https://www.hospitalrecords.com/products/nulogic-what-ive-always-waited-for"
+        ],
+        [
+          "Anniversary remixes",
+          "https://www.hospitalrecords.com/products/nulogic-remixes-ive-always-waited-for"
+        ]
+      ]
     }
   },
   "connections": [
@@ -865,6 +940,66 @@
       "type": "Sample",
       "note": "Guitar riff source",
       "source": "https://theprodigy.info/discography/official/voodoo-people/"
+    },
+    {
+      "from": "voodoo",
+      "to": "voodoo-pendulum",
+      "type": "Remix",
+      "note": "Pendulum’s remix on the 2005 XL single",
+      "source": "https://shop.xlrecordings.com/release/346767-the-prodigy-voodoo-people-out-of-space?lang=en_US"
     }
+  ],
+  "labelCatalogue": [
+    [
+      "Hospital Records",
+      "https://www.hospitalrecords.com/",
+      [
+        "allnight",
+        "movearound",
+        "memory",
+        "everlasting",
+        "together",
+        "ultra",
+        "hoax",
+        "between",
+        "apex",
+        "nu-album",
+        "nu-remix"
+      ]
+    ],
+    [
+      "XL Recordings",
+      "https://shop.xlrecordings.com/artist/94820-the-prodigy?lang=en_GB",
+      [
+        "fire",
+        "original",
+        "breathe",
+        "breathe-remix",
+        "voodoo",
+        "voodoo-pendulum"
+      ]
+    ],
+    [
+      "Galacy",
+      "https://galacy.bandcamp.com/",
+      [
+        "edlan"
+      ]
+    ],
+    [
+      "Hyperdub",
+      "https://hyperdub.net/products/burial-untrue",
+      [
+        "burial-untrue",
+        "burial-debut"
+      ]
+    ],
+    [
+      "Ninja Tune",
+      "https://ninjatune.net/release/floating-points/crush/",
+      [
+        "fp-crush"
+      ]
+    ]
   ]
 }
