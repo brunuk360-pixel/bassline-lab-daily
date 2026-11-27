@@ -22,7 +22,7 @@ const server=http.createServer((req,res)=>{
  page.on("request",r=>{const u=r.url();if(u.startsWith(origin+"/")||u.startsWith("data:")||u.startsWith("blob:")||u==="about:blank")r.continue().catch(()=>{});else r.abort().catch(()=>{})});
  let runtimeErrors=0;page.on("pageerror",()=>runtimeErrors++);
  await page.goto(origin+"/",{waitUntil:"domcontentloaded",timeout:15000});await page.waitForSelector("#app .night-home");
- const check=async(name,fn)=>{try{await fn();checks.push(name+" PASS")}catch(e){failures++;checks.push(name+" FAIL ("+(e.name==="AssertionError"?"assertion":"navigation/runtime")+")")}};
+ const check=async(name,fn)=>{try{await fn();checks.push(name+" PASS")}catch(e){failures++;checks.push(name+" FAIL ("+(e.name==="AssertionError"?"assertion":"navigation/runtime")+")");console.log("QA diagnostic "+name+": "+String(e.message).slice(0,500))}};
  const settle=()=>new Promise(r=>setTimeout(r,220));
  const nav=async name=>{await page.click('.bottom button[data-nav-label="'+name+'"]');await settle()};
  const overflow=()=>page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
