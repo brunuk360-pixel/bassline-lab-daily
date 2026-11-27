@@ -32,8 +32,8 @@ function enrich(detail){
  heading(panel,"Follow the connections");data.connections.forEach(([name,q,kind])=>{const a=link(name,"https://open.spotify.com/search/"+encodeURIComponent(q));a.className="sl-r-connection";a.append(node("small",null,kind+" ↗"));panel.append(a)});
  const refs=node("details","sl-r-sources");refs.append(node("summary",null,"Research sources ("+data.sources.length+")"));const ol=node("ol");data.sources.forEach(([label,url])=>{const li=node("li");li.append(link(label,url));ol.append(li)});refs.append(ol);panel.append(refs);
  }else{
- heading(panel,"Research further");panel.append(node("p","sl-r-note","Extended editorial research has not yet been added for this track. Explore catalogues for more information."));
- const q=artist.replace(/\b(?:19|20)\d{2}\s*$/,"").trim()+" "+title;
+ panel.classList.add("sl-r-catalogue-only");heading(panel,"More from the archive");
+ const q=artist.replace(/\s*(?:19|20)\d{2}\s*$/,"").trim()+" "+title;
  [["MusicBrainz — recording search","https://musicbrainz.org/search?type=recording&query="+encodeURIComponent(q)],["Discogs — release search","https://www.discogs.com/search/?type=release&q="+encodeURIComponent(q)]].forEach(([label,url])=>{const a=link(label,url);a.className="sl-r-connection";a.append(node("small",null,"Search ↗"));panel.append(a)});
  }
  story.append(panel);
