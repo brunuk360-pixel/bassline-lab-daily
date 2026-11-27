@@ -80,7 +80,7 @@ function queuePanel(){
 
 function remember(id){state.history=[id,...state.history.filter(x=>x!==id)].slice(0,100);persist()}
 function toggle(id,key="saved"){const a=state[key];const on=a.includes(id);state[key]=on?a.filter(x=>x!==id):[id,...a];persist();announce(on?"Removed from your collection":"Saved to your collection");return !on}
-function saveButton(id,key="saved",label="Save"){const saved=state[key].includes(id);const b=button(saved?(key==="saved"?"✓ Saved":"✓ Following"):label,()=>{const on=toggle(id,key);b.textContent=on?(key==="saved"?"✓ Saved":"✓ Following"):label;b.setAttribute("aria-pressed",String(on));if(current?.mode==="journey")render("journey")});b.setAttribute("aria-pressed",String(saved));return b}
+function saveButton(id,key="saved",label="Save"){const saved=state[key].includes(id);const b=button(saved?(key==="saved"?"✓ Saved":"✓ Following"):label,()=>{const on=toggle(id,key);b.textContent=on?(key==="saved"?"✓ Saved":"✓ Following"):label;b.setAttribute("aria-pressed",String(on));if(current?.mode==="journey")render("journey",current.arg)});b.setAttribute("aria-pressed",String(saved));return b}
 function artwork(r){
  const empty=()=>{const tile=create("div","sl-d-art sl-d-art-missing");tile.append(create("span",null,"SUBLEVEL / RELEASE"),create("small",null,r.genre),create("span","sl-d-art-note","Cover not available"));return tile};
  if(!r.art)return empty();
@@ -273,7 +273,26 @@ function render(mode,arg){
  }else if(mode==="gems"){
  titleBlock("DEEP CUTS / INDEPENDENT MUSIC","Hidden Gems","A handpicked shelf of less obvious selections across bass music, jungle and beyond.");content.append(catalogue(records.filter(r=>r.tag==="Deep cut")));
  }else if(mode==="journey"){
- titleBlock("YOUR PERSONAL LIBRARY","My Music Journey","A collection stored on this browser. Listening history records opened listening-room entries, not verified streaming playback.");
+ const tabs=[["overview","Overview"],["collection","Saved music"],["playlists","Playlists"],["following","Following"],["history","History"],["settings","Profile & data"]];
+ const tab=tabs.some(t=>t[0]===arg)?arg:"overview";
+ titleBlock("SUBLEVEL / PERSONAL LIBRARY","My Music Journey","Your music, discoveries and producer community in one place.");
+ const nav=create("nav","sl-library-tabs");nav.setAttribute("aria-label","Library sections");
+ for(const [id,name] of tabs){const b=button(name,()=>{render("journey",id)},"sl-library-tab");if(id===tab)b.setAttribute("aria-current","page");nav.append(b)}content.append(nav);
+ const saved=state.saved.map(byId).filter(Boolean),history=state.history.map(byId).filter(Boolean);
+ if(!persistent)content.append(create("p","sl-d-muted","Browser storage unavailable; changes last only for this session."));
+ function profileCard(){const card=create("section","sl-library-account");card.append(create("span","sl-d-kicker","UNSIGNED / PRODUCER COMMUNITY"),create("h3",null,"Your producer profile"),create("p","sl-d-muted","Manage your community profile, submissions and feedback using your separate Unsigned account."));const actions=create("div","sl-d-actions");actions.append(link("Open community →","https://sublevel-unsigned-xvpf.onrender.com/","sl-d-button sl-d-primary"),link("Sign in","https://sublevel-unsigned-xvpf.onrender.com/login"),link("Join beta","https://sublevel-unsigned-xvpf.onrender.com/join"));card.append(actions);return card}
+ function collection(){section("Saved music ("+saved.length+")");if(saved.length){const views=create("div","sl-d-actions"),area=create("div");views.append(button("Record shelf",()=>area.replaceChildren(shelf(saved))),button("Search / list",()=>area.replaceChildren(catalogue(saved))),button("Start listening",()=>startListening(saved[0].id,saved)));content.append(views,area);area.append(shelf(saved))}else content.append(create("p","sl-d-muted","Save records in any discovery room to build your collection."),button("Explore the Daily Dig",()=>show("daily")))}
+ if(tab==="overview"){
+ content.append(collectionStats());const resume=resumePanel();if(resume)content.append(resume);
+ const shortcuts=create("div","sl-library-shortcuts");
+ for(const [id,name,count] of [["collection","Saved music",saved.length],["playlists","Playlists",listening.playlists.length],["following","Following",state.artists.length+state.labels.length],["history","Recently explored",history.length]]){const b=button("",()=>render("journey",id),"sl-library-shortcut");b.append(create("span",null,name),create("strong",null,String(count)),create("span",null,"→"));shortcuts.append(b)}content.append(shortcuts);
+ section("Recommended for you");content.append(personalized(),profileCard());
+ }else if(tab==="collection"){collection()}
+ else if(tab==="playlists"){section("Your playlists");content.append(playlistLibrary());const resume=resumePanel();if(resume)content.append(resume)}
+ else if(tab==="following"){section("Followed artists");const followed=D.profiles.filter(p=>state.artists.includes(p[0]));if(!followed.length)content.append(create("p","sl-d-muted","Follow artists in Artist DNA."),button("Discover artists",()=>show("artists")));for(const p of followed){const row=create("article","sl-d-profile");row.append(create("h3",null,p[0]),create("p","sl-d-muted",p[1]),button("Artist DNA →",()=>show("artist",p[0])),saveButton(p[0],"artists","Follow artist"));content.append(row)}
+ section("Record labels");for(const [name,url,ids] of labelsData){const row=create("article","sl-d-profile");row.append(create("h3",null,name));const actions=create("div","sl-d-actions");actions.append(saveButton(name,"labels","Follow label"),button("Browse catalogue →",()=>show("label",name)),link("Official catalogue ↗",url));row.append(actions);content.append(row)}
+ }else if(tab==="history"){section("Recently explored");content.append(create("p","sl-d-muted","This is your listening-room visit history, not verified streaming playback."));if(history.length){content.append(button("Clear visit history",()=>{if(!confirm("Clear recently explored records? Saved music and playlists will be kept."))return;state.history=[];persist();render("journey","history")}),catalogue(history))}else content.append(create("p","sl-d-muted","Your listening-room visits will appear here."))}
+ else if(tab==="settings"){content.append(profileCard());section("Your data");content.append(create("p","sl-d-muted","Collections and playlists are stored in this browser. Export a backup before clearing browser data or moving devices. Signing into Unsigned does not synchronise this library."));
  const controls=create("div","sl-d-actions");controls.append(button("Export collection",()=>{const blob=new Blob([JSON.stringify({...state,listening},null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=create("a");a.href=url;a.download="sublevel-collection.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}));
 const file=create("input");file.type="file";file.accept=".json,application/json";file.hidden=true;
 file.addEventListener("change",async()=>{try{
@@ -283,17 +302,13 @@ file.addEventListener("change",async()=>{try{
  const valid={saved:records.map(r=>r.id),history:records.map(r=>r.id),artists:D.profiles.map(p=>p[0]),labels:labelsData.map(l=>l[0])};
  for(const k of Object.keys(valid)){if(Array.isArray(incoming[k]))state[k]=[...new Set([...state[k],...incoming[k].filter(v=>typeof v==="string"&&valid[k].includes(v))])].slice(0,100)}
  if(incoming.listening){listening=L.merge(listening,incoming.listening,validIDs);persistListening()}
- persist();render("journey");announce("Collection merged successfully");
+ persist();render("journey","settings");announce("Collection merged successfully");
  }catch{announce("Could not import this collection. Choose a valid SUBLEVEL JSON export.")}});
  controls.append(button("Import collection",()=>file.click()),file);
 
+
  content.append(controls);
- if(!persistent)content.append(create("p","sl-d-muted","Browser storage unavailable; changes last only for this session."));
- const resume=resumePanel();if(resume)content.append(resume);section("Your playlists");content.append(playlistLibrary());
- content.append(collectionStats());section("Recommended for you");content.append(personalized());section("Saved records ("+state.saved.length+")");const saved=state.saved.map(byId).filter(Boolean);if(saved.length){const views=create("div","sl-d-actions"),area=create("div");views.append(button("Record shelf",()=>area.replaceChildren(shelf(saved))),button("Search / list",()=>area.replaceChildren(catalogue(saved))));content.append(views,area);area.append(shelf(saved))}else content.append(create("p","sl-d-muted","Save a record from any discovery feature to start your shelf."),button("Explore the Daily Dig",()=>show("daily")));
- section("Followed artists");state.artists.forEach(name=>content.append(button(name+" →",()=>show("artist",name))));if(!state.artists.length)content.append(create("p","sl-d-muted","Follow artists from Artist DNA."));
- section("Record labels");labelsData.forEach(([name,url,ids])=>{const row=create("article","sl-d-profile");row.append(create("h3",null,name));const actions=create("div","sl-d-actions");actions.append(saveButton(name,"labels","Follow label"),button("Browse catalogue →",()=>show("label",name)),link("Official catalogue ↗",url));row.append(actions);content.append(row)});
- section("Recently explored");const history=state.history.map(byId).filter(Boolean);if(history.length)content.append(listRecords(history.slice(0,12)));else content.append(create("p","sl-d-muted","Your listening-room visits will appear here."));
+ }
  }else if(mode==="playlist"){
  const p=listening.playlists.find(p=>p.name===arg);if(!p){render("journey");return}
  titleBlock("YOUR COLLECTION / PLAYLIST",p.name,p.ids.length+" records · saved on this device");
@@ -337,7 +352,7 @@ function mount(){const home=app.querySelector(".night-home"),explore=app.querySe
  panel.append(shortcuts,button("Browse complete catalogue →",()=>open(),"sl-d-button sl-d-primary"));explore.before(panel);
 }
  const active=document.querySelector(".bottom button.active");const savedActive=active?.dataset.navLabel==="Saved"||active?.textContent.trim().startsWith("Saved");if(!savedActive)app.querySelector(".sl-d-journey-entry")?.remove();
- if(savedActive&&!app.querySelector(".sl-d-journey-entry")){const b=button("My Music Journey →",()=>open("journey"),"sl-d-button sl-d-journey-entry");app.prepend(b)}
+ if(savedActive&&!app.querySelector(".sl-d-journey-entry")){const panel=create("section","sl-d-journey-entry sl-library-entry");panel.append(create("span","sl-d-kicker","SUBLEVEL / PERSONAL LIBRARY"),create("h2",null,"Your music collection"),create("p","sl-d-muted","Manage discovery saves, playlists and followed artists. Existing magazine saves remain below."),button("Open My Music Journey →",()=>open("journey"),"sl-d-button sl-d-primary"));app.prepend(panel)}
  app.querySelectorAll(".editorial-detail").forEach(d=>{if(d.querySelector(".sl-d-track-link"))return;const h=d.querySelector(".sl-dossier-hero");if(!h)return;const t=h.querySelector(".sl-dossier-artist")?.textContent||"";const p=D.profiles.find(x=>t.toLowerCase().includes(x[0].toLowerCase()));if(p){const b=button("Artist DNA →",()=>{open("artists");show("artist",p[0])},"sl-d-button sl-d-track-link");h.after(b)}})
 }
 let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{pending=false;mount()})}};new MutationObserver(schedule).observe(app,{childList:true,subtree:true});const nav=document.querySelector(".bottom");if(nav)new MutationObserver(schedule).observe(nav,{attributes:true,subtree:true,attributeFilter:["class"]});schedule();
