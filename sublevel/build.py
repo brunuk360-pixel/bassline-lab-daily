@@ -176,8 +176,15 @@ record_patch=('<style id="sublevel-record-concept-02">'+record_css+'</style>').e
 data,n=re.subn(br"</head\s*>",lambda m:record_patch+m.group(0),data,count=1,flags=re.I)
 assert n==1
 
+
+# Final shared visual system, after all older section overrides.
+coherence_css=(root/"coherence.css").read_text(encoding="utf-8")
+coherence_patch=('<style id="sublevel-coherent-edition">'+coherence_css+'</style>').encode("utf-8")
+data,n=re.subn(br"</head\s*>",lambda m:coherence_patch+m.group(0),data,count=1,flags=re.I)
+assert n==1
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
 (output.parent/"record-concept-02.html").write_bytes(data)
-print("Published SUBLEVEL editorial UX upgrade.")
+print("Published SUBLEVEL unified editorial edition.")
