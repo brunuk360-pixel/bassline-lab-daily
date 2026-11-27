@@ -64,8 +64,8 @@
       ]
     },
     {
-      "id": "dnb",
-      "genre": "Drum & Bass",
+      "id": "dnb-beatport-archive",
+      "genre": "Drum & Bass — Beatport archive",
       "source": "Beatport — global genre track sales",
       "url": "https://www.beatport.com/genre/drum-bass/1/top-100",
       "checked": "2026-11-27",
@@ -611,12 +611,73 @@
           "artist": "The Deepshakerz, Turntables Night Fever"
         }
       ]
+    },
+    {
+      "id": "dnb",
+      "genre": "Drum & Bass",
+      "url": "https://www.traxsource.com/genre/31/drum-and-bass",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "note": "Source page indexed 27 November; retailer chart period not published. Beatport's ranking is separate and not confirmed current.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Elastic Soul (Original Mix)",
+          "artist": "Alix Perez"
+        },
+        {
+          "rank": 2,
+          "title": "Smokescreen",
+          "artist": "Zero T"
+        },
+        {
+          "rank": 3,
+          "title": "The Alchemist (Original Mix)",
+          "artist": "Jamie Van Goulden"
+        },
+        {
+          "rank": 4,
+          "title": "That Thing",
+          "artist": "Unknown Artist"
+        },
+        {
+          "rank": 5,
+          "title": "Energy (Napes Remix)",
+          "artist": "Flava D, Stush, Napes"
+        },
+        {
+          "rank": 6,
+          "title": "Happy Feelings (Original Mix)",
+          "artist": "Soultec"
+        },
+        {
+          "rank": 7,
+          "title": "Echoes Of Us (Original Mix)",
+          "artist": "Technimatic"
+        },
+        {
+          "rank": 8,
+          "title": "Imminent",
+          "artist": "Blade (Dnb)"
+        },
+        {
+          "rank": 9,
+          "title": "BACK 2 LIFE (Extended Mix)",
+          "artist": "Sigma, Soul II Soul, Capo Lee, Zimma, Liv Campbell"
+        },
+        {
+          "rank": 10,
+          "title": "Brown Paper Bag",
+          "artist": "Roni Size, Reprazent"
+        }
+      ]
     }
   ],
   "sources": [
     [
       "Drum & Bass",
-      "https://www.beatport.com/genre/drum-bass/1/top-100",
+      "https://www.traxsource.com/genre/31/drum-and-bass",
       "dnb"
     ],
     [
@@ -695,6 +756,27 @@
     [
       "Soul / Funk / Disco",
       "https://www.traxsource.com/genre/3/soul-funk-disco/top"
+    ],
+    [
+      "Drum & Bass — Beatport archive",
+      "https://www.beatport.com/genre/drum-bass/1/top-100",
+      "dnb-beatport-archive"
+    ],
+    [
+      "Breaks / Breakbeat / UK Bass",
+      "https://www.beatport.com/genre/breaks-breakbeat-uk-bass/9/top-100"
+    ],
+    [
+      "Trance (Main Floor)",
+      "https://www.beatport.com/genre/trance-main-floor/7/top-100"
+    ],
+    [
+      "Trance (Raw / Deep / Hypnotic)",
+      "https://www.beatport.com/genre/trance-raw-deep-hypnotic/99/top-100"
+    ],
+    [
+      "Dubstep",
+      "https://www.beatport.com/de/genre/dubstep/18/top-100"
     ]
   ]
 }
