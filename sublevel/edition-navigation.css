@@ -49,3 +49,67 @@ html body #app .weekly-copy{padding-top:12px!important}
 html body #app .editorial-detail .sl-dossier-section,html body #app .editorial-detail .sl-dossier-discovery h3{font-size:12px!important;letter-spacing:.09em!important;color:#79c9b7!important;font-weight:700!important}
 html body #app .editorial-detail .sl-dossier-discovery{margin-top:14px!important}
 html body #app .editorial-detail .sl-research-edition{margin-top:14px!important;padding-top:12px!important}
+
+
+/* Editorial design refresh: consistent rhythm, prominent section titles,
+   distinct reading surfaces and direct discovery navigation. */
+:root{--sl-page:#080e10;--sl-paper:#eef0e7;--sl-quiet:#b5c5c0;--sl-action:#8bd4c1;--sl-surface:#12201f;--sl-spacing:clamp(14px,4vw,24px)}
+html body #app .night-home .sl-home-index{padding:12px 13px!important;margin:10px 0 20px!important;background:#111e1e!important;border-top:2px solid var(--sl-action)!important}
+.sl-home-index-head strong{font-size:13px!important}.sl-home-index-head{margin-bottom:7px}
+html body #app .night-home .sl-home-index-link{min-height:44px!important;font-size:13px!important;gap:7px!important}
+html body #app .night-home .sl-home-index-link:hover{background:#79c9b712!important}
+html body #app .night-home .sl-home-index-link .sl-home-num{font-size:11px!important}
+html body #app .night-home>.sl-home-department{margin:24px 0 0!important;padding-bottom:8px!important;scroll-margin-top:20px!important}
+html body #app .night-home .sl-home-dept-title{padding:12px 0 11px!important;border-top:2px solid #79c9b799!important;border-bottom:0!important;margin-bottom:10px!important}
+html body #app .night-home .sl-home-dept-copy h2{font-size:clamp(24px,6.1vw,34px)!important;color:var(--sl-paper)!important;line-height:1.12!important}
+html body #app .night-home .sl-home-dept-copy small{font-size:12px!important;color:var(--sl-quiet)!important}
+.sl-home-dept-num{color:var(--sl-action)!important;font-size:29px!important;min-width:38px!important;align-self:flex-start;margin-top:3px}
+html body #app .night-home .sl-home-original-heading{display:none!important}
+html body #app .night-home .sl-home-dig{border-top:1px solid #79c9b970!important;border-bottom:1px solid #79c9b940!important;padding:15px 14px!important}
+html body #app .night-home .sl-home-dig strong{font-size:26px!important}
+html body #app .night-home .sl-home-dig small{font-size:12px!important}
+html body #app .night-home .news-item summary{min-height:84px!important}
+html body #app .night-home .news-copy b{font-size:16px!important;line-height:1.35!important}
+html body #app .night-home .news-copy time{font-size:11px!important}
+html body #app .night-home .motion-highlights{gap:12px!important}
+html body #app .night-home .motion-highlight{border-bottom:1px solid #b5cbc32a!important}
+html body #app .night-home .night-tool-group button{color:var(--sl-paper)!important}
+html body #app .sl-d-explore{margin:4px 0 20px!important;padding:15px 0 18px!important;border-block:1px solid #79c9b955!important}
+html body #app .sl-d-explore h2{font-size:28px!important;line-height:1.15!important;margin:5px 0!important}
+html body #app .sl-d-explore p{font-size:13px!important;line-height:1.45!important}
+.sl-d-shortcuts{display:grid;grid-template-columns:1fr;gap:0;margin:8px 0 14px}
+html body #app .sl-d-shortcut{display:grid!important;grid-template-columns:30px minmax(0,1fr) 17px!important;gap:9px!important;align-items:center!important;width:100%!important;text-align:left!important;background:none!important;color:#eef0e7!important;border:0!important;border-bottom:1px solid #b5cbc32a!important;border-radius:0!important;box-shadow:none!important;min-height:58px!important;padding:9px 3px!important;cursor:pointer}
+.sl-d-shortcut-num,.sl-d-shortcut-arrow{color:#8bd4c1!important;font-size:12px!important;font-weight:700!important}
+.sl-d-shortcut-copy{min-width:0;display:flex;flex-direction:column;gap:3px}
+.sl-d-shortcut-copy strong{font-size:15px!important;font-weight:700!important;line-height:1.25!important;color:#eef0e7!important}
+.sl-d-shortcut-copy small{font-size:11px!important;line-height:1.4!important;color:#b5c5c0!important}
+html body #app .sl-d-shortcut:hover{background:#79c9b70b!important}
+html body #app .sl-d-shortcut:focus-visible{outline:2px solid #79c9b7!important;outline-offset:-2px!important}
+.sl-discovery-dialog{color-scheme:dark!important}
+.sl-d-content{padding:16px clamp(16px,4.5vw,38px) 30px!important}
+.sl-d-content h1{font-size:clamp(31px,8vw,54px)!important;line-height:1.05!important;letter-spacing:-.045em!important}
+.sl-d-content h2{font-size:clamp(22px,5.6vw,31px)!important;line-height:1.2!important;margin:24px 0 12px!important}
+.sl-d-content p,.sl-d-copy p{line-height:1.55!important}
+.sl-d-content .sl-d-button{min-height:44px!important;font-size:12px!important}
+.sl-d-content .sl-d-muted{color:#b5c5c0!important}
+.sl-d-content .sl-d-record{align-items:start!important;gap:13px!important}
+.sl-d-content .sl-d-record.sl-d-no-art{grid-template-columns:1fr!important}
+.sl-d-content .sl-d-record.sl-d-no-art .sl-d-copy{padding-left:12px!important;border-left:2px solid #79c9b766!important}
+.sl-d-content .sl-d-record .sl-d-copy h3{font-size:18px!important;line-height:1.2!important}
+.sl-d-content .sl-d-record .sl-d-copy .sl-d-muted{font-size:12px!important}
+.sl-d-content .sl-d-search{min-height:46px!important}
+.sl-d-content .sl-d-art-missing{aspect-ratio:auto!important;min-height:44px!important;font-size:11px!important;padding:10px!important}
+.sl-d-content .sl-d-listen-art:has(.sl-d-art-missing){width:100%!important;max-width:none!important;box-shadow:none!important;margin:0 0 12px!important}
+.sl-d-content .sl-d-listen-art .sl-d-art-missing{min-height:44px!important;border:1px solid #b5cbc32a!important;background:#101b1b!important}
+.sl-d-content .sl-d-shelf-cell .sl-d-art-missing{min-height:72px!important}
+.sl-d-content .sl-d-button:focus-visible,.sl-d-content a:focus-visible,.sl-d-back:focus-visible,.sl-d-close:focus-visible{outline:2px solid #8bd4c1!important;outline-offset:2px!important}
+html body #app .weekly-page .weekly-cover.sl-issue-strip{aspect-ratio:720/202!important;min-height:0!important;max-height:202px!important}
+html body #app .weekly-page .weekly-cover.sl-issue-strip>img.sl-issue-art{height:100%!important;object-fit:fill!important}
+html body #app .weekly-story .weekly-copy h2{font-size:clamp(26px,6.5vw,43px)!important;margin:7px 0 10px!important}
+html body #app .weekly-story .sl-read-time{margin-bottom:10px!important}
+html body #app .editorial-detail .record-tabs button{font-size:12px!important;min-height:44px!important}
+html body #app .editorial-detail .sl-dossier-discovery a,html body #app .editorial-detail .sl-r-connection{min-height:44px!important;font-size:13px!important}
+html body .bottom button{color:#b6c8c3!important}
+html body .bottom button.active{color:#8bd4c1!important}
+@media(min-width:700px){.sl-d-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}.sl-home-dept-num{font-size:34px!important}.sl-d-content .sl-d-record{gap:20px!important}}
+@media(max-width:350px){html body #app .night-home .sl-home-index-link{font-size:12px!important}.sl-home-index-head strong{font-size:11px!important}.sl-home-dept-num{min-width:29px!important;font-size:23px!important}}
