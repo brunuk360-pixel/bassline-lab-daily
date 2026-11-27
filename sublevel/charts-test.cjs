@@ -10,4 +10,8 @@ a.match(f.status({status:"snapshot",checked:"2026-11-27"},"2026-11-27"),/not con
 a.match(f.status({status:"verified",checked:"2026-11-27"},"2026-11-28"),/refresh needed/);
 a.equal(f.sourceFor("Drum & Bass")[2],"dnb");
 a.equal(f.sourceFor("Unknown genre"),undefined);
+a.equal(f.sourceFor("Techno")[2],"techno");
+a.equal(f.sourceFor("Garage")[2],"garage");
+a.equal(f.sourceFor("House")[2],"house");
+for(const c of feed.charts){a.equal(c.rows.length,10);a.deepEqual(c.rows.map(r=>r.rank),Array.from({length:10},(_,i)=>i+1));a.equal(new Set(c.rows.map(r=>r.title+'|'+r.artist)).size,10)}
 console.log("Chart checks passed: source matching and honest freshness labels.");
