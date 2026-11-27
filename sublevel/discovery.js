@@ -28,7 +28,7 @@ let dialog,content,heading,back,lastFocus,stack=[],current,queue=[],position=0,n
 function announce(txt){if(notice)notice.textContent=txt}
 function remember(id){state.history=[id,...state.history.filter(x=>x!==id)].slice(0,100);persist()}
 function toggle(id,key="saved"){const a=state[key];const on=a.includes(id);state[key]=on?a.filter(x=>x!==id):[id,...a];persist();announce(on?"Removed from your collection":"Saved to your collection");return !on}
-function saveButton(id,key="saved",label="Save"){const saved=state[key].includes(id);const b=button(saved?"✓ Saved":label,()=>{const on=toggle(id,key);b.textContent=on?"✓ Saved":label;b.setAttribute("aria-pressed",String(on))});b.setAttribute("aria-pressed",String(saved));return b}
+function saveButton(id,key="saved",label="Save"){const saved=state[key].includes(id);const b=button(saved?"✓ Saved":label,()=>{const on=toggle(id,key);b.textContent=on?"✓ Saved":label;b.setAttribute("aria-pressed",String(on));if(current?.mode==="journey")render("journey")});b.setAttribute("aria-pressed",String(saved));return b}
 function artwork(r){if(r.art){const img=create("img","sl-d-art");img.src=r.art;img.alt=r.title+" release artwork";img.loading="lazy";img.addEventListener("error",()=>{img.replaceWith(create("div","sl-d-art sl-d-art-missing","Artwork unavailable"))},{once:true});return img}return create("div","sl-d-art sl-d-art-missing","Artwork unavailable")}
 function record(r,list){const a=create("article","sl-d-record");a.append(artwork(r));const copy=create("div","sl-d-copy");copy.append(create("span","sl-d-kicker",r.tag),create("h3",null,r.title),create("p","sl-d-muted",r.artist+" · "+r.genre+(r.date?" · "+r.date:"")),create("p",null,r.note));const actions=create("div","sl-d-actions");actions.append(button("Listen / details →",()=>startListening(r.id,list)),saveButton(r.id));copy.append(actions);a.append(copy);return a}
 function listRecords(list){const g=create("div","sl-d-list");list.filter(Boolean).forEach(r=>g.append(record(r,list)));return g}
@@ -82,6 +82,34 @@ function graph(profile){
  rlist.forEach(r=>{const b=button(r.title,()=>startListening(r.id,rlist),"sl-d-node");b.append(create("small",null,r.tag));box.append(b)});
  return box
 }
+
+const connections=(D.connections||[]).filter(c=>byId(c.from)&&byId(c.to));
+function connectionPanel(id,filter="All"){
+ const edges=connections.filter(c=>(c.from===id||c.to===id)&&(filter==="All"||c.type===filter));
+ const panel=create("div","sl-d-connected");
+ const base=byId(id);if(!base||!edges.length)return panel;
+ const central=create("div","sl-d-connection-center");central.append(artwork(base),create("strong",null,base.title),create("small",null,base.artist));panel.append(central);
+ const list=create("div","sl-d-edge-list");
+ for(const edge of edges){
+  const other=byId(edge.from===id?edge.to:edge.from);
+  const row=create("article","sl-d-edge");const kind=edge.type==="Sample"?(edge.from===id?"Sample source":"Sampled by"):(edge.from===id?"Remix":"Original recording");
+  row.append(create("span","sl-d-kicker",kind));const info=create("div","sl-d-edge-copy");info.append(artwork(other));const txt=create("div");txt.append(create("strong",null,other.title),create("small",null,other.artist),create("p",null,edge.note));info.append(txt);row.append(info);
+  const actions=create("div","sl-d-actions");actions.append(button("Listen / details →",()=>startListening(other.id,[base,other])),link("Evidence ↗",edge.source),saveButton(other.id));row.append(actions);list.append(row);
+ }
+ panel.append(list);return panel;
+}
+function shelf(list){
+ const grid=create("div","sl-d-shelf");for(const r of list){const cell=create("article","sl-d-shelf-cell");const b=button("",()=>startListening(r.id,list),"sl-d-shelf-open");b.append(artwork(r),create("strong",null,r.title),create("small",null,r.artist));cell.append(b,saveButton(r.id));grid.append(cell)}return grid
+}
+function collectionStats(){
+ const list=state.saved.map(byId).filter(Boolean),box=create("div","sl-d-stats");
+ for(const [n,t] of [[list.length,"Saved releases"],[new Set(list.map(r=>r.genre)).size,"Genres"],[state.artists.length,"Artists followed"],[state.labels.length,"Labels followed"]]){const card=create("div");card.append(create("strong",null,String(n)),create("small",null,t));box.append(card)}
+ const groups={};list.forEach(r=>groups[r.genre]=(groups[r.genre]||0)+1);
+ const chart=create("div","sl-d-taste");
+ for(const [genre,n] of Object.entries(groups).sort((a,b)=>b[1]-a[1]).slice(0,6)){const row=create("div","sl-d-taste-row");row.append(create("span",null,genre),create("small",null,String(n)));const line=create("div","sl-d-taste-track");const bar=create("div");bar.style.width=(n/list.length*100)+"%";line.append(bar);row.append(line);chart.append(row)}
+ const section=create("section");section.append(box);if(list.length)section.append(create("h2","sl-d-section","Your saved genres"),chart);return section;
+}
+
 function render(mode,arg){
  current={mode,arg};if(notice)notice.textContent="";content.replaceChildren();heading.textContent=labels[mode]||({artist:"Artist DNA",listen:"Listening room",graph:"Connections",hub:"Discover more",label:"Label catalogue"}[mode]||"SUBLEVEL");back.textContent=stack.length?"← Back":"← Close";dialog.scrollTop=0;
  if(mode==="hub"){
@@ -93,13 +121,16 @@ function render(mode,arg){
  titleBlock("ARTIST ARCHIVE","Artist DNA","Discover the stories and connections behind the records.");D.profiles.forEach(p=>{const a=create("article","sl-d-profile");const b=button(p[0],()=>show("artist",p[0]),"sl-d-profile-title");a.append(b,create("p","sl-d-muted",p[1]),create("p",null,p[2]),button("Explore artist →",()=>show("artist",p[0])));content.append(a)});
  }else if(mode==="artist"){
  const p=D.profiles.find(x=>x[0]===arg);if(!p){show("artists",null,true);return}
- titleBlock("ARTIST DNA",p[0],p[2]);const actions=create("div","sl-d-actions");actions.append(saveButton(p[0],"artists","Follow artist"),link("Source / artist background ↗",p[4]),link("Artist catalogue ↗",search(p[0])));content.append(actions);const research=D.research?.[p[0]];if(research){section("Career timeline");const t=create("div","sl-d-timeline");for(const [year,story] of research.timeline||[]){const row=create("article","sl-d-event");row.append(create("time",null,year),create("p",null,story));t.append(row)}content.append(t);if(research.listen){section("Listening guide");content.append(create("p",null,research.listen))}if(research.links?.length){const refs=create("div","sl-d-actions");for(const [name,url] of research.links)refs.append(link(name+" ↗",url));content.append(refs)}}section("Music connections");content.append(graph(p));section("Essential and connected listening");content.append(listRecords(p[3].map(byId).filter(Boolean)));
+ titleBlock("ARTIST DNA",p[0],p[2]);const actions=create("div","sl-d-actions");actions.append(saveButton(p[0],"artists","Follow artist"),link("Source / artist background ↗",p[4]),link("Artist catalogue ↗",search(p[0])));content.append(actions);const research=D.research?.[p[0]];if(research){section("Career timeline");const t=create("div","sl-d-timeline");for(const [year,story] of research.timeline||[]){const row=create("article","sl-d-event");row.append(create("time",null,year),create("p",null,story));t.append(row)}content.append(t);if(research.listen){section("Listening guide");content.append(create("p",null,research.listen))}if(research.links?.length){const refs=create("div","sl-d-actions");for(const [name,url] of research.links)refs.append(link(name+" ↗",url));content.append(refs)}}section("Music connections");content.append(graph(p));const linked=p[3].filter(id=>connections.some(c=>c.from===id));if(linked.length){const group=create("div","sl-d-actions");linked.forEach(id=>group.append(button(byId(id).title+" — connections →",()=>show("samples",id))));content.append(group)}section("Essential and connected listening");content.append(listRecords(p[3].map(byId).filter(Boolean)));
  }else if(mode==="samples"){
- titleBlock("SAMPLE DETECTIVE","Hear the connection.","A documented comparison of the sounds sampled on Firestarter. Listen on the linked services; no unauthorised audio is hosted.");
- const target=byId("original");content.append(record(target,[target,byId("fire")]));
- const pairs=[["S.O.S.","The Breeders","Guitar sample"],["Close (to the Edit)","Art of Noise","Vocal sample"]];
- pairs.forEach(([track,artist,kind])=>{const a=create("article","sl-d-profile");a.append(create("span","sl-d-kicker",kind),create("h3",null,track),create("p","sl-d-muted",artist),link("Find original recording ↗",search(artist+" "+track)));content.append(a)});
- content.append(link("Read release and sample credits ↗","https://musicbrainz.org/release/8a64392a-9460-4f90-bce8-021ee39aeb8b"));section("Compare the remix");content.append(record(byId("fire"),[target,byId("fire")]));
+ titleBlock("SAMPLE DETECTIVE","Trace the sound.","Follow documented samples and remixes between rock, hip hop, rave and drum & bass. Each connection links to its evidence.");
+ const roots=[...new Set(connections.map(c=>c.from))].map(byId).filter(Boolean);
+ const controls=create("div","sl-d-filters");const pick=create("select","sl-d-select");pick.setAttribute("aria-label","Choose a recording");
+ roots.forEach(r=>{const o=create("option",null,r.title);o.value=r.id;pick.append(o)});
+ const type=create("select","sl-d-select");type.setAttribute("aria-label","Relationship type");["All","Sample","Remix"].forEach(t=>{const o=create("option",null,t==="All"?"All connections":t==="Sample"?"Samples":"Remixes");o.value=t;type.append(o)});
+ const result=create("div");function draw(){result.replaceChildren(connectionPanel(pick.value,type.value));if(!result.querySelector(".sl-d-edge"))result.append(create("p","sl-d-muted","No documented connections of this type for this recording."))}
+ if(roots.some(r=>r.id===arg))pick.value=arg;
+ controls.append(pick,type);content.append(controls,result);pick.addEventListener("change",draw);type.addEventListener("change",draw);draw();
  }else if(mode==="history"){
  titleBlock("SUBLEVEL / ARCHIVE","On This Day","A source-dated music history timeline. Only documented dates appear as anniversaries.");
  const now=new Date(),parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/London",month:"2-digit",day:"2-digit"}).formatToParts(now),md=parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;
@@ -132,7 +163,7 @@ file.addEventListener("change",async()=>{try{
 
  content.append(controls);
  if(!persistent)content.append(create("p","sl-d-muted","Browser storage unavailable; changes last only for this session."));
- section("Saved records ("+state.saved.length+")");const saved=state.saved.map(byId).filter(Boolean);if(saved.length)content.append(catalogue(saved));else content.append(create("p","sl-d-muted","Save a record from any discovery feature to start your shelf."),button("Explore the Daily Dig",()=>show("daily")));
+ content.append(collectionStats());section("Saved records ("+state.saved.length+")");const saved=state.saved.map(byId).filter(Boolean);if(saved.length){const views=create("div","sl-d-actions"),area=create("div");views.append(button("Record shelf",()=>area.replaceChildren(shelf(saved))),button("Search / list",()=>area.replaceChildren(catalogue(saved))));content.append(views,area);area.append(shelf(saved))}else content.append(create("p","sl-d-muted","Save a record from any discovery feature to start your shelf."),button("Explore the Daily Dig",()=>show("daily")));
  section("Followed artists");state.artists.forEach(name=>content.append(button(name+" →",()=>show("artist",name))));if(!state.artists.length)content.append(create("p","sl-d-muted","Follow artists from Artist DNA."));
  section("Record labels");labelsData.forEach(([name,url,ids])=>{const row=create("article","sl-d-profile");row.append(create("h3",null,name));const actions=create("div","sl-d-actions");actions.append(saveButton(name,"labels","Follow label"),button("Browse catalogue →",()=>show("label",name)),link("Official catalogue ↗",url));row.append(actions);content.append(row)});
  section("Recently explored");const history=state.history.map(byId).filter(Boolean);if(history.length)content.append(listRecords(history.slice(0,12)));else content.append(create("p","sl-d-muted","Your listening-room visits will appear here."));
@@ -145,7 +176,7 @@ file.addEventListener("change",async()=>{try{
  const actions=create("div","sl-d-actions");actions.append(link(r.url.includes("bandcamp")?"Listen on Bandcamp ↗":"Open release / source ↗",r.url,"sl-d-button sl-d-primary"),link("Find on Spotify ↗",search(r.artist+" "+r.title)),saveButton(r.id));content.append(actions);
  content.append(create("p","sl-d-muted","Playback opens on the selected music service. No automatic audio playback is started here."));
  if(queue.length>1){const pager=create("div","sl-d-pager");const prev=button("← Previous",()=>move(-1)),next=button("Next →",()=>move(1));prev.disabled=position<=0;next.disabled=position>=queue.length-1;pager.append(prev,create("span",null,(position+1)+" / "+queue.length),next);content.append(pager)}
- const profile=D.profiles.find(p=>p[3].includes(r.id));if(profile){section("Follow the connections");content.append(graph(profile));content.append(button("Read artist profile →",()=>show("artist",profile[0])))}
+ const edges=connections.filter(c=>c.from===r.id||c.to===r.id);if(edges.length){section("Sample & remix connections");content.append(connectionPanel(r.id))}const profiles=D.profiles.filter(p=>p[3].includes(r.id));if(profiles.length){section("Artist DNA");for(const profile of profiles)content.append(button(profile[0]+" →",()=>show("artist",profile[0])))}
  const related=records.filter(x=>x.id!==r.id&&x.genre===r.genre).slice(0,3);if(related.length){section("More to discover");content.append(listRecords(related))}
  }
  content.append(create("footer","sl-d-footer","SUBLEVEL / INDEPENDENT MUSIC DISCOVERY"));
