@@ -232,6 +232,20 @@ data,n=re.subn(br"</body\s*>",lambda m:discovery_script+m.group(0),data,count=1,
 assert n==1
 print("Discovery catalogue validated:",len(ids),"entries;",len(discovery["profiles"]),"artist profiles.")
 
+
+# Final visual navigation pass; preserve the existing editorial content and actions.
+edition_css=(root/"edition-navigation.css").read_text(encoding="utf-8")
+edition_js=(root/"edition-navigation.js").read_text(encoding="utf-8")
+if shutil.which("node"):
+    for script in ("edition-navigation.js","track-dossier.js","research-edition.js"):
+        subprocess.run(["node","--check",str(root/script)],check=True)
+edition_patch=('<style id="sublevel-edition-navigation">'+edition_css+'</style>').encode("utf-8")
+data,n=re.subn(br"</head\s*>",lambda m:edition_patch+m.group(0),data,count=1,flags=re.I)
+assert n==1
+data,n=re.subn(br"</body\s*>",lambda m:('<script>'+edition_js+'</script>').encode("utf-8")+m.group(0),data,count=1,flags=re.I)
+assert n==1
+print("Editorial contents navigation and compact magazine strip included.")
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
