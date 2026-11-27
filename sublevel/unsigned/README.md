@@ -1,0 +1,9 @@
+# SUBLEVEL Unsigned — moderated beta
+
+Separate service, separate accounts, PostgreSQL data shared between devices. No changes to the main magazine or its local accounts. No uploaded audio files; link only. All submissions and feedback require moderator approval. Votes use one row per track and member. Own-track votes are rejected. Producer rankings require five approved ratings, with Bayesian-style neutral prior (five ratings at 10). No fabricated content. Account deletion cascades. Password hashes use Werkzeug scrypt; CSRF on POST, HTTP-only secure cookies, rate budgets in PostgreSQL, validated link hosts and escaped templates.
+
+## Beta limitations
+Invite-only. No email verification, password reset, robust anti-Sybil identity verification, legal/privacy review, independent security audit or production load test. Rank weighting is not fraud-proof. Public bios require human oversight. Database expiry requires export/migration before 30 days. Free web service may sleep and monthly workspace usage limits apply. Not a production launch. Do not reuse main magazine credentials.
+
+## Deployment
+Review sublevel/unsigned/render.yaml as its own Blueprint, no adoption of existing services. Generated secrets remain in Render environment. The owner retrieves INVITE_CODE and ADMIN_CODE privately in Render dashboard; never put them in GitHub or chat. Create first beta account with invite; use moderator access from own profile to unlock moderation with ADMIN_CODE. Rotate codes when appropriate. Build runs offline unit tests; after provisioning verify health endpoint and perform two-account end-to-end submission, moderation, feedback, duplicate-vote and ranking tests. Only then replace/link the original Unsigned entry; until then leave main website intact.
