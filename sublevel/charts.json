@@ -682,6 +682,254 @@
           "url": "https://www.traxsource.com/track/13652303/brown-paper-bag"
         }
       ]
+    },
+    {
+      "id": "afrobeats",
+      "genre": "Afrobeats",
+      "source": "Official Charts — UK Afrobeats (sales and streams)",
+      "url": "https://www.officialcharts.com/charts/afrobeats-chart/20261122/afrobeat/",
+      "from": "2026-11-22",
+      "through": "2026-11-28",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "IKEBE 3000",
+          "artist": "BLAQBONEZ FT ASAKE"
+        },
+        {
+          "rank": 2,
+          "title": "INFERNO",
+          "artist": "PERUZZI/ZLATAN/SHODAY"
+        },
+        {
+          "rank": 3,
+          "title": "IF YOU LIKE",
+          "artist": "BNXN"
+        },
+        {
+          "rank": 4,
+          "title": "CHIPPIE",
+          "artist": "AYA NAKAMURA & SKEPTA"
+        },
+        {
+          "rank": 5,
+          "title": "OH NO",
+          "artist": "REMA"
+        },
+        {
+          "rank": 6,
+          "title": "THAT GIRL",
+          "artist": "DARKOO & ASAKE"
+        },
+        {
+          "rank": 7,
+          "title": "COACHELLA",
+          "artist": "NO11 & GABZY"
+        },
+        {
+          "rank": 8,
+          "title": "ATTENTION",
+          "artist": "FOLA"
+        },
+        {
+          "rank": 9,
+          "title": "ALREADY FALLING",
+          "artist": "DAVIDO"
+        },
+        {
+          "rank": 10,
+          "title": "TREAT U RIGHT",
+          "artist": "FOLA & AYRA STARR"
+        }
+      ]
+    },
+    {
+      "id": "rock-metal",
+      "genre": "UK Rock & Metal",
+      "source": "Official Charts — UK Rock & Metal Singles (sales)",
+      "url": "https://www.officialcharts.com/charts/rock-and-metal-singles-chart/20261127/111/",
+      "from": "2026-11-27",
+      "through": "2026-12-03",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "IRIS",
+          "artist": "GOO GOO DOLLS"
+        },
+        {
+          "rank": 2,
+          "title": "BRING ME TO LIFE",
+          "artist": "EVANESCENCE"
+        },
+        {
+          "rank": 3,
+          "title": "DON'T STOP ME NOW",
+          "artist": "QUEEN"
+        },
+        {
+          "rank": 4,
+          "title": "NUMB",
+          "artist": "LINKIN PARK"
+        },
+        {
+          "rank": 5,
+          "title": "SWEET CHILD O' MINE",
+          "artist": "GUNS N' ROSES"
+        },
+        {
+          "rank": 6,
+          "title": "LIVIN' ON A PRAYER",
+          "artist": "BON JOVI"
+        },
+        {
+          "rank": 7,
+          "title": "CAN'T STOP",
+          "artist": "RED HOT CHILI PEPPERS"
+        },
+        {
+          "rank": 8,
+          "title": "THUNDERSTRUCK",
+          "artist": "AC/DC"
+        },
+        {
+          "rank": 9,
+          "title": "BOHEMIAN RHAPSODY",
+          "artist": "QUEEN"
+        },
+        {
+          "rank": 10,
+          "title": "ENTER SANDMAN",
+          "artist": "METALLICA"
+        }
+      ]
+    },
+    {
+      "id": "uk-singles",
+      "genre": "UK Singles — all genres",
+      "source": "Official Charts — UK Singles (sales and streams)",
+      "url": "https://www.officialcharts.com/charts/singles-chart/20261127/7501/",
+      "from": "2026-11-27",
+      "through": "2026-12-03",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "BABYDOLL",
+          "artist": "JAMIE MILLER"
+        },
+        {
+          "rank": 2,
+          "title": "STOP THE WEDDING",
+          "artist": "ASHE"
+        },
+        {
+          "rank": 3,
+          "title": "FLOWER IN A HURRICANE",
+          "artist": "JUSTICE/TAME IMPALA/SZA"
+        },
+        {
+          "rank": 4,
+          "title": "MY BODY ISN'T READY",
+          "artist": "SOMBR"
+        },
+        {
+          "rank": 5,
+          "title": "HOUSEWIFE",
+          "artist": "TATE MCRAE"
+        },
+        {
+          "rank": 6,
+          "title": "GREAT EXPECTATION",
+          "artist": "SIENNA SPIRO"
+        },
+        {
+          "rank": 7,
+          "title": "LAST CHRISTMAS",
+          "artist": "WHAM"
+        },
+        {
+          "rank": 8,
+          "title": "ALL I WANT FOR CHRISTMAS IS YOU",
+          "artist": "MARIAH CAREY"
+        },
+        {
+          "rank": 9,
+          "title": "REIN ME IN",
+          "artist": "SAM FENDER & OLIVIA DEAN"
+        },
+        {
+          "rank": 10,
+          "title": "WILLING AND ABLE",
+          "artist": "NOAH KAHAN"
+        }
+      ]
+    },
+    {
+      "id": "independent",
+      "genre": "UK Independent Singles",
+      "source": "Official Charts — independently released UK singles (sales)",
+      "url": "https://www.officialcharts.com/charts/independent-singles-chart/20261127/130/",
+      "from": "2026-11-27",
+      "through": "2026-12-03",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "MOVIN' TO THE SUN",
+          "artist": "HUGEL/IMAEL ANGEL/ULTRA NATE"
+        },
+        {
+          "rank": 2,
+          "title": "WHERE IS MY HUSBAND",
+          "artist": "RAYE"
+        },
+        {
+          "rank": 3,
+          "title": "SHOTTA'S.",
+          "artist": "SEASON 25"
+        },
+        {
+          "rank": 4,
+          "title": "STARBURSTER",
+          "artist": "FONTAINES DC"
+        },
+        {
+          "rank": 5,
+          "title": "MERRY XMAS EVERYBODY",
+          "artist": "SLADE"
+        },
+        {
+          "rank": 6,
+          "title": "JAPAN",
+          "artist": "FONTAINES DC"
+        },
+        {
+          "rank": 7,
+          "title": "GOOD GIRL",
+          "artist": "CLOONEE & PROSPA FT TRISTAN"
+        },
+        {
+          "rank": 8,
+          "title": "FREE YOUR MIND",
+          "artist": "PROSPA/CLOONEE"
+        },
+        {
+          "rank": 9,
+          "title": "DO I WANNA KNOW",
+          "artist": "ARCTIC MONKEYS"
+        },
+        {
+          "rank": 10,
+          "title": "MARIANNE",
+          "artist": "FONTAINES DC"
+        }
+      ]
     }
   ],
   "sources": [
@@ -787,6 +1035,133 @@
     [
       "Dubstep",
       "https://www.beatport.com/de/genre/dubstep/18/top-100"
+    ],
+    [
+      "Afrobeats",
+      "https://www.officialcharts.com/charts/afrobeats-chart/",
+      "afrobeats"
+    ],
+    [
+      "UK Rock & Metal",
+      "https://www.officialcharts.com/charts/rock-and-metal-singles-chart/",
+      "rock-metal"
+    ],
+    [
+      "UK Singles — all genres",
+      "https://www.officialcharts.com/charts/singles-chart/",
+      "uk-singles"
+    ],
+    [
+      "UK Independent Singles",
+      "https://www.officialcharts.com/charts/independent-singles-chart/",
+      "independent"
+    ],
+    [
+      "UK Hip Hop & R&B",
+      "https://www.officialcharts.com/charts/official-hip-hop-and-r-and-b-singles-chart/"
+    ],
+    [
+      "140 / Deep Dubstep / Grime",
+      "https://www.beatport.com/genre/140-deep-dubstep-grime/95/top-100"
+    ],
+    [
+      "Lounge / Chill Out",
+      "https://www.traxsource.com/genre/1/lounge-chill"
+    ]
+  ],
+  "rooms": [
+    [
+      "Drum & Bass",
+      "Drum & Bass"
+    ],
+    [
+      "UK Garage",
+      "UK Garage / Bassline"
+    ],
+    [
+      "House",
+      "House"
+    ],
+    [
+      "Tech House",
+      "Tech House"
+    ],
+    [
+      "Techno",
+      "Techno"
+    ],
+    [
+      "Trance",
+      "Trance (Main Floor)",
+      "Source covers main-floor trance only."
+    ],
+    [
+      "Dubstep",
+      "Dubstep"
+    ],
+    [
+      "Breakbeat / Big Beat",
+      "Breaks / Breakbeat / UK Bass",
+      "Broader source chart, not a Big Beat-only ranking."
+    ],
+    [
+      "Hip-Hop",
+      "UK Hip Hop & R&B",
+      "Combined hip-hop and R&B chart."
+    ],
+    [
+      "Grime",
+      "140 / Deep Dubstep / Grime",
+      "Combined genre chart."
+    ],
+    [
+      "R&B",
+      "UK Hip Hop & R&B",
+      "Combined hip-hop and R&B chart."
+    ],
+    [
+      "Soul",
+      null,
+      "No dedicated current ten-place chart verified."
+    ],
+    [
+      "Funk & Disco",
+      "Soul / Funk / Disco",
+      "Combined retailer chart."
+    ],
+    [
+      "Rock",
+      "UK Rock & Metal",
+      "Combined UK Rock and Metal chart, not rock-only."
+    ],
+    [
+      "Indie & Alternative",
+      "UK Independent Singles",
+      "Independent-release sales, not an indie/alternative genre chart."
+    ],
+    [
+      "Metal",
+      "UK Rock & Metal",
+      "Combined UK Rock and Metal chart, not metal-only."
+    ],
+    [
+      "Pop",
+      "UK Singles — all genres",
+      "General UK chart, not a pop-only chart."
+    ],
+    [
+      "Afrobeats",
+      "Afrobeats"
+    ],
+    [
+      "Reggae & Dub",
+      null,
+      "No current dedicated track chart verified."
+    ],
+    [
+      "Trip-Hop & Downtempo",
+      "Lounge / Chill Out",
+      "Related retailer category, not an exact genre match."
     ]
   ]
 }
