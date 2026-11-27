@@ -1,0 +1,17 @@
+
+#app .sl-chart-panel,#app .sl-chart-directory{margin:16px 0;padding:14px 10px;border-block:1px solid #79c9b755;color:#eef0e7;background:#101b1c}
+#app .sl-chart-directory .sl-chart-panel{background:transparent;padding-inline:0;border:0;margin:10px 0}
+#app .sl-chart-kicker{font-size:10px;letter-spacing:.12em;color:#79c9b7;font-weight:750}
+#app .sl-chart-panel h2,#app .sl-chart-directory h2{font-size:24px!important;line-height:1.15;margin:7px 0}
+#app .sl-chart-meta{font-size:12px!important;color:#b5c5c0;line-height:1.5;margin:6px 0}
+#app .sl-chart-status{font-size:12px!important;color:#e4eae5;font-weight:700;margin:7px 0}
+#app .sl-chart-list{padding:0;margin:12px 0;list-style:none}
+#app .sl-chart-row{display:flex;align-items:center;gap:9px;padding:11px 0;border-bottom:1px solid #b5cbc32a}
+#app .sl-chart-rank{font:700 15px ui-monospace,monospace;color:#79c9b7;min-width:24px}
+#app .sl-chart-cover{width:48px;height:48px;object-fit:contain}
+#app .sl-chart-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+#app .sl-chart-copy strong{font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+#app .sl-chart-copy small{color:#b5c5c0;font-size:11px;line-height:1.35}
+#app .sl-chart-link{display:inline-flex;align-items:center;min-height:44px;padding:6px 8px;color:#9cdece!important;font-size:11px;font-weight:650;text-decoration:none;border:1px solid #79c9b755;max-width:110px}
+#app .sl-chart-panel>.sl-chart-link{max-width:none}
+#app .sl-chart-select{color:#eef0e7;background:#142321;border:1px solid #79c9b755;width:100%;min-height:44px;padding:8px;font-size:13px}
