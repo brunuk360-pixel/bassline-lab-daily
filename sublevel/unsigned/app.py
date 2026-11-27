@@ -218,7 +218,10 @@ def delete_account():
 def error(e):return render_template("page.html",view="error",error=e),e.code
 
 if __name__=="__main__":
-    with psycopg.connect(os.environ["DATABASE_URL"],autocommit=True,connect_timeout=15) as conn:
+    with psycopg.connect(os.environ["DATABASE_URL"],autocommit=True,connect_timeout=15,row_factory=dict_row) as conn:
         from pathlib import Path
         conn.execute(Path(__file__).with_name("schema.sql").read_text())
-    print("Unsigned schema initialised.")
+        import sys
+        from integration_check import run
+        run(sys.modules[__name__],conn)
+    print("Unsigned schema initialised.",flush=True)
