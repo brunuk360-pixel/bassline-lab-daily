@@ -1,0 +1,152 @@
+{
+  "checked": "2026-11-27",
+  "charts": [
+    {
+      "id": "uk-dance",
+      "genre": "UK Dance",
+      "source": "Official Charts — UK Dance Singles (sales)",
+      "url": "https://www.officialcharts.com/charts/dance-singles-chart/20261127/104/",
+      "from": "2026-11-27",
+      "through": "2026-12-03",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "MOVIN' TO THE SUN",
+          "artist": "HUGEL/IMAEL ANGEL/ULTRA NATE"
+        },
+        {
+          "rank": 2,
+          "title": "NOT OVER YET",
+          "artist": "GRACE"
+        },
+        {
+          "rank": 3,
+          "title": "GOOD GIRL",
+          "artist": "CLOONEE & PROSPA FT TRISTAN"
+        },
+        {
+          "rank": 4,
+          "title": "FREE YOUR MIND",
+          "artist": "PROSPA/CLOONEE"
+        },
+        {
+          "rank": 5,
+          "title": "DANCING ON MY OWN",
+          "artist": "ROBYN"
+        },
+        {
+          "rank": 6,
+          "title": "FANCY FOOTWORK",
+          "artist": "CHRIS LORENZO/CHROMEO"
+        },
+        {
+          "rank": 7,
+          "title": "NO BROKE BOYS",
+          "artist": "DISCO LINES & TINASHE"
+        },
+        {
+          "rank": 8,
+          "title": "TALK TO YOU",
+          "artist": "ANOTR/54 ULTRA"
+        },
+        {
+          "rank": 9,
+          "title": "ON 2NITE",
+          "artist": "SILVA BUMPA"
+        },
+        {
+          "rank": 10,
+          "title": "HEY EVERYBODY (BACK IN THE DANCE)",
+          "artist": "KOLTER"
+        }
+      ]
+    },
+    {
+      "id": "dnb",
+      "genre": "Drum & Bass",
+      "source": "Beatport — global genre track sales",
+      "url": "https://www.beatport.com/genre/drum-bass/1/top-100",
+      "checked": "2026-11-27",
+      "status": "snapshot",
+      "note": "Indexed 26 November; direct source blocked and indexed variants disagree. Not certified as today's ranking.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Trippin Original Mix",
+          "artist": "Voltage"
+        },
+        {
+          "rank": 2,
+          "title": "Bad Ass Bladerunner remix",
+          "artist": "Aphrodite, Micky Finn • Bladerunner"
+        },
+        {
+          "rank": 3,
+          "title": "Put In Ya Place Original Mix",
+          "artist": "Sub Killaz, Burntboi"
+        },
+        {
+          "rank": 4,
+          "title": "Divide Original Mix",
+          "artist": "Amplify, Sub Killaz"
+        },
+        {
+          "rank": 5,
+          "title": "Get Out Original Mix",
+          "artist": "Sub Killaz, Rendah"
+        },
+        {
+          "rank": 6,
+          "title": "Sensation Original Mix",
+          "artist": "T-Lex"
+        },
+        {
+          "rank": 7,
+          "title": "WOW Original Mix",
+          "artist": "Benny L"
+        },
+        {
+          "rank": 8,
+          "title": "Last Time Basstripper Remix",
+          "artist": "Basstripper, Subsonic"
+        },
+        {
+          "rank": 9,
+          "title": "Ready Original Mix",
+          "artist": "Mann, Sub Killaz"
+        },
+        {
+          "rank": 10,
+          "title": "Alcatraz Original Mix",
+          "artist": "Sub Killaz, M.L.D, Gum-B"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    [
+      "Drum & Bass",
+      "https://www.beatport.com/genre/drum-bass/1/top-100",
+      "dnb"
+    ],
+    [
+      "UK Garage / Bassline",
+      "https://www.beatport.com/genre/uk-garage-bassline/86/top-100"
+    ],
+    [
+      "House",
+      "https://www.beatport.com/genre/house/5/top-100"
+    ],
+    [
+      "Techno (Peak Time / Driving)",
+      "https://www.beatport.com/genre/techno-peak-time-driving/6/top-100"
+    ],
+    [
+      "UK Dance",
+      "https://www.officialcharts.com/charts/dance-singles-chart/",
+      "uk-dance"
+    ]
+  ]
+}
