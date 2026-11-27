@@ -300,7 +300,7 @@ file.addEventListener("change",async()=>{try{
  const incoming=JSON.parse(await selected.text());
  if(!incoming||typeof incoming!=="object"||!Array.isArray(incoming.saved))throw Error("Not a SUBLEVEL collection");
  const valid={saved:records.map(r=>r.id),history:records.map(r=>r.id),artists:D.profiles.map(p=>p[0]),labels:labelsData.map(l=>l[0])};
- for(const k of Object.keys(valid)){if(Array.isArray(incoming[k]))state[k]=[...new Set([...state[k],...incoming[k].filter(v=>typeof v==="string"&&valid[k].includes(v))])].slice(0,100)}
+ for(const k of Object.keys(valid)){if(Array.isArray(incoming[k])){const merged=[...new Set([...state[k],...incoming[k].filter(v=>typeof v==="string"&&valid[k].includes(v))])];state[k]=k==="history"?merged.slice(0,Math.max(100,state[k].length)):merged}}
  if(incoming.listening){listening=L.merge(listening,incoming.listening,validIDs);persistListening()}
  persist();render("journey","settings");announce("Collection merged successfully");
  }catch{announce("Could not import this collection. Choose a valid SUBLEVEL JSON export.")}});
@@ -353,6 +353,15 @@ function mount(){const home=app.querySelector(".night-home"),explore=app.querySe
 }
  const active=document.querySelector(".bottom button.active");const savedActive=active?.dataset.navLabel==="Saved"||active?.textContent.trim().startsWith("Saved");if(!savedActive)app.querySelector(".sl-d-journey-entry")?.remove();
  if(savedActive&&!app.querySelector(".sl-d-journey-entry")){const panel=create("section","sl-d-journey-entry sl-library-entry");panel.append(create("span","sl-d-kicker","SUBLEVEL / PERSONAL LIBRARY"),create("h2",null,"Your music collection"),create("p","sl-d-muted","Manage discovery saves, playlists and followed artists. Existing magazine saves remain below."),button("Open My Music Journey →",()=>open("journey"),"sl-d-button sl-d-primary"));app.prepend(panel)}
+ app.querySelectorAll(".editorial-detail").forEach(d=>{
+  const h=d.querySelector(".sl-dossier-hero");if(!h||d.querySelector(".sl-library-track-save"))return;
+  const norm=t=>(t||"").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu,"");
+  const title=norm(h.querySelector("h2")?.textContent),artist=norm(h.querySelector(".sl-dossier-artist")?.textContent);
+  if(!title||!artist)return;
+  const matches=records.filter(r=>norm(r.title)===title&&norm(r.artist)===artist);
+  if(matches.length!==1)return;
+  const row=create("div","sl-library-track-save sl-d-actions");row.append(saveButton(matches[0].id,"saved","Save to My Music Journey"),button("Open library →",()=>open("journey")));h.after(row);
+ });
  app.querySelectorAll(".editorial-detail").forEach(d=>{if(d.querySelector(".sl-d-track-link"))return;const h=d.querySelector(".sl-dossier-hero");if(!h)return;const t=h.querySelector(".sl-dossier-artist")?.textContent||"";const p=D.profiles.find(x=>t.toLowerCase().includes(x[0].toLowerCase()));if(p){const b=button("Artist DNA →",()=>{open("artists");show("artist",p[0])},"sl-d-button sl-d-track-link");h.after(b)}})
 }
 let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{pending=false;mount()})}};new MutationObserver(schedule).observe(app,{childList:true,subtree:true});const nav=document.querySelector(".bottom");if(nav)new MutationObserver(schedule).observe(nav,{attributes:true,subtree:true,attributeFilter:["class"]});schedule();
