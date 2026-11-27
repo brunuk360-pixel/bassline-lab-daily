@@ -250,6 +250,20 @@ data,n=re.subn(br"</body\s*>",lambda m:('<script>'+edition_js+'</script>').encod
 assert n==1
 print("Editorial contents navigation and compact magazine strip included.")
 
+# Link the verified, separately hosted community beta. No credentials or
+# shared-account assumptions in the magazine's static HTML.
+unsigned_css=(root/"unsigned-entry.css").read_text(encoding="utf-8")
+unsigned_js=(root/"unsigned-entry.js").read_text(encoding="utf-8")
+if shutil.which("node"):
+    subprocess.run(["node","--check",str(root/"unsigned-entry.js")],check=True)
+    subprocess.run(["node",str(root/"unsigned-entry-test.cjs")],check=True)
+unsigned_patch=('<style id="sublevel-unsigned-entry">'+unsigned_css+'</style>').encode("utf-8")
+data,n=re.subn(br"</head\s*>",lambda m:unsigned_patch+m.group(0),data,count=1,flags=re.I)
+assert n==1
+data,n=re.subn(br"</body\s*>",lambda m:('<script>'+unsigned_js+'</script>').encode("utf-8")+m.group(0),data,count=1,flags=re.I)
+assert n==1
+print("Unsigned beta entry included; community accounts remain separate.")
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
