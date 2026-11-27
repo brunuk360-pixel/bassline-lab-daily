@@ -1,0 +1,30 @@
+
+/* Editorial reading room, independent of the existing homepage and player. */
+body.sl-mag-lock{overflow:hidden!important}
+dialog.sl-mag-reader{position:fixed!important;inset:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;width:100%!important;max-width:none!important;height:100dvh!important;max-height:none!important;overflow:auto!important;overscroll-behavior:contain;background:#090e10!important;color:#e9eeea!important;font-family:"Space Grotesk","DM Sans",Arial,sans-serif!important;box-sizing:border-box!important}
+.sl-mag-reader::backdrop{background:#090e10}
+.sl-mag-reader *{box-sizing:border-box}
+.sl-mag-bar{position:sticky;top:0;z-index:5;background:#090e10f5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px clamp(16px,4vw,38px);border-bottom:1px solid #c3d9d125}
+.sl-mag-close{font:600 12px/1.2 inherit;color:#e8eeeb;background:transparent;border:0;padding:10px 0;cursor:pointer;min-height:42px}
+.sl-mag-close:focus-visible,.sl-mag-reader a:focus-visible{outline:2px solid #6bc9b4;outline-offset:4px}
+.sl-mag-brand,.sl-mag-kicker,.sl-mag-end{font-size:10px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:#70c4b2}
+.sl-mag-page{max-width:1000px;margin:auto;padding:clamp(18px,4vw,52px) clamp(18px,4vw,46px) 36px}
+.sl-mag-mast{max-width:850px;margin:0 0 24px}
+.sl-mag-mast h1{font-size:clamp(34px,6vw,72px)!important;line-height:1.02!important;letter-spacing:-.045em!important;font-weight:700!important;color:#f2f4ed!important;margin:12px 0 15px!important}
+.sl-mag-meta{font-size:12px;color:#9cacaa;line-height:1.5}
+.sl-mag-photo{margin:0 0 20px;min-width:0}
+.sl-mag-photo img{display:block;width:100%;height:auto;max-height:460px;object-fit:contain;background:#0e1517}
+.sl-mag-hero img{max-height:min(55vh,550px);object-fit:contain}
+.sl-mag-photo figcaption{font-size:11px;line-height:1.5;color:#9cacaa;padding:7px 0}
+.sl-mag-reader a{color:#7dd4bf;text-decoration:underline;text-underline-offset:3px}
+.sl-mag-prose{max-width:760px;margin:0 auto;font-size:16px;line-height:1.8;color:#d8e1de}
+.sl-mag-prose p{margin:0 0 1.35em!important;font-size:inherit!important;line-height:inherit!important;color:inherit!important}
+.sl-mag-prose .sl-mag-intro{font-size:clamp(19px,2.4vw,25px)!important;line-height:1.55!important;font-weight:500;color:#f1f3ec!important}
+.sl-mag-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0 8px}
+.sl-mag-gallery:has(> :only-child){grid-template-columns:1fr}
+.sl-mag-gallery img{max-height:350px}
+.sl-mag-links{display:flex!important;flex-wrap:wrap;gap:20px;max-width:760px;margin:22px auto!important;padding:18px 0!important;border-top:1px solid #c3d9d125;border-bottom:1px solid #c3d9d125}
+.sl-mag-links a{background:transparent!important;border:0!important;padding:4px 0!important;box-shadow:none!important;font-size:13px!important}
+.sl-mag-end{margin:40px auto 0;max-width:760px;color:#91a49f;border-top:1px solid #c3d9d125;padding-top:18px}
+@media(max-width:500px){.sl-mag-gallery{gap:9px}.sl-mag-page{padding-inline:16px}.sl-mag-bar{padding-inline:16px}.sl-mag-brand{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.sl-mag-reader *{animation:none!important}}
