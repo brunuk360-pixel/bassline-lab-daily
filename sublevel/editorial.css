@@ -70,3 +70,66 @@ html body .sl-top-jump[hidden]{display:none!important}
 @media(min-width:800px){html body #app .weekly-story{padding:36px 0 26px!important}html body #app .weekly-copy{padding:20px 16px!important}html body .sl-top-jump{bottom:28px;right:24px}}
 @media(max-width:360px){html body .bottom button{font-size:9px!important}}
 @media(prefers-reduced-motion:reduce){html body #app *,html body .bottom *{animation-duration:.01ms!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+
+/* Weekly magazine — concept 04: compact printed editorial strip. */
+html body #app .weekly-cover {
+  --weekly-paper:#e4e5dd;
+  position:relative!important;isolation:isolate!important;overflow:hidden!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;
+  min-height:clamp(140px,38vw,205px)!important;height:auto!important;
+  padding:18px 32% 18px 14%!important;gap:0!important;
+  background:#0e2225!important;color:#14211f!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+}
+html body #app .weekly-cover::before {
+  content:""!important;position:absolute!important;inset:0 0 0 54%!important;z-index:-2!important;
+  background-image:linear-gradient(110deg,#09252e42,#08171a12),url("section-art/underground.jpg")!important;
+  background-size:cover!important;background-position:65% center!important;background-repeat:no-repeat!important;
+  opacity:1!important;filter:brightness(1.10) saturate(.8) contrast(1.04)!important;
+}
+html body #app .weekly-cover::after {
+  content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;pointer-events:none!important;
+  clip-path:polygon(0 0,76% 0,69% 100%,0 100%)!important;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 84'%3E%3Cpath fill='%2314211f' d='M7 24 53 0v13L18 31l29 15-12 7L7 38Zm50 23L11 71V58l35-18L17 25l12-7 28 15Z'/%3E%3C/svg%3E") 3.5% center / 7.5% auto no-repeat,
+    repeating-linear-gradient(0deg,#101e1a03 0px,#101e1a03 1px,transparent 1px,transparent 4px),
+    linear-gradient(110deg,#e9e9e0,#d8dbd2)!important;
+  filter:none!important;
+}
+html body #app .weekly-cover > * {
+  max-width:100%!important;min-width:0!important;position:relative!important;z-index:1!important;
+  color:#162320!important;text-shadow:none!important;filter:none!important;
+}
+html body #app .weekly-cover .weekly-kicker{
+  font-family:var(--sublevel-type,Arial,sans-serif)!important;
+  font-size:clamp(8px,2.15vw,13px)!important;font-weight:700!important;
+  letter-spacing:.055em!important;color:#21695e!important;line-height:1.35!important;
+  margin:0 0 5px!important;text-transform:uppercase!important;
+}
+html body #app .weekly-cover h1{
+  font-family:var(--sublevel-type,Arial,sans-serif)!important;
+  font-size:clamp(25px,6.8vw,52px)!important;font-weight:800!important;
+  line-height:1.02!important;letter-spacing:-.055em!important;
+  color:#14211f!important;margin:4px 0 9px!important;max-width:100%!important;
+  text-wrap:balance;overflow-wrap:normal!important;
+}
+html body #app .weekly-cover p{
+  color:#20352e!important;font-size:clamp(10px,2.55vw,13px)!important;
+  line-height:1.45!important;font-weight:600!important;letter-spacing:0!important;margin:0 0 5px!important;
+}
+html body #app .weekly-cover small{
+  color:#344941!important;font-size:clamp(8px,1.9vw,10px)!important;
+  font-weight:650!important;letter-spacing:.075em!important;line-height:1.4!important;
+}
+html body #app .weekly-index {padding:9px 0 13px!important;gap:10px!important;}
+html body #app .weekly-index select {min-height:40px!important;max-height:48px!important;}
+@media(min-width:800px){
+ html body #app .weekly-cover{min-height:170px!important;padding:24px 29% 24px 13%!important;}
+ html body #app .weekly-cover::after{clip-path:polygon(0 0,78% 0,70% 100%,0 100%)!important;}
+ html body #app .weekly-cover h1{font-size:clamp(36px,4.4vw,58px)!important;}
+}
+@media(max-width:360px){
+ html body #app .weekly-cover{padding:13px 30% 13px 13%!important;min-height:130px!important;}
+ html body #app .weekly-cover h1{font-size:24px!important;}
+}
