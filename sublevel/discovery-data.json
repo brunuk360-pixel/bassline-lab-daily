@@ -489,6 +489,46 @@
       "Sample source",
       "https://open.spotify.com/search/Art%20of%20Noise%20Close%20to%20the%20Edit",
       "Compare the sampled vocal sound with Firestarter."
+    ],
+    [
+      "baddadan",
+      "Baddadan",
+      "Chase & Status & Bou",
+      "2023",
+      "Drum & Bass",
+      "Classic",
+      "https://www.qobuz.com/gb-en/album/baddadan-trigga-bou-takura-chase-status-flowdan-irah/cnygnqnppcy1a",
+      "Compare the single with the extended 2 RUFF version."
+    ],
+    [
+      "backbone",
+      "BACKBONE",
+      "Chase & Status & Stormzy",
+      "2024-08-08",
+      "Drum & Bass",
+      "Classic",
+      "https://www.officialcharts.com/songs/chase-status-stormzy-backbone/",
+      "The duo's first UK number one."
+    ],
+    [
+      "blind-faith",
+      "Blind Faith",
+      "Chase & Status feat. Liam Bailey",
+      "2011",
+      "Drum & Bass",
+      "Classic",
+      "https://www.officialcharts.com/songs/chase-status-ft-liam-bailey-blind-faith/",
+      "A vocal-led selection from No More Idols."
+    ],
+    [
+      "disconnect",
+      "Disconnect",
+      "Becky Hill & Chase & Status",
+      "2023",
+      "Drum & Bass",
+      "Classic",
+      "https://www.officialcharts.com/artist/becky-hillchase-status/",
+      "Explore the contrast between the vocal hook and the drop."
     ]
   ],
   "profiles": [
@@ -572,6 +612,18 @@
         "velvet-dust"
       ],
       "https://armsandlegsrecords.bandcamp.com/album/the-dust"
+    ],
+    [
+      "Chase & Status",
+      "UK · drum & bass",
+      "Saul Milton and Will Kennard charted with Love’s Theme in 2005, reached the UK album top two with No More Idols and earned their first singles chart number one with BACKBONE in 2024.",
+      [
+        "baddadan",
+        "backbone",
+        "blind-faith",
+        "disconnect"
+      ],
+      "https://www.officialcharts.com/artist/5228/chase-and-status/"
     ]
   ],
   "edition": "2026-11-27",
@@ -736,6 +788,37 @@
         [
           "Remix release credits",
           "https://www.qobuz.com/gb-en/album/breathe-the-prodigy-mefjus-camo-krooked/j419glokn1kma"
+        ]
+      ]
+    },
+    "Chase & Status": {
+      "timeline": [
+        [
+          "2005",
+          "Love’s Theme — UK chart debut"
+        ],
+        [
+          "2011",
+          "No More Idols reaches #2"
+        ],
+        [
+          "2023",
+          "Baddadan and Disconnect reach UK top ten"
+        ],
+        [
+          "2024",
+          "BACKBONE becomes their first UK number one"
+        ]
+      ],
+      "listen": "Compare the vocal collaborations across four different eras of the duo’s catalogue.",
+      "links": [
+        [
+          "Official chart history",
+          "https://www.officialcharts.com/artist/5228/chase-and-status/"
+        ],
+        [
+          "2 RUFF, Vol. 1 artist commentary",
+          "https://music.apple.com/us/album/2-ruff-vol-1/1708257502"
         ]
       ]
     }
