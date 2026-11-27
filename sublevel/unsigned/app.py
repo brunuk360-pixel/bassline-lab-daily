@@ -1,0 +1,222 @@
+"""SUBLEVEL Unsigned — invite-only, moderated community pilot."""
+import os, re, secrets, hmac, hashlib
+from datetime import timedelta
+from urllib.parse import urlsplit
+from flask import Flask, request, session, g, abort, redirect, url_for, render_template, flash
+from werkzeug.security import generate_password_hash, check_password_hash
+import psycopg
+from psycopg.rows import dict_row
+
+app=Flask(__name__)
+app.config.update(SECRET_KEY=os.environ.get("SECRET_KEY") or secrets.token_hex(32),
+ SESSION_COOKIE_SECURE=True,SESSION_COOKIE_HTTPONLY=True,SESSION_COOKIE_SAMESITE="Lax",
+ PERMANENT_SESSION_LIFETIME=timedelta(hours=12),MAX_CONTENT_LENGTH=16384)
+GENRES=("Drum & Bass","Jungle","UK garage","House","Techno","Dubstep","Ambient","Experimental","Other")
+HANDLE=re.compile(r"[a-z0-9_]{3,24}\Z")
+def music_link(raw):
+    try:
+        u=urlsplit(raw.strip())
+        if u.scheme!="https" or u.username or u.password or u.port or u.fragment or len(raw)>500:return None
+        host=u.hostname or ""
+        p=u.path.rstrip("/")
+        if (host in ("soundcloud.com","www.soundcloud.com") and re.fullmatch(r"/[\w.-]+/[\w.-]+",p)
+            or host.endswith(".bandcamp.com") and re.fullmatch(r"/(?:track|album)/[\w.-]+",p)
+            or host in ("www.youtube.com","youtube.com","music.youtube.com") and p=="/watch" and re.search(r"(?:^|&)v=[A-Za-z0-9_-]{11}(?:&|$)",u.query)
+            or host=="youtu.be" and re.fullmatch(r"/[A-Za-z0-9_-]{11}",p)):
+            return u.geturl()
+    except (ValueError,AttributeError):pass
+    return None
+def field(name,maxlen,minimum=1):
+    value=request.form.get(name,"").strip()
+    if not minimum<=len(value)<=maxlen:abort(400,"Please check "+name.replace("_"," ")+".")
+    return value
+def db():
+    if "db" not in g:g.db=psycopg.connect(os.environ["DATABASE_URL"],row_factory=dict_row,autocommit=True,connect_timeout=6)
+    return g.db
+def one(sql,args=()):return db().execute(sql,args).fetchone()
+def rows(sql,args=()):return db().execute(sql,args).fetchall()
+@app.teardown_appcontext
+def close_db(_):
+    conn=g.pop("db",None)
+    if conn:conn.close()
+def csrf():
+    if "csrf" not in session:session["csrf"]=secrets.token_urlsafe(32)
+    return session["csrf"]
+app.jinja_env.globals["csrf"]=csrf
+@app.before_request
+def protect():
+    if request.method=="POST":
+        token=request.form.get("csrf","")
+        if not session.get("csrf") or not hmac.compare_digest(token,session["csrf"]):abort(403)
+    g.user=None
+    if request.endpoint not in ("static","health") and session.get("uid"):
+        g.user=one("SELECT id,handle,bio,is_admin FROM members WHERE id=%s AND active",(session["uid"],))
+        if not g.user:session.clear()
+@app.after_request
+def headers(response):
+    response.headers["Content-Security-Policy"]="default-src 'none'; style-src 'self'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+    response.headers["X-Content-Type-Options"]="nosniff"
+    response.headers["Referrer-Policy"]="no-referrer"
+    response.headers["Permissions-Policy"]="camera=(), microphone=(), geolocation=()"
+    response.headers["Cache-Control"]="no-store"
+    response.headers["X-Robots-Tag"]="noindex, nofollow"
+    return response
+def limit(action,maximum,identity=None):
+    # Database-backed hourly budget, not reset by restarting a server.
+    key=hmac.new(app.secret_key.encode(),(action+":"+str(identity or request.remote_addr or "unknown")).encode(),hashlib.sha256).hexdigest()
+    item=one("""INSERT INTO limits(key,hour,n) VALUES(%s,date_trunc('hour',now()),1)
+    ON CONFLICT(key,hour) DO UPDATE SET n=limits.n+1 RETURNING n""",(key,))
+    if item["n"]>maximum:abort(429,"Please try again later.")
+def member():
+    if not g.user:abort(401,"Sign in to continue.")
+    return g.user["id"]
+def admin():
+    member()
+    if not g.user["is_admin"]:abort(403)
+def secret_matches(name,value):
+    configured=os.environ.get(name,"")
+    return bool(configured) and hmac.compare_digest(configured.encode(),value.encode())
+@app.get("/health")
+def health():
+    one("SELECT 1 AS ok FROM members LIMIT 1")
+    return {"status":"ok","database":"reachable"}
+@app.get("/")
+def home():
+    genre=request.args.get("genre","")
+    if genre not in GENRES:genre=""
+    tracks=rows("""SELECT t.id,t.title,t.genre,t.url,t.note,m.handle,
+      count(f.id) FILTER(WHERE f.status='approved') AS votes,
+      round(avg(f.rating) FILTER(WHERE f.status='approved'),1) AS rating
+      FROM tracks t JOIN members m ON m.id=t.owner LEFT JOIN feedback f ON f.track=t.id
+      WHERE t.status='approved' AND m.active AND (%s='' OR t.genre=%s)
+      GROUP BY t.id,m.handle ORDER BY t.created DESC LIMIT 60""",(genre,genre))
+    chart=rows("""SELECT m.handle,count(f.id) AS votes,
+      round(avg(f.rating),1) AS rating,
+      round((sum(f.rating)+5*10.0)/(count(f.id)+5),2) AS score
+      FROM members m JOIN tracks t ON t.owner=m.id AND t.status='approved'
+      JOIN feedback f ON f.track=t.id AND f.status='approved'
+      WHERE m.active GROUP BY m.id,m.handle HAVING count(f.id)>=5
+      ORDER BY score DESC,votes DESC,m.handle LIMIT 20""")
+    return render_template("page.html",view="home",tracks=tracks,chart=chart,genre=genre,genres=GENRES)
+@app.get("/join")
+def join_page():return render_template("page.html",view="join")
+@app.post("/join")
+def join():
+    limit("join",8)
+    handle=field("handle",24,3).lower()
+    password=request.form.get("password","")
+    if not HANDLE.fullmatch(handle) or not 12<=len(password)<=128:abort(400,"Use a valid handle and a password of 12–128 characters.")
+    if not secret_matches("INVITE_CODE",request.form.get("invite","")):abort(403,"A beta invitation is required.")
+    row=one("INSERT INTO members(handle,password_hash) VALUES(%s,%s) ON CONFLICT(handle) DO NOTHING RETURNING id",(handle,generate_password_hash(password,method="scrypt")))
+    if not row:abort(400,"Handle unavailable.")
+    session.clear();session["uid"]=row["id"];session.permanent=True
+    return redirect(url_for("profile",handle=handle))
+@app.get("/login")
+def login_page():return render_template("page.html",view="login")
+@app.post("/login")
+def login():
+    handle=field("handle",24,3).lower()
+    limit("login-ip",30);limit("login-account",8,handle)
+    password=request.form.get("password","")
+    if len(password)>128:abort(400)
+    user=one("SELECT id,password_hash FROM members WHERE handle=%s AND active",(handle,))
+    if not user or not check_password_hash(user["password_hash"],password):abort(401,"Incorrect handle or password.")
+    session.clear();session["uid"]=user["id"];session.permanent=True
+    return redirect(url_for("home"))
+@app.post("/logout")
+def logout():
+    session.clear();return redirect(url_for("home"))
+@app.get("/producer/<handle>")
+def profile(handle):
+    user=one("SELECT id,handle,bio FROM members WHERE handle=%s AND active",(handle,))
+    if not user:abort(404)
+    owner=g.user and g.user["id"]==user["id"]
+    tracks=rows("SELECT id,title,genre,status FROM tracks WHERE owner=%s AND (status='approved' OR %s) ORDER BY created DESC",(user["id"],bool(owner)))
+    return render_template("page.html",view="profile",producer=user,tracks=tracks,owner=owner)
+@app.post("/profile")
+def edit_profile():
+    uid=member();limit("profile",20,uid)
+    db().execute("UPDATE members SET bio=%s WHERE id=%s",(field("bio",600,0),uid))
+    return redirect(url_for("profile",handle=g.user["handle"]))
+@app.get("/submit")
+def submit_page():member();return render_template("page.html",view="submit",genres=GENRES)
+@app.post("/submit")
+def submit():
+    uid=member();limit("submit",5,uid)
+    genre=field("genre",40);url=music_link(field("url",500))
+    if genre not in GENRES or not url:abort(400,"Choose a genre and a supported public music link.")
+    if request.form.get("rights")!="yes":abort(400,"Confirm that you have permission to share the recording.")
+    row=one("INSERT INTO tracks(owner,title,genre,url,note) VALUES(%s,%s,%s,%s,%s) RETURNING id",(uid,field("title",100),genre,url,field("note",1200,0)))
+    flash("Submitted for moderation. It will appear publicly after approval.")
+    return redirect(url_for("track",track_id=row["id"]))
+def accessible_track(track_id):
+    t=one("SELECT t.*,m.handle FROM tracks t JOIN members m ON m.id=t.owner WHERE t.id=%s AND m.active",(track_id,))
+    if not t or (t["status"]!="approved" and not (g.user and (g.user["id"]==t["owner"] or g.user["is_admin"]))):abort(404)
+    return t
+@app.get("/track/<int:track_id>")
+def track(track_id):
+    t=accessible_track(track_id)
+    feedback=rows("""SELECT f.rating,f.body,m.handle FROM feedback f JOIN members m ON m.id=f.author
+      WHERE f.track=%s AND f.status='approved' AND m.active ORDER BY f.created DESC LIMIT 100""",(track_id,))
+    own=one("SELECT rating,body,status FROM feedback WHERE track=%s AND author=%s",(track_id,g.user["id"])) if g.user else None
+    return render_template("page.html",view="track",t=t,feedback=feedback,own=own)
+@app.post("/track/<int:track_id>/feedback")
+def rate(track_id):
+    uid=member();limit("feedback",20,uid);t=accessible_track(track_id)
+    if t["status"]!="approved" or t["owner"]==uid:abort(403)
+    try:rating=int(request.form.get("rating",""))
+    except ValueError:abort(400)
+    if not 1<=rating<=19:abort(400,"Choose a rating from 1 to 19.")
+    body=field("body",1500,20)
+    db().execute("""INSERT INTO feedback(track,author,rating,body) VALUES(%s,%s,%s,%s)
+    ON CONFLICT(track,author) DO UPDATE SET rating=EXCLUDED.rating,body=EXCLUDED.body,status='pending',created=now()""",(track_id,uid,rating,body))
+    flash("Feedback sent for review. Only approved ratings count.");return redirect(url_for("track",track_id=track_id))
+@app.post("/track/<int:track_id>/report")
+def report(track_id):
+    uid=member();limit("report",10,uid);accessible_track(track_id)
+    db().execute("INSERT INTO reports(track,author,reason) VALUES(%s,%s,%s) ON CONFLICT(track,author) DO NOTHING",(track_id,uid,field("reason",400,10)))
+    flash("Report submitted.");return redirect(url_for("track",track_id=track_id))
+@app.get("/moderation")
+def moderation():
+    member()
+    if not g.user["is_admin"]:return render_template("page.html",view="unlock")
+    return render_template("page.html",view="moderation",
+      tracks=rows("SELECT t.*,m.handle FROM tracks t JOIN members m ON m.id=t.owner WHERE t.status='pending' ORDER BY t.created LIMIT 100"),
+      feedback=rows("SELECT f.*,m.handle,t.title FROM feedback f JOIN members m ON m.id=f.author JOIN tracks t ON t.id=f.track WHERE f.status='pending' ORDER BY f.created LIMIT 100"),
+      reports=rows("SELECT r.*,t.title FROM reports r JOIN tracks t ON t.id=r.track WHERE NOT r.resolved ORDER BY r.created LIMIT 100"))
+@app.post("/moderation/unlock")
+def unlock():
+    uid=member();limit("admin",5,uid)
+    if not secret_matches("ADMIN_CODE",request.form.get("code","")):abort(403)
+    db().execute("UPDATE members SET is_admin=true WHERE id=%s",(uid,))
+    return redirect(url_for("moderation"))
+@app.post("/moderation/<kind>/<int:item_id>")
+def moderate(kind,item_id):
+    admin();action=request.form.get("action","")
+    if kind=="report" and action=="resolve":
+        db().execute("UPDATE reports SET resolved=true WHERE id=%s",(item_id,))
+    elif kind=="track" and action in ("approve","hide"):
+        db().execute("UPDATE tracks SET status=%s WHERE id=%s",("approved" if action=="approve" else "hidden",item_id))
+    elif kind=="feedback" and action in ("approve","hide"):
+        db().execute("UPDATE feedback SET status=%s WHERE id=%s",("approved" if action=="approve" else "hidden",item_id))
+    else:abort(400)
+    return redirect(url_for("moderation"))
+@app.post("/account/delete")
+def delete_account():
+    uid=member();password=request.form.get("password","");limit("delete",5,uid)
+    user=one("SELECT password_hash FROM members WHERE id=%s",(uid,))
+    if not user or len(password)>128 or not check_password_hash(user["password_hash"],password):abort(403)
+    db().execute("DELETE FROM members WHERE id=%s",(uid,))
+    session.clear();return redirect(url_for("home"))
+@app.errorhandler(400)
+@app.errorhandler(401)
+@app.errorhandler(403)
+@app.errorhandler(404)
+@app.errorhandler(429)
+def error(e):return render_template("page.html",view="error",error=e),e.code
+
+if __name__=="__main__":
+    with psycopg.connect(os.environ["DATABASE_URL"],autocommit=True,connect_timeout=15) as conn:
+        from pathlib import Path
+        conn.execute(Path(__file__).with_name("schema.sql").read_text())
+    print("Unsigned schema initialised.")
