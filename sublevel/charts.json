@@ -123,6 +123,494 @@
           "artist": "Sub Killaz, M.L.D, Gum-B"
         }
       ]
+    },
+    {
+      "id": "house",
+      "genre": "House",
+      "url": "https://www.traxsource.com/genre/4/house",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "note": "Source page indexed 27 November; chart period not published. Retailer ranking, not a national chart.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Sixth Sense (Extended Mix)",
+          "artist": "Odyssey Inc., Wayne Soul Avengerz"
+        },
+        {
+          "rank": 2,
+          "title": "Feelings (Extended Mix)",
+          "artist": "Junior Jack, Mark Knight, James Hurr"
+        },
+        {
+          "rank": 3,
+          "title": "Work It To The Bone (Louie Vega Mix)",
+          "artist": "Louie Vega, Funki Cadets"
+        },
+        {
+          "rank": 4,
+          "title": "Luv Musica (Richard Earnshaw Revision)",
+          "artist": "Ridney"
+        },
+        {
+          "rank": 5,
+          "title": "Let Love In (Extended Mix)",
+          "artist": "Mirko & Meex"
+        },
+        {
+          "rank": 6,
+          "title": "Scatisfaction (Original Mix)",
+          "artist": "N.W.N."
+        },
+        {
+          "rank": 7,
+          "title": "I Never Knew Love (Extended Mix)",
+          "artist": "Ethan Gray, Andre Espeut"
+        },
+        {
+          "rank": 8,
+          "title": "Come Get My Lovin (Extended Mix)",
+          "artist": "James Hurr, DJ Rae"
+        },
+        {
+          "rank": 9,
+          "title": "Play All Night (Extended Mix)",
+          "artist": "Groove P"
+        },
+        {
+          "rank": 10,
+          "title": "Scream & Shout (Extended Mix)",
+          "artist": "Jewel Kid"
+        }
+      ]
+    },
+    {
+      "id": "deep-house",
+      "genre": "Deep House",
+      "url": "https://www.traxsource.com/genre/13/deep-house",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "note": "Source page indexed 27 November; chart period not published. Retailer ranking, not a national chart.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Vibin' (Moodena Extended Remix)",
+          "artist": "N-You-Up"
+        },
+        {
+          "rank": 2,
+          "title": "Stand!ng By (Fred Everything Remix)",
+          "artist": "Karizma"
+        },
+        {
+          "rank": 3,
+          "title": "The Message",
+          "artist": "Fouk"
+        },
+        {
+          "rank": 4,
+          "title": "Essence of a Black Track (Rick and Gary Deep Mix)",
+          "artist": "Black Traxx"
+        },
+        {
+          "rank": 5,
+          "title": "Play With My... (Homero Espinosa Touch of Jazz Remix)",
+          "artist": "N.W.N."
+        },
+        {
+          "rank": 6,
+          "title": "Deja Vu (N.W.N. Remix)",
+          "artist": "Stogov"
+        },
+        {
+          "rank": 7,
+          "title": "Show Me The Way (Original Mix)",
+          "artist": "Ralph Session"
+        },
+        {
+          "rank": 8,
+          "title": "This Poem (Original Mix)",
+          "artist": "Chuck Daniels, Jason Hodges"
+        },
+        {
+          "rank": 9,
+          "title": "Deep In The Shadow",
+          "artist": "DJ Erv"
+        },
+        {
+          "rank": 10,
+          "title": "The Ghost Rider (Original Mix)",
+          "artist": "The Jargons, Zulumafia"
+        }
+      ]
+    },
+    {
+      "id": "techno",
+      "genre": "Techno",
+      "url": "https://www.traxsource.com/genre/20/techno",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "note": "Source page indexed 27 November; chart period not published. Retailer ranking, not a national chart.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Onabi Daiebbe (Original Mix)",
+          "artist": "Stanny Abram, Mikel Wonic"
+        },
+        {
+          "rank": 2,
+          "title": "I Need You (Original Mix)",
+          "artist": "White Cat Project"
+        },
+        {
+          "rank": 3,
+          "title": "In Control (Extended Mix)",
+          "artist": "Nick Harvey"
+        },
+        {
+          "rank": 4,
+          "title": "Belinda",
+          "artist": "Sam Shure"
+        },
+        {
+          "rank": 5,
+          "title": "Dawn Over the Blue Planet (Edward's Subtile Drum Version)",
+          "artist": "Aubrey"
+        },
+        {
+          "rank": 6,
+          "title": "Resonanz",
+          "artist": "Oliver Huntemann"
+        },
+        {
+          "rank": 7,
+          "title": "Wisdom To The Wise (Joris Voorn Remix)",
+          "artist": "Dave Clarke, Joris Voorn"
+        },
+        {
+          "rank": 8,
+          "title": "Movements",
+          "artist": "Joe Milli"
+        },
+        {
+          "rank": 9,
+          "title": "Play House (Original Mix)",
+          "artist": "Tony Dee"
+        },
+        {
+          "rank": 10,
+          "title": "Disconnection (Tiger Stripes Remix)",
+          "artist": "Joe MZM, Juliet Mendoza"
+        }
+      ]
+    },
+    {
+      "id": "garage",
+      "genre": "Garage",
+      "url": "https://www.traxsource.com/genre/29/garage",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "note": "Source page indexed 27 November; chart period not published. Retailer ranking, not a national chart.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Love Somebody Else (Extended Mix)",
+          "artist": "LOSTBOYJAY, Joi Cardwell"
+        },
+        {
+          "rank": 2,
+          "title": "Block Party (Original Mix)",
+          "artist": "Chemars"
+        },
+        {
+          "rank": 3,
+          "title": "You're In My Head (Original Mix)",
+          "artist": "Dub Striker"
+        },
+        {
+          "rank": 4,
+          "title": "Set Alight (Original Mix)",
+          "artist": "Deepmore"
+        },
+        {
+          "rank": 5,
+          "title": "One & Only (Garage Mix)",
+          "artist": "Babs Presents, Alex Hobbs, Bethan Johnston"
+        },
+        {
+          "rank": 6,
+          "title": "Into The Heat (TshegoTMM & Vencer Cafe Garage Remix)",
+          "artist": "Tracksuit Society"
+        },
+        {
+          "rank": 7,
+          "title": "Fire In Da House (Original Mix)",
+          "artist": "2Sleep"
+        },
+        {
+          "rank": 8,
+          "title": "Keep Pushing (Original Mix)",
+          "artist": "Marc Cotterell"
+        },
+        {
+          "rank": 9,
+          "title": "Walls",
+          "artist": "City Soul Project, Roland Nights"
+        },
+        {
+          "rank": 10,
+          "title": "Turn Up The Music",
+          "artist": "Jeremy Sylvester"
+        }
+      ]
+    },
+    {
+      "id": "afro-house",
+      "genre": "Afro House",
+      "url": "https://www.traxsource.com/genre/27/afro-house",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "note": "Source page indexed 27 November; chart period not published. Retailer ranking, not a national chart.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Honey (Let Me Tell You Something Mix)",
+          "artist": "Stacy Kidd, Tiffany Jenkins"
+        },
+        {
+          "rank": 2,
+          "title": "Music Inside My Head (Original Vocal)",
+          "artist": "Larry La Birt, Corey Holmes"
+        },
+        {
+          "rank": 3,
+          "title": "This is House (Original Mix)",
+          "artist": "Rocco Rodamaal"
+        },
+        {
+          "rank": 4,
+          "title": "MY BLACK (Ancestral Roots Vocal Mix)",
+          "artist": "Solara, Carmen Cané"
+        },
+        {
+          "rank": 5,
+          "title": "Ha Ya (Afro Mix)",
+          "artist": "Mike Flexx"
+        },
+        {
+          "rank": 6,
+          "title": "Ileke (Extended)",
+          "artist": "Pablo Fierro"
+        },
+        {
+          "rank": 7,
+          "title": "Unye Unye",
+          "artist": "Zapapaya, Captain Planet, Son Palenque"
+        },
+        {
+          "rank": 8,
+          "title": "Heartbreaker (Extended)",
+          "artist": "Desiree, Marieme"
+        },
+        {
+          "rank": 9,
+          "title": "Ukunqoba",
+          "artist": "Stefano Ranieri"
+        },
+        {
+          "rank": 10,
+          "title": "Haunt Me",
+          "artist": "Corey Holmes"
+        }
+      ]
+    },
+    {
+      "id": "nu-disco",
+      "genre": "Nu Disco / Indie Dance",
+      "url": "https://www.traxsource.com/genre/17/nu-disco-indie-dance",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "note": "Source page indexed 27 November; chart period not published. Retailer ranking, not a national chart.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Love Is Back Again (Extended Mix)",
+          "artist": "D.P.V."
+        },
+        {
+          "rank": 2,
+          "title": "Miracles (Da Lukas Extended Mix)",
+          "artist": "S.K.O.D, Mishell Ivon"
+        },
+        {
+          "rank": 3,
+          "title": "Music Lights (Vinny's Nu Disco Mix)",
+          "artist": "HP Vince"
+        },
+        {
+          "rank": 4,
+          "title": "Illusion (Original Mix)",
+          "artist": "GooDisco"
+        },
+        {
+          "rank": 5,
+          "title": "Love Will Save The Day (Extended Mix)",
+          "artist": "Re-Tide"
+        },
+        {
+          "rank": 6,
+          "title": "I Need You (Original Mix)",
+          "artist": "Hotmood"
+        },
+        {
+          "rank": 7,
+          "title": "Scared (Clubmix)",
+          "artist": "Block & Crown"
+        },
+        {
+          "rank": 8,
+          "title": "Mistery (Original Mix)",
+          "artist": "Pikau"
+        },
+        {
+          "rank": 9,
+          "title": "Disco Nights (FederFunk ' Touch ' Mix)",
+          "artist": "DiscoCream"
+        },
+        {
+          "rank": 10,
+          "title": "Cielo",
+          "artist": "Issam Dahmani"
+        }
+      ]
+    },
+    {
+      "id": "progressive-house",
+      "genre": "Melodic / Progressive House",
+      "url": "https://www.traxsource.com/genre/19/melodic-progressive-house",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "checked": "2026-11-27",
+      "status": "verified",
+      "note": "Source page indexed 27 November; chart period not published. Retailer ranking, not a national chart.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "What's A Girl To Do (Extended Mix)",
+          "artist": "Disla, Danis, GINO LE NOIR"
+        },
+        {
+          "rank": 2,
+          "title": "Addicted With My Past (Original Mix)",
+          "artist": "Stanny Abram, D-SOUNDS"
+        },
+        {
+          "rank": 3,
+          "title": "Domino (Ares Carter Extended Remix)",
+          "artist": "Oxia"
+        },
+        {
+          "rank": 4,
+          "title": "In A Dream (Kevin McKay Extended Remix)",
+          "artist": "Mallin"
+        },
+        {
+          "rank": 5,
+          "title": "Furnace Creek (Extended Mix)",
+          "artist": "Tim Green"
+        },
+        {
+          "rank": 6,
+          "title": "Good Life (Extended Mix)",
+          "artist": "MAKID"
+        },
+        {
+          "rank": 7,
+          "title": "Be The One You Are (Extended Mix)",
+          "artist": "Moon Rocket"
+        },
+        {
+          "rank": 8,
+          "title": "One More Time (Extended Mix)",
+          "artist": "Gorge"
+        },
+        {
+          "rank": 9,
+          "title": "Fire in my Veins (Original Mix)",
+          "artist": "Stanny Abram, D-SOUNDS"
+        },
+        {
+          "rank": 10,
+          "title": "A Million Cascades",
+          "artist": "Sébastien Léger, Dulus"
+        }
+      ]
+    },
+    {
+      "id": "tech-house",
+      "genre": "Tech House",
+      "url": "https://www.traxsource.com/genre/18/tech-house",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "checked": "2026-11-27",
+      "status": "snapshot",
+      "note": "Complete source snapshot indexed 25 November; current ranking not independently confirmed.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Dam - Dam (Original Mix)",
+          "artist": "Stanny Abram, Mikel Wonic"
+        },
+        {
+          "rank": 2,
+          "title": "Doctor (Extended Mix)",
+          "artist": "DJ Minx"
+        },
+        {
+          "rank": 3,
+          "title": "Feel It (Extended Mix)",
+          "artist": "Roland Clark, Amy Alexander"
+        },
+        {
+          "rank": 4,
+          "title": "Love Strong (Extended Mix)",
+          "artist": "DJ PP"
+        },
+        {
+          "rank": 5,
+          "title": "Miami Vice (Extended Mix)",
+          "artist": "DJ PP, Mark Knight, James Hurr"
+        },
+        {
+          "rank": 6,
+          "title": "Strike",
+          "artist": "Tiger Stripes"
+        },
+        {
+          "rank": 7,
+          "title": "The Wetdown",
+          "artist": "Tiger Stripes"
+        },
+        {
+          "rank": 8,
+          "title": "Mayona (Extended Mix)",
+          "artist": "Kevin McKay, Gianmarco Limenta"
+        },
+        {
+          "rank": 9,
+          "title": "BODYCHECK (Extended Mix)",
+          "artist": "Afriqua, A-Trak"
+        },
+        {
+          "rank": 10,
+          "title": "Kid Funk (The Deepshakerz Tribe mix)",
+          "artist": "The Deepshakerz, Turntables Night Fever"
+        }
+      ]
     }
   ],
   "sources": [
@@ -136,10 +624,6 @@
       "https://www.beatport.com/genre/uk-garage-bassline/86/top-100"
     ],
     [
-      "House",
-      "https://www.beatport.com/genre/house/5/top-100"
-    ],
-    [
       "Techno (Peak Time / Driving)",
       "https://www.beatport.com/genre/techno-peak-time-driving/6/top-100"
     ],
@@ -147,6 +631,70 @@
       "UK Dance",
       "https://www.officialcharts.com/charts/dance-singles-chart/",
       "uk-dance"
+    ],
+    [
+      "House",
+      "https://www.traxsource.com/genre/4/house",
+      "house"
+    ],
+    [
+      "Deep House",
+      "https://www.traxsource.com/genre/13/deep-house",
+      "deep-house"
+    ],
+    [
+      "Techno",
+      "https://www.traxsource.com/genre/20/techno",
+      "techno"
+    ],
+    [
+      "Garage",
+      "https://www.traxsource.com/genre/29/garage",
+      "garage"
+    ],
+    [
+      "Afro House",
+      "https://www.traxsource.com/genre/27/afro-house",
+      "afro-house"
+    ],
+    [
+      "Nu Disco / Indie Dance",
+      "https://www.traxsource.com/genre/17/nu-disco-indie-dance",
+      "nu-disco"
+    ],
+    [
+      "Melodic / Progressive House",
+      "https://www.traxsource.com/genre/19/melodic-progressive-house",
+      "progressive-house"
+    ],
+    [
+      "Tech House",
+      "https://www.traxsource.com/genre/18/tech-house",
+      "tech-house"
+    ],
+    [
+      "Ambient / Experimental",
+      "https://www.beatport.com/genre/ambient-experimental/100/top-100"
+    ],
+    [
+      "Hard Techno",
+      "https://www.beatport.com/genre/hard-techno/2/top-100"
+    ],
+    [
+      "Hard Dance / Hardcore / Neo Rave",
+      "https://www.beatport.com/genre/hard-dance-hardcore/8/top-100"
+    ],
+    [
+      "Classic House",
+      "https://www.traxsource.com/genre/12/classic-house"
+    ],
+    [
+      "Soulful House",
+      "https://www.traxsource.com/genre/24/soulful-house"
+    ],
+    [
+      "Soul / Funk / Disco",
+      "https://www.traxsource.com/genre/3/soul-funk-disco/top"
     ]
   ]
 }
