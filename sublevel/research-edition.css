@@ -19,3 +19,25 @@ html body #app .sl-r-connection{display:flex;justify-content:space-between;align
 .sl-r-sample{padding:8px 0;border-bottom:1px solid var(--sl-rule)}
 .sl-r-sources{margin-top:17px;border-top:1px solid var(--sl-rule);padding:12px 0;font-size:12px}
 .sl-r-sources summary{min-height:40px;cursor:pointer;color:#b5c5c0}.sl-r-sources li{margin:7px 0}.sl-r-sources a{color:#9de2d1!important;text-decoration:underline}
+
+
+/* Shared research typography and responsive evidence presentation. */
+html body #app .sl-research-edition,.sl-d-content .sl-research-edition{margin:22px 0 0;padding:18px 0 0;border-top:2px solid #79c9b788;color:#e5eeea}
+.sl-research-edition .sl-r-kicker{font-size:11px;color:#79c9b7;letter-spacing:.13em;font-weight:700}
+.sl-d-content .sl-research-edition .sl-r-lead{font-size:17px;line-height:1.65;margin:10px 0 18px}
+.sl-d-content .sl-research-edition .sl-r-heading{font-size:22px;letter-spacing:-.035em;line-height:1.2;margin:24px 0 12px}
+.sl-d-content .sl-r-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.sl-research-edition .sl-r-facts div{overflow-wrap:anywhere}
+.sl-r-chart{border-block:1px solid #b5cbc32a;padding:10px 0;margin:12px 0}
+.sl-r-chart-row{display:grid;grid-template-columns:55px 32px minmax(0,1fr);align-items:center;gap:8px;font-size:11px;color:#b5c5c0;margin:8px 0}
+.sl-r-chart-row>span:nth-child(2){color:#e9f2ee;font-weight:700;font-variant-numeric:tabular-nums}
+.sl-r-chart-track{height:8px;background:#203433;border-radius:0;overflow:hidden}
+.sl-r-chart-track>div{height:100%;background:#79c9b7}
+.sl-d-content .sl-r-timeline p{font-size:14px;line-height:1.55;margin:5px 0 0}
+.sl-d-content .sl-r-timeline{margin:15px 0}
+.sl-d-content .sl-r-connection{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;border-bottom:1px solid #b5cbc32a;color:#e5eeea;text-decoration:none;font-size:13px;padding:8px 0}
+.sl-d-content .sl-r-sources{border-top:1px solid #b5cbc32a;margin-top:16px;padding-top:10px}
+.sl-d-content .sl-r-sources summary{cursor:pointer;min-height:44px}
+.sl-d-content .sl-r-sources a,.sl-d-content .sl-r-ref{color:#9de2d1;text-decoration:underline}
+.sl-d-content .sl-r-note{font-size:13px;line-height:1.55}
+@media(min-width:750px){.sl-d-content .sl-r-facts{grid-template-columns:repeat(3,minmax(0,1fr))}}
