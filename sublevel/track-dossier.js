@@ -13,7 +13,7 @@ function build(detail){
  const track=detail.closest(".track");if(!track)return;
  const title=clean(track.querySelector(".tracktitle strong,.tracktitle b"));if(!title)return;
  const rawArtist=clean(track.querySelector(".tracktitle small"));
- const artist=rawArtist.replace(/\s+(?:19|20)\d{2}\s*$/,"").replace(/\s*[·|•]\s*$/,"").trim();
+ const artist=rawArtist.replace(/\s*(?:19|20)\d{2}\s*$/,"").replace(/\s*[·|•]\s*$/,"").trim();
  const metadata=facts(detail);
  const year=metadata.get("original year")||metadata.get("year")||metadata.get("release year")||"";
  const album=metadata.get("album")||"";
