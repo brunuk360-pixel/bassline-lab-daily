@@ -18,7 +18,7 @@ const mounted=new WeakMap();
 function homeIndex(home){
  const sections=departments.map(([selector,title,kicker,desc,match])=>{
   let nodes=Array.from(home.querySelectorAll(":scope > "+selector));
-  if(match)nodes=nodes.filter(n=>new RegExp(match,"i").test(clean(n.querySelector(".night-heading,h2"))));
+  if(match)nodes=nodes.filter(n=>new RegExp(match,"i").test(clean(n.querySelector(":scope > .night-heading")||n.querySelector(":scope > .motion-title"))));
   return {node:nodes[0],title,kicker,desc};
  }).filter(s=>s.node);
  const prior=mounted.get(home);
