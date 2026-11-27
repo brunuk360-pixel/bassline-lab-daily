@@ -194,6 +194,17 @@ dossier_script=('<script>'+dossier_js+'</script>').encode("utf-8")
 data,n=re.subn(br"</body\s*>",lambda m:dossier_script+m.group(0),data,count=1,flags=re.I)
 assert n==1
 
+
+# Source-linked editorial research, independent of original track data.
+research_css=(root/"research-edition.css").read_text(encoding="utf-8")
+research_js=(root/"research-edition.js").read_text(encoding="utf-8")
+research_patch=('<style id="sublevel-research-edition">'+research_css+'</style>').encode("utf-8")
+data,n=re.subn(br"</head\s*>",lambda m:research_patch+m.group(0),data,count=1,flags=re.I)
+assert n==1
+research_script=('<script>'+research_js+'</script>').encode("utf-8")
+data,n=re.subn(br"</body\s*>",lambda m:research_script+m.group(0),data,count=1,flags=re.I)
+assert n==1
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
