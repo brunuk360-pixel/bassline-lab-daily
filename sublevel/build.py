@@ -216,6 +216,8 @@ ids=[row[0] for row in discovery["items"]]
 assert len(ids)==len(set(ids)), "Duplicate discovery IDs"
 assert all(row[6].startswith("https://") for row in discovery["items"])
 assert all(set(profile[3]).issubset(ids) for profile in discovery["profiles"])
+assert all(edge["from"] in ids and edge["to"] in ids and edge["type"] in ("Sample","Remix") and edge["source"].startswith("https://") for edge in discovery.get("connections",[])), "Invalid discovery relationship"
+print("Discovery relationships validated:",len(discovery.get("connections",[])))
 discovery_css=(root/"discovery.css").read_text(encoding="utf-8")
 discovery_js=(root/"discovery.js").read_text(encoding="utf-8")
 if shutil.which("node"):
