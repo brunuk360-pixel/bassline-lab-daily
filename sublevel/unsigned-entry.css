@@ -1,0 +1,12 @@
+
+html body #app .sl-u-section>.sl-u-legacy[hidden]{display:none!important}
+html body #app .sl-u-entry{margin:12px 0 18px;padding:17px 14px;background:linear-gradient(135deg,#142725,#101819 75%);border-top:2px solid #79c9b7;border-bottom:1px solid #79c9b755;color:#eef0e7}
+html body #app .sl-u-entry .sl-u-kicker{font-size:10px;font-weight:700;letter-spacing:.1em;color:#79c9b7}
+html body #app .sl-u-entry h2{font-size:clamp(25px,6.8vw,38px);font-weight:750;line-height:1.08;letter-spacing:-.045em;margin:10px 0}
+html body #app .sl-u-entry p{font-size:13px;line-height:1.6;color:#cbdad5;margin:0 0 12px}
+html body #app .sl-u-entry small{display:block;font-size:11px;color:#b5c5c0;line-height:1.4;margin-top:10px}
+html body #app .sl-u-actions{display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+html body #app .sl-u-actions .sl-u-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 11px;color:#e5eeea;background:#152523;border:1px solid #79c9b755;font-size:12px;font-weight:650;text-decoration:none}
+html body #app .sl-u-actions .sl-u-primary{background:#79c9b7;border-color:#79c9b7;color:#0a211b}
+html body #app .sl-u-actions .sl-u-link:focus-visible{outline:2px solid #eef0e7;outline-offset:2px}
+html body #app .sl-u-compact h2{font-size:22px}
