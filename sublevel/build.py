@@ -130,6 +130,26 @@ patch = ('<style id="sublevel-banner-layout-v1">\n' + css + '</style>\n').encode
 assert b'id="sublevel-banner-layout-v1"' not in data
 data, count = re.subn(br"</head\s*>", lambda m: patch + m.group(0), data, count=1, flags=re.I)
 assert count == 1, "Missing HTML head"
+
+# Add the magazine reader without modifying existing navigation or article copy.
+import json
+from magazine_images import assets
+try:
+    photo_index=assets(data)
+except Exception as exc:
+    print("Magazine source images unavailable:",type(exc).__name__)
+    photo_index={}
+root=pathlib.Path(__file__).resolve().parent
+mag_css=(root/"magazine.css").read_text(encoding="utf-8")
+mag_js=(root/"magazine.js").read_text(encoding="utf-8")
+photo_json=json.dumps(photo_index,ensure_ascii=True).replace("<",r"\u003c")
+mag_patch=('<style id="sublevel-magazine">'+mag_css+'</style>').encode("utf-8")
+data, n=re.subn(br"</head\s*>",lambda m:mag_patch+m.group(0),data,count=1,flags=re.I)
+assert n==1
+reader=('<script>window.__sublevelMagazineImages='+photo_json+';</script><script>'+mag_js+'</script>').encode("utf-8")
+data,n=re.subn(br"</body\s*>",lambda m:reader+m.group(0),data,count=1,flags=re.I)
+assert n==1
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
