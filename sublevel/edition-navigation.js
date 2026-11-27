@@ -4,48 +4,47 @@ const app=document.getElementById("app");if(!app)return;
 const make=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt)n.textContent=txt;return n};
 const clean=n=>n?.textContent?.trim().replace(/\s+/g," ")||"";
 const scroll=n=>n.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"});
+const departments=[
+ [".ed-lead","Browse genres","THE MUSIC LIBRARY","Explore genres, charts and essential tracks."],
+ [".stream-listen","Daily listening","ON ROTATION","Daily mix and record of the day."],
+ [".sl-d-entry","The Daily Dig","NEW DISCOVERIES","Ten curated releases."],
+ [".stream-moods","Listen by mood","SET THE ATMOSPHERE","Find the right music for the moment."],
+ [".motion-news","Today in music","THE NEWS DESK","Independent music news and stories."],
+ [".night-section:not(.stream-listen):not(.stream-moods)","Discovery tools","DIG DEEPER","Follow samples and discover unfamiliar sounds.","discover more|listening tools"],
+ [".motion-section:not(.motion-news)","Beyond the charts","THE CULTURE DESK","Albums, scenes and documentaries."],
+ [".night-section","Unsigned","THE NEXT WAVE","Discover emerging producers.","unsigned"]
+];
+const mounted=new WeakMap();
 function homeIndex(home){
- const defs=[
- [".ed-lead","Browse genres","The music library","Explore genres and charts"],
- [".stream-listen","Daily listening","On rotation","Daily mix & record of the day"],
- [".sl-d-entry","The Daily Dig","Fresh discoveries","Ten curated releases"],
- [".stream-moods","Listen by mood","Set the atmosphere","Warehouse, afterhours & more"],
- [".motion-news","Today in music","The news desk","Latest music stories"],
- [".night-section:not(.stream-listen):not(.stream-moods)","Discovery tools","Dig deeper","Samples, moods & surprise picks"],
- [".motion-section:not(.motion-news)","Beyond the charts","The culture desk","Records, scenes & documentaries"],
- [".night-section","Unsigned","The next wave","Producer community"]
- ];
- const sections=[];
- for(const [selector,title,kicker,desc] of defs){
-  let candidates=Array.from(home.querySelectorAll(":scope > "+selector));
-  if(title==="Unsigned")candidates=candidates.filter(n=>/unsigned/i.test(clean(n.querySelector("h2,.night-heading"))));
-  if(title==="Discovery tools")candidates=candidates.filter(n=>/discover more|listening tools/i.test(clean(n.querySelector(".night-heading,h2"))));
-  const node=candidates[0];if(node&&!sections.some(x=>x.node===node))sections.push({node,title,kicker,desc});
- }
+ const sections=departments.map(([selector,title,kicker,desc,match])=>{
+  let nodes=Array.from(home.querySelectorAll(":scope > "+selector));
+  if(match)nodes=nodes.filter(n=>new RegExp(match,"i").test(clean(n.querySelector(".night-heading,h2"))));
+  return {node:nodes[0],title,kicker,desc};
+ }).filter(s=>s.node);
+ const prior=mounted.get(home);
+ if(prior&&prior.length===sections.length&&prior.every((n,i)=>n===sections[i].node)&&home.querySelector(".sl-home-index"))return;
+ mounted.set(home,sections.map(s=>s.node));
+ home.querySelector(":scope > .sl-home-index")?.remove();
  if(!sections.length)return;
- const signature=sections.map(s=>s.title).join("|");
- const old=home.querySelector(":scope > .sl-home-index");
- if(old?.dataset.signature===signature)return;
- old?.remove();
- const index=make("nav","sl-home-index");index.dataset.signature=signature;index.setAttribute("aria-label","Today's edition contents");
- const heading=make("div","sl-home-index-head");heading.append(make("span","sl-home-kicker","TODAY / CONTENTS"),make("strong",null,"Explore this edition"));index.append(heading);
+ const nav=make("nav","sl-home-index");nav.setAttribute("aria-label","Today's edition contents");
+ const header=make("div","sl-home-index-head");header.append(make("span","sl-home-kicker","SUBLEVEL / TODAY"),make("strong",null,"In this edition"));nav.append(header);
  const grid=make("div","sl-home-index-grid");
  sections.forEach((s,i)=>{
-  const number=String(i+1).padStart(2,"0");
-  const anchor=make("button","sl-home-index-link");anchor.type="button";anchor.append(make("span","sl-home-num",number),make("span",null,s.title),make("span","sl-home-arr","↘"));anchor.addEventListener("click",()=>scroll(s.node));grid.append(anchor);
+  const number=String(i+1).padStart(2,"0"),anchor=make("button","sl-home-index-link");anchor.type="button";
+  anchor.append(make("span","sl-home-num",number),make("span",null,s.title),make("span","sl-home-arr","↘"));anchor.addEventListener("click",()=>scroll(s.node));grid.append(anchor);
   if(s.node.matches(".sl-d-entry")){s.node.classList.add("sl-home-dig");return}
   s.node.classList.add("sl-home-department");
-  let header=s.node.querySelector(":scope > .sl-home-dept-title");
-  if(!header){header=make("div","sl-home-dept-title");s.node.prepend(header)}
-  header.replaceChildren(make("span","sl-home-dept-num",number),make("div","sl-home-dept-copy"));
-  header.lastChild.append(make("span","sl-home-kicker",s.kicker),make("h2",null,s.title),make("small",null,s.desc));
-  // Keep original interactive heading controls; only conceal a duplicate non-interactive title.
-  const existing=s.node.querySelector(":scope > .night-heading,:scope > .motion-title,:scope > .home-mood-label");
-  if(existing&&!existing.querySelector("button,a,select,input"))existing.classList.add("sl-home-original-heading");
+  let dept=s.node.querySelector(":scope > .sl-home-dept-title");
+  if(!dept){dept=make("header","sl-home-dept-title");s.node.prepend(dept)}
+  const copy=make("div","sl-home-dept-copy");
+  copy.append(make("span","sl-home-kicker",s.kicker),make("h2",null,s.title),make("small",null,s.desc));
+  dept.replaceChildren(make("span","sl-home-dept-num",number),copy);
+  // Retain interactive original headings; suppress only the redundant static heading.
+  const old=s.node.querySelector(":scope > .night-heading,:scope > .motion-title");
+  if(old&&!old.querySelector("button,a,select,input"))old.classList.add("sl-home-original-heading");
  });
- index.append(grid);
- const issue=home.querySelector(":scope > .night-issue");
- if(issue)issue.after(index);else home.prepend(index);
+ nav.append(grid);
+ const issue=home.querySelector(":scope > .night-issue");if(issue)issue.after(nav);else home.prepend(nav);
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c]));
 function masthead(cover){
