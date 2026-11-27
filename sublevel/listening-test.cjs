@@ -1,0 +1,12 @@
+"use strict";
+const a=require("node:assert/strict"),L=require("./listening-state.js"),v=new Set(["a","b","c","d"]);
+const s=L.session({ids:["a","b","b","c","bogus"],current:"b"},v);
+a.deepEqual(s,{ids:["a","b","c"],current:"b"});
+a.deepEqual(L.addNext(s,"a",v),{ids:["b","a","c"],current:"b"});
+a.deepEqual(L.addNext(s,"d",v),{ids:["a","b","d","c"],current:"b"});
+a.deepEqual(L.remove(s,"b",v),{ids:["a","c"],current:"c"});
+a.deepEqual(L.reorder(s,"b",1,v),{ids:["a","c","b"],current:"b"});
+a.deepEqual(L.shuffleRemaining({ids:["a","b","c","d"],current:"b"},v,()=>0),{ids:["a","b","d","c"],current:"b"});
+a.deepEqual(L.sanitize({session:{ids:["bogus"]},playlists:[{name:" Mix ",ids:["b","b","bogus"]},{name:"mix",ids:["c"]}]},v),{session:{ids:[],current:null},playlists:[{name:"Mix",ids:["b"]}]});
+a.deepEqual(L.merge({session:s,playlists:[{name:"Mix",ids:["a"]}]},{playlists:[{name:"mix",ids:["c"]}]},v).playlists,[{name:"Mix",ids:["a","c"]}]);
+console.log("Listening session tests passed: deduplication, resume, play-next, removal, reordering, shuffle and playlist import.");
