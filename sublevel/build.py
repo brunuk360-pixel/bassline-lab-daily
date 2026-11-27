@@ -183,6 +183,17 @@ coherence_patch=('<style id="sublevel-coherent-edition">'+coherence_css+'</style
 data,n=re.subn(br"</head\s*>",lambda m:coherence_patch+m.group(0),data,count=1,flags=re.I)
 assert n==1
 
+
+# Track dossier enhancements, preserving the underlying track controls and data.
+dossier_css=(root/"track-dossier.css").read_text(encoding="utf-8")
+dossier_js=(root/"track-dossier.js").read_text(encoding="utf-8")
+dossier_patch=('<style id="sublevel-track-dossiers">'+dossier_css+'</style>').encode("utf-8")
+data,n=re.subn(br"</head\s*>",lambda m:dossier_patch+m.group(0),data,count=1,flags=re.I)
+assert n==1
+dossier_script=('<script>'+dossier_js+'</script>').encode("utf-8")
+data,n=re.subn(br"</body\s*>",lambda m:dossier_script+m.group(0),data,count=1,flags=re.I)
+assert n==1
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
