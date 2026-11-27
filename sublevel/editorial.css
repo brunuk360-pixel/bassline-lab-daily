@@ -1,0 +1,72 @@
+
+/* SUBLEVEL editorial system: readable type, open layouts, consistent controls. */
+:root{--sl-ink:#f2f3ee;--sl-muted:#b7c7c3;--sl-teal:#79c9b7;--sl-rule:#a0b9b329;--sl-bg:#080e10}
+html body #app :is(.roomcopy p,.detail p,.story-copy,.weekly-copy p,.news-body p,.subnote,.editorial-detail p){font-size:clamp(15px,3.9vw,17px)!important;line-height:1.72!important;color:#dce5e1!important;letter-spacing:0!important}
+html body #app :is(.pagehead h1,.roomcopy h1,.xhero h1,.weekly-cover h1){line-height:1.08!important;text-wrap:balance}
+html body #app :is(.night-heading h2,.motion-title h2,.sectionhead h2){font-size:clamp(20px,5vw,27px)!important;line-height:1.2!important;color:var(--sl-ink)!important}
+html body #app :is(.night-label,.motion-kicker,.ed-tag,.sleeve-kicker){color:var(--sl-teal)!important}
+html body #app .night-home .night-banner::before,html body #app .night-home .night-feature::before{filter:saturate(.88) brightness(1.20) contrast(1.02)!important}
+html body #app .night-home .night-banner::after,html body #app .night-home .night-feature::after{background:linear-gradient(90deg,#080e10e0 0%,#080e1094 44%,#080e100a 100%),linear-gradient(0deg,#080e1080,transparent 38%)!important}
+html body #app .night-home .night-banner,html body #app .night-home .stream-listen .night-feature{border:0!important;border-radius:0!important;box-shadow:none!important}
+html body #app .night-home .night-section,html body #app .night-home .motion-section{padding-top:14px!important;padding-bottom:8px!important}
+html body #app .night-home .stream-listen{padding-top:0!important}
+html body #app .night-home .stream-moods .night-tile::before{filter:saturate(.85) brightness(1.18)!important}
+html body #app .night-home .stream-moods .night-tile{min-height:126px!important}
+html body #app .night-home .press-news-stream{border:0!important;background:transparent!important}
+html body #app .night-home .press-news-stream .news-item summary{padding:12px 0!important;min-height:96px!important;gap:12px!important}
+html body #app .night-home .press-news-stream .news-art{width:78px!important;height:78px!important;border-radius:3px!important}
+html body #app .night-home .press-news-stream .news-copy b{font-size:16px!important;line-height:1.3!important}
+html body #app .night-home .news-copy time{color:var(--sl-muted)!important}
+html body #app .night-home .news-item.lead summary{min-height:185px!important}
+html body #app .night-home .news-item.lead .news-copy b{font-size:clamp(23px,6vw,36px)!important}
+html body #app .night-home .ed-record .cover,html body #app .night-home .ed-record img{width:64px!important;height:64px!important;flex:0 0 64px!important}
+html body #app .night-home .ed-record{min-height:78px!important}
+html body #app .night-home .night-tools{gap:16px!important}
+html body #app .night-home .night-tool-group{background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important}
+html body #app .night-home .night-tool-group button{min-height:44px!important;font-size:14px!important}
+html body #app .night-home .motion-highlight{border:0!important;box-shadow:none!important;border-radius:0!important}
+html body #app .night-home .ed-resume,html body #app .night-home .ed-quick-listen,html body #app .weekly-contents{display:none!important}
+html body #app .genre.genre-sleeve{border:0!important;border-radius:3px!important;box-shadow:none!important}
+html body #app .genre-sleeve .scene-photo{opacity:.95!important;filter:saturate(.9) brightness(1.12)!important}
+html body #app .genre-sleeve .genre-name{font-size:clamp(22px,15cqw,40px)!important;line-height:1.03!important;letter-spacing:-.04em!important;text-shadow:0 1px 4px #000a!important}
+html body #app .genre-sleeve .genre-name.long{font-size:clamp(18px,12.5cqw,32px)!important}
+html body #app .tracks{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+html body #app .track{border-radius:0!important;box-shadow:none!important;border-width:0 0 1px!important;border-color:var(--sl-rule)!important;background:transparent!important}
+html body #app .trackline{min-height:80px!important;padding:10px 2px!important;gap:10px!important}
+html body #app .tracktitle strong{font-size:15px!important;color:var(--sl-ink)!important;line-height:1.35!important}
+html body #app .tracktitle small{font-size:12px!important;color:var(--sl-muted)!important}
+html body #app .track.is-expanded .trackline{background:#10201e!important}
+html body #app :is(.tabs,.record-tabs){border-radius:0!important;box-shadow:none!important}
+html body #app :is(.tabs,.record-tabs) button{min-height:44px!important;font-size:12px!important}
+html body #app :is(.roomhead,.subhero,.xhero,.xhead){border:0!important;box-shadow:none!important;border-radius:3px!important}
+html body #app .weekly-page{background:transparent!important;border:0!important;border-radius:0!important;overflow:visible!important}
+html body #app .weekly-cover{min-height:clamp(215px,51vw,370px)!important;padding:clamp(18px,4vw,40px)!important}
+html body #app .weekly-cover::before{filter:grayscale(.18) saturate(.85) contrast(1.04) brightness(1.06)!important}
+html body #app .weekly-cover::after{background:linear-gradient(90deg,#080e10b0,transparent 85%),linear-gradient(0deg,#080e10f0,transparent 90%)!important}
+html body #app .weekly-cover h1{font-size:clamp(38px,10vw,76px)!important;color:var(--sl-ink)!important}
+html body #app .weekly-index{background:transparent!important;padding:12px 0 20px!important}
+html body #app .weekly-index select{max-width:100%!important;font-size:14px!important;min-height:44px!important}
+html body #app .weekly-story{border:0!important;border-top:1px solid var(--sl-rule)!important;padding:24px 0 16px!important;background:transparent!important;scroll-margin-top:24px!important}
+html body #app .weekly-copy,html body #app .weekly-roundup{background:transparent!important;padding:16px 0!important;max-width:740px;margin-inline:auto!important}
+html body #app .weekly-copy h2,html body #app .weekly-roundup h2{font-size:clamp(27px,7vw,43px)!important;line-height:1.13!important;letter-spacing:-.035em!important;margin:10px 0 16px!important}
+html body #app .weekly-copy p:first-of-type{font-size:clamp(17px,4.2vw,21px)!important;line-height:1.6!important;color:var(--sl-ink)!important}
+html body #app .weekly-story img{max-width:100%;height:auto;object-fit:contain}
+html body #app .sl-weekly-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(145px,100%),1fr));gap:12px;margin:22px 0}
+html body #app .sl-weekly-gallery figure{margin:0;min-width:0}
+html body #app .sl-weekly-gallery img{display:block;width:100%;height:auto;max-height:400px;object-fit:contain;background:#111b1c}
+html body #app .sl-weekly-gallery figcaption{font-size:11px;line-height:1.5;color:var(--sl-muted);padding-top:6px}
+html body #app .sl-weekly-gallery a{color:var(--sl-teal);text-decoration:underline}
+html body #app .sl-story-tools{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;border-top:1px solid var(--sl-rule);padding:12px 0;margin:18px 0 0;color:var(--sl-muted);font-size:12px}
+html body #app .sl-story-tools button{border:0!important;background:transparent!important;color:var(--sl-teal)!important;min-height:44px;padding:8px 0!important;font-size:13px!important;text-align:left;cursor:pointer}
+html body #app .sl-read-time{display:block;font-size:12px;color:var(--sl-muted);margin:0 0 14px}
+html body .bottom{background:#080e10f5!important;border-top:1px solid var(--sl-rule)!important;box-shadow:0 -5px 18px #0004!important;padding:7px 3px calc(7px + env(safe-area-inset-bottom))!important}
+html body .bottom button{min-width:0!important;flex:1 1 0!important;font-size:10px!important;line-height:1.2!important;font-weight:600!important;min-height:52px!important;gap:4px!important;color:#aabcb7!important;border-radius:0!important;background:transparent!important}
+html body .bottom button.active{color:var(--sl-teal)!important}
+html body .bottom button svg{width:22px!important;height:22px!important}
+html body .bottom button.active::before{box-shadow:none!important}
+html body #app :is(button,a,summary):focus-visible,html body .bottom button:focus-visible{outline:2px solid var(--sl-teal)!important;outline-offset:2px}
+html body .sl-top-jump{position:fixed;right:12px;bottom:calc(83px + env(safe-area-inset-bottom));z-index:29;width:44px;height:44px;display:grid;place-items:center;background:#102321f5;color:var(--sl-ink);border:1px solid var(--sl-rule);border-radius:50%;font-size:21px;cursor:pointer;box-shadow:0 3px 12px #0006}
+html body .sl-top-jump[hidden]{display:none!important}
+@media(min-width:800px){html body #app .weekly-story{padding:36px 0 26px!important}html body #app .weekly-copy{padding:20px 16px!important}html body .sl-top-jump{bottom:28px;right:24px}}
+@media(max-width:360px){html body .bottom button{font-size:9px!important}}
+@media(prefers-reduced-motion:reduce){html body #app *,html body .bottom *{animation-duration:.01ms!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
