@@ -161,6 +161,13 @@ editorial_script=('<script>'+editorial_js+'</script>').encode("utf-8")
 data,n=re.subn(br"</body\s*>",lambda m:editorial_script+m.group(0),data,count=1,flags=re.I)
 assert n==1
 
+
+from section_photos import install_photos
+section_css=install_photos("crate-public")
+section_patch=('<style id="sublevel-section-photography">'+section_css+'</style>').encode("utf-8")
+data,n=re.subn(br"</head\s*>",lambda m:section_patch+m.group(0),data,count=1,flags=re.I)
+assert n==1
+
 output = pathlib.Path("crate-public/index.html")
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_bytes(data)
