@@ -71,3 +71,5 @@ html body #app .sl-d-track-link{margin:0 0 12px;color:#a0decf!important}
 .sl-d-record .sl-d-art-missing{background:#132120;color:#b5c5c0;min-height:76px}
 .sl-d-journey-entry{margin-bottom:14px}
 @media(min-width:700px){.sl-d-filters{grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr)}.sl-d-search{grid-column:auto}}
+
+.sl-d-feed-status{display:flex;flex-direction:column;gap:4px;border-left:2px solid #79c9b7;padding:10px 13px;margin:0 0 15px;background:#12211f}.sl-d-feed-status strong{font-size:15px;color:#f3f5ef}.sl-d-feed-status small{font-size:11px;line-height:1.5;color:#b5c5c0}.sl-d-art-credit{display:block;text-align:center;margin:-10px 0 15px;font-size:11px;color:#79c9b7;text-decoration:underline}.sl-d-timeline .sl-d-event p{margin:5px 0 0}
