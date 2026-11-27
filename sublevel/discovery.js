@@ -26,6 +26,58 @@ try{const raw=JSON.parse(localStorage.getItem(storeKey)||"null");if(raw)for(cons
 function persist(){try{localStorage.setItem(storeKey,JSON.stringify(state))}catch{persistent=false}}
 let dialog,content,heading,back,lastFocus,stack=[],current,queue=[],position=0,notice;
 function announce(txt){if(notice)notice.textContent=txt}
+
+const L=window.SUBLEVELListening,validIDs=new Set(records.map(r=>r.id)),listenKey="sublevel.listening.v1";
+let listening=L.sanitize({},validIDs);
+try{listening=L.sanitize(JSON.parse(localStorage.getItem(listenKey)||"null"),validIDs)}catch{persistent=false}
+function persistListening(){try{localStorage.setItem(listenKey,JSON.stringify(listening))}catch{persistent=false}}
+function setSession(next){listening.session=L.session(next,validIDs);queue=[...listening.session.ids];position=Math.max(0,queue.indexOf(listening.session.current));persistListening()}
+function sessionFromQueue(){return L.session({ids:queue,current:queue[position]},validIDs)}
+function resumeSession(){const saved=L.session(listening.session,validIDs);if(!saved.current)return;startListening(saved.current,saved.ids.map(byId))}
+function playNext(id){
+ const base=current?.mode==="listen"?sessionFromQueue():listening.session;
+ setSession(L.addNext(base,id,validIDs));
+ if(current?.mode==="listen")render("listen",listening.session.current);
+ announce("Added to your listening queue")
+}
+function resumePanel(){
+ const r=byId(listening.session.current);if(!r)return null;
+ const b=button("",resumeSession,"sl-d-resume-session");const copy=create("span");copy.append(create("span","sl-d-kicker","CONTINUE YOUR SESSION"),create("strong",null,r.title),create("small",null,r.artist+" · "+listening.session.ids.length+" queued records"));b.append(copy,create("span",null,"→"));return b
+}
+function playlistEditor(ids){
+ const box=create("div","sl-d-playlist-editor");
+ const field=create("input","sl-d-search");field.type="text";field.maxLength=60;field.placeholder="Name a new playlist";field.setAttribute("aria-label","New playlist name");
+ const add=button("Create playlist",()=>{const name=field.value.trim();if(!name){announce("Enter a playlist name");field.focus();return}
+ if(listening.playlists.some(p=>p.name.toLowerCase()===name.toLowerCase())){announce("A playlist with that name already exists");return}
+ if(listening.playlists.length>=50){announce("Playlist limit reached");return}
+ listening.playlists.push({name,ids:L.session({ids},validIDs).ids});persistListening();render(current.mode,current.arg);announce("Playlist created")});
+ box.append(field,add);return box
+}
+function playlistPicker(id){
+ const box=create("div","sl-d-playlist-picker");
+ if(listening.playlists.length){const select=create("select","sl-d-select");select.setAttribute("aria-label","Choose playlist");for(const p of listening.playlists){const o=create("option",null,p.name);o.value=p.name;select.append(o)}
+ box.append(select,button("Add to playlist",()=>{const p=listening.playlists.find(p=>p.name===select.value);if(!p)return;p.ids=L.session({ids:[...p.ids,id]},validIDs).ids;persistListening();announce("Added to "+p.name)}))}
+ const details=create("details");details.append(create("summary",null,"Create a new playlist with this record"),playlistEditor([id]));box.append(details);return box
+}
+function playlistLibrary(){
+ const box=create("div","sl-d-playlist-library");box.append(playlistEditor([]));
+ if(!listening.playlists.length){box.append(create("p","sl-d-muted","Create a playlist here, or save a listening queue as a playlist."));return box}
+ for(const p of listening.playlists){const row=create("article","sl-d-playlist-row");const b=button(p.name+" →",()=>show("playlist",p.name),"sl-d-profile-title");row.append(b,create("p","sl-d-muted",p.ids.length+" records"));box.append(row)}return box
+}
+function queuePanel(){
+ const box=create("details","sl-d-queue");box.open=true;box.append(create("summary",null,"Listening queue · "+queue.length+" records"));
+ const actions=create("div","sl-d-actions");
+ actions.append(button("Shuffle upcoming",()=>{setSession(L.shuffleRemaining(sessionFromQueue(),validIDs));render("listen",listening.session.current)}),button("Save queue as playlist",()=>{const editor=box.querySelector(".sl-d-queue-save");editor.hidden=!editor.hidden;if(!editor.hidden)editor.querySelector("input")?.focus()}));
+ box.append(actions);const editor=create("div","sl-d-queue-save");editor.hidden=true;editor.append(playlistEditor(queue));box.append(editor);
+ const list=create("div","sl-d-queue-list");
+ queue.forEach((id,i)=>{const r=byId(id);if(!r)return;const row=create("div","sl-d-queue-row");if(i===position)row.classList.add("sl-d-queue-current");
+ const b=button("",()=>{position=i;render("listen",id)},"sl-d-queue-track");b.append(create("span","sl-d-kicker",i===position?"CURRENT":String(i+1).padStart(2,"0")),create("strong",null,r.title),create("small",null,r.artist));if(i===position)b.setAttribute("aria-current","true");row.append(b);
+ const controls=create("div","sl-d-queue-controls");
+ for(const [symbol,delta,label] of [["↑",-1,"Move up"],["↓",1,"Move down"]]){const moveButton=button(symbol,()=>{setSession(L.reorder(sessionFromQueue(),id,delta,validIDs));render("listen",listening.session.current)},"sl-d-queue-icon");moveButton.disabled=i+delta<0||i+delta>=queue.length;moveButton.setAttribute("aria-label",label+" "+r.title);controls.append(moveButton)}
+ const remove=button("×",()=>{setSession(L.remove(sessionFromQueue(),id,validIDs));if(listening.session.current)render("listen",listening.session.current);else render("journey")},"sl-d-queue-icon");remove.setAttribute("aria-label","Remove "+r.title);controls.append(remove);row.append(controls);list.append(row)});
+ box.append(list);return box
+}
+
 function remember(id){state.history=[id,...state.history.filter(x=>x!==id)].slice(0,100);persist()}
 function toggle(id,key="saved"){const a=state[key];const on=a.includes(id);state[key]=on?a.filter(x=>x!==id):[id,...a];persist();announce(on?"Removed from your collection":"Saved to your collection");return !on}
 function saveButton(id,key="saved",label="Save"){const saved=state[key].includes(id);const b=button(saved?(key==="saved"?"✓ Saved":"✓ Following"):label,()=>{const on=toggle(id,key);b.textContent=on?(key==="saved"?"✓ Saved":"✓ Following"):label;b.setAttribute("aria-pressed",String(on));if(current?.mode==="journey")render("journey")});b.setAttribute("aria-pressed",String(saved));return b}
@@ -43,7 +95,7 @@ function profileArtwork(p){
  if(known[0].artSource){caption.append(" · ",link("Source ↗",known[0].artSource,"sl-d-photo-credit"))}
  f.append(caption);return f
 }
-function record(r,list){const a=create("article","sl-d-record");if(r.art){const cover=artwork(r);a.append(cover);cover.addEventListener("error",()=>{a.querySelector(".sl-d-art-missing")?.remove();a.classList.add("sl-d-no-art")},{once:true})}else a.classList.add("sl-d-no-art");const copy=create("div","sl-d-copy");copy.append(create("span","sl-d-kicker",r.tag+(window.SUBLEVELResearch?.has(r.title,r.artist)?" / Track dossier":"")),create("h3",null,r.title),create("p","sl-d-muted",r.artist+" · "+r.genre+(r.date?" · "+r.date:"")),create("p",null,r.note));const actions=create("div","sl-d-actions");actions.append(button("Listen / details →",()=>startListening(r.id,list)),saveButton(r.id));copy.append(actions);a.append(copy);return a}
+function record(r,list){const a=create("article","sl-d-record");if(r.art){const cover=artwork(r);a.append(cover);cover.addEventListener("error",()=>{a.querySelector(".sl-d-art-missing")?.remove();a.classList.add("sl-d-no-art")},{once:true})}else a.classList.add("sl-d-no-art");const copy=create("div","sl-d-copy");copy.append(create("span","sl-d-kicker",r.tag+(window.SUBLEVELResearch?.has(r.title,r.artist)?" / Track dossier":"")),create("h3",null,r.title),create("p","sl-d-muted",r.artist+" · "+r.genre+(r.date?" · "+r.date:"")),create("p",null,r.note));const actions=create("div","sl-d-actions");actions.append(button("Listen / details →",()=>startListening(r.id,list)),button("Queue next",()=>playNext(r.id)),saveButton(r.id));copy.append(actions);a.append(copy);return a}
 function listRecords(list){const g=create("div","sl-d-list");list.filter(Boolean).forEach(r=>g.append(record(r,list)));return g}
 
 function catalogue(list){
@@ -177,7 +229,7 @@ function collectionStats(){
 }
 
 function render(mode,arg){
- current={mode,arg};dialog.dataset.room=mode;if(notice)notice.textContent="";content.replaceChildren();heading.textContent=labels[mode]||({artist:"Artist DNA",listen:"Listening room",graph:"Connections",hub:"Discover more",label:"Label catalogue"}[mode]||"SUBLEVEL");back.textContent=stack.length?"← Back":"← Close";dialog.scrollTop=0;
+ current={mode,arg};dialog.dataset.room=mode;if(notice)notice.textContent="";content.replaceChildren();heading.textContent=labels[mode]||({artist:"Artist DNA",listen:"Listening room",graph:"Connections",hub:"Discover more",label:"Label catalogue",playlist:"Your playlist"}[mode]||"SUBLEVEL");back.textContent=stack.length?"← Back":"← Close";dialog.scrollTop=0;
  if(mode==="hub"){
  titleBlock("SUBLEVEL / DISCOVERY","Go deeper.","Explore beyond the charts, or search the entire curated catalogue.");
  const grid=create("div","sl-d-hub");const usedPhotos=new Set();modes.forEach(([id,name,desc,img])=>{
@@ -189,7 +241,7 @@ function render(mode,arg){
  b.append(create("strong",null,name),create("small",null,desc));grid.append(b)
 });content.append(grid);section("For you");content.append(personalized());section("Browse record labels");const labelNav=create("div","sl-d-label-nav");labelsData.forEach(l=>labelNav.append(button(l[0]+" →",()=>show("label",l[0]))));content.append(labelNav);section("Browse the catalogue");content.append(catalogue(records));
  }else if(mode==="daily"){
- titleBlock("DAILY SELECTION / "+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric",timeZone:"Europe/London"}),"The Daily Dig","A daily selection of recently released records and catalogue discoveries, with links to the original sources.");const list=daily();const feed=create("div","sl-d-feed-status");feed.append(create("strong",null,recentReleases().length+" releases from the last 7 days"),create("small",null,"Editorial catalogue last updated "+D.edition+" · dates from linked release pages"));content.append(feed,button("Start listening →",()=>startListening(list[0].id,list),"sl-d-button sl-d-primary"),listRecords(list));section("New release archive");content.append(catalogue(records.filter(r=>["New release","Reissue"].includes(r.tag)).sort((a,b)=>b.date.localeCompare(a.date))));
+ titleBlock("DAILY SELECTION / "+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric",timeZone:"Europe/London"}),"The Daily Dig","A daily selection of recently released records and catalogue discoveries, with links to the original sources.");const list=daily();const feed=create("div","sl-d-feed-status");feed.append(create("strong",null,recentReleases().length+" releases from the last 7 days"),create("small",null,"Editorial catalogue last updated "+D.edition+" · dates from linked release pages"));content.append(feed);const resume=resumePanel();if(resume)content.append(resume);content.append(button("Start listening →",()=>startListening(list[0].id,list),"sl-d-button sl-d-primary"),listRecords(list));section("New release archive");content.append(catalogue(records.filter(r=>["New release","Reissue"].includes(r.tag)).sort((a,b)=>b.date.localeCompare(a.date))));
  }else if(mode==="artists"){
  titleBlock("ARTIST ARCHIVE","Artist DNA","Discover the stories and connections behind the records.");D.profiles.forEach(p=>{const a=create("article","sl-d-profile");const art=profileArtwork(p);if(art){a.classList.add("sl-d-profile-with-art");a.append(art)}const copy=create("div","sl-d-profile-copy");const b=button(p[0],()=>show("artist",p[0]),"sl-d-profile-title");copy.append(b,create("p","sl-d-muted",p[1]),create("p",null,p[2]),button("Explore artist →",()=>show("artist",p[0])));a.append(copy);content.append(a)});
  }else if(mode==="artist"){
@@ -222,7 +274,7 @@ function render(mode,arg){
  titleBlock("DEEP CUTS / INDEPENDENT MUSIC","Hidden Gems","A handpicked shelf of less obvious selections across bass music, jungle and beyond.");content.append(catalogue(records.filter(r=>r.tag==="Deep cut")));
  }else if(mode==="journey"){
  titleBlock("YOUR PERSONAL LIBRARY","My Music Journey","A collection stored on this browser. Listening history records opened listening-room entries, not verified streaming playback.");
- const controls=create("div","sl-d-actions");controls.append(button("Export collection",()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=create("a");a.href=url;a.download="sublevel-collection.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}));
+ const controls=create("div","sl-d-actions");controls.append(button("Export collection",()=>{const blob=new Blob([JSON.stringify({...state,listening},null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=create("a");a.href=url;a.download="sublevel-collection.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}));
 const file=create("input");file.type="file";file.accept=".json,application/json";file.hidden=true;
 file.addEventListener("change",async()=>{try{
  const selected=file.files?.[0];if(!selected)return;if(selected.size>1000000)throw Error("File too large");
@@ -230,32 +282,45 @@ file.addEventListener("change",async()=>{try{
  if(!incoming||typeof incoming!=="object"||!Array.isArray(incoming.saved))throw Error("Not a SUBLEVEL collection");
  const valid={saved:records.map(r=>r.id),history:records.map(r=>r.id),artists:D.profiles.map(p=>p[0]),labels:labelsData.map(l=>l[0])};
  for(const k of Object.keys(valid)){if(Array.isArray(incoming[k]))state[k]=[...new Set([...state[k],...incoming[k].filter(v=>typeof v==="string"&&valid[k].includes(v))])].slice(0,100)}
+ if(incoming.listening){listening=L.merge(listening,incoming.listening,validIDs);persistListening()}
  persist();render("journey");announce("Collection merged successfully");
  }catch{announce("Could not import this collection. Choose a valid SUBLEVEL JSON export.")}});
  controls.append(button("Import collection",()=>file.click()),file);
 
  content.append(controls);
  if(!persistent)content.append(create("p","sl-d-muted","Browser storage unavailable; changes last only for this session."));
+ const resume=resumePanel();if(resume)content.append(resume);section("Your playlists");content.append(playlistLibrary());
  content.append(collectionStats());section("Recommended for you");content.append(personalized());section("Saved records ("+state.saved.length+")");const saved=state.saved.map(byId).filter(Boolean);if(saved.length){const views=create("div","sl-d-actions"),area=create("div");views.append(button("Record shelf",()=>area.replaceChildren(shelf(saved))),button("Search / list",()=>area.replaceChildren(catalogue(saved))));content.append(views,area);area.append(shelf(saved))}else content.append(create("p","sl-d-muted","Save a record from any discovery feature to start your shelf."),button("Explore the Daily Dig",()=>show("daily")));
  section("Followed artists");state.artists.forEach(name=>content.append(button(name+" →",()=>show("artist",name))));if(!state.artists.length)content.append(create("p","sl-d-muted","Follow artists from Artist DNA."));
  section("Record labels");labelsData.forEach(([name,url,ids])=>{const row=create("article","sl-d-profile");row.append(create("h3",null,name));const actions=create("div","sl-d-actions");actions.append(saveButton(name,"labels","Follow label"),button("Browse catalogue →",()=>show("label",name)),link("Official catalogue ↗",url));row.append(actions);content.append(row)});
  section("Recently explored");const history=state.history.map(byId).filter(Boolean);if(history.length)content.append(listRecords(history.slice(0,12)));else content.append(create("p","sl-d-muted","Your listening-room visits will appear here."));
+ }else if(mode==="playlist"){
+ const p=listening.playlists.find(p=>p.name===arg);if(!p){render("journey");return}
+ titleBlock("YOUR COLLECTION / PLAYLIST",p.name,p.ids.length+" records · saved on this device");
+ const list=p.ids.map(byId).filter(Boolean),actions=create("div","sl-d-actions");
+ if(list.length)actions.append(button("Start session →",()=>startListening(list[0].id,list),"sl-d-button sl-d-primary"));
+ const rename=create("input","sl-d-search");rename.value=p.name;rename.maxLength=60;rename.setAttribute("aria-label","Playlist name");
+ actions.append(rename,button("Rename",()=>{const name=rename.value.trim();if(!name||listening.playlists.some(x=>x!==p&&x.name.toLowerCase()===name.toLowerCase())){announce("Choose a unique playlist name");return}p.name=name;persistListening();render("playlist",name)}),button("Delete playlist",()=>{if(!confirm("Delete this playlist? Your saved records will not be removed."))return;listening.playlists=listening.playlists.filter(x=>x!==p);persistListening();render("journey")}));
+ content.append(actions);
+ for(const r of list){const row=record(r,list);row.append(button("Remove from playlist",()=>{p.ids=p.ids.filter(id=>id!==r.id);persistListening();render("playlist",p.name)}));content.append(row)}
+ if(!list.length)content.append(create("p","sl-d-muted","Add records from their Listening Room."),button("Browse music",()=>show("hub")));
  }else if(mode==="label"){
  const label=labelsData.find(l=>l[0]===arg);if(!label)return;titleBlock("LABEL ARCHIVE",label[0],"Explore selections from this label’s catalogue.");const actions=create("div","sl-d-actions");actions.append(saveButton(label[0],"labels","Follow label"),link("Official catalogue ↗",label[1]));content.append(actions,listRecords(label[2].map(byId).filter(Boolean)));
  }else if(mode==="listen"){
- const r=byId(arg);if(!r)return;remember(r.id);
+ const r=byId(arg);if(!r)return;remember(r.id);if(!queue.includes(r.id))queue=[r.id];position=queue.indexOf(r.id);setSession(sessionFromQueue());
  const hero=create("div","sl-d-listen-art");hero.append(artwork(r));content.append(hero);if(r.artSource)content.append(link("Artwork source ↗",r.artSource,"sl-d-art-credit"));
  titleBlock("LISTENING ROOM / "+r.tag,r.title,r.artist+" · "+r.genre+(r.date?" · "+r.date:""));content.append(create("p",null,r.note));
- const actions=create("div","sl-d-actions");actions.append(link(r.url.includes("bandcamp")?"Listen on Bandcamp ↗":"Open release / source ↗",r.url,"sl-d-button sl-d-primary"),link("Find on Spotify ↗",search(r.artist+" "+r.title)),saveButton(r.id));content.append(actions);
+ const actions=create("div","sl-d-actions");actions.append(link(r.url.includes("bandcamp")?"Listen on Bandcamp ↗":"Open release / source ↗",r.url,"sl-d-button sl-d-primary"),link("Find on Spotify ↗",search(r.artist+" "+r.title)),link("Find on YouTube Music ↗","https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title)),link("Find on Apple Music ↗","https://music.apple.com/gb/search?term="+encodeURIComponent(r.artist+" "+r.title)),saveButton(r.id));content.append(actions,playlistPicker(r.id));
  content.append(create("p","sl-d-muted","Playback opens on the selected music service. No automatic audio playback is started here."));
  if(queue.length>1){const pager=create("div","sl-d-pager");const prev=button("← Previous",()=>move(-1)),next=button("Next →",()=>move(1));prev.disabled=position<=0;next.disabled=position>=queue.length-1;pager.append(prev,create("span",null,(position+1)+" / "+queue.length),next);content.append(pager)}
+ content.append(queuePanel());
  const dossier=window.SUBLEVELResearch?.panel(r.title,r.artist,false);if(dossier)content.append(dossier);
  const edges=connections.filter(c=>c.from===r.id||c.to===r.id);if(edges.length){section("Sample & remix connections");content.append(connectionPanel(r.id))}const profiles=D.profiles.filter(p=>p[3].includes(r.id));if(profiles.length){section("Artist DNA");for(const profile of profiles)content.append(button(profile[0]+" →",()=>show("artist",profile[0])))}
  const labelLinks=labelMatches(r);if(labelLinks.length){section("Explore the label");for(const l of labelLinks)content.append(button(l[0]+" →",()=>show("label",l[0])))}const related=recommend([r],new Set([r.id]),6);if(related.length){section("More to discover");content.append(recommendations(related))}
  }
  content.append(create("footer","sl-d-footer","SUBLEVEL / INDEPENDENT MUSIC DISCOVERY"));
 }
-function startListening(id,list){if(current)stack.push({...current,queue:[...queue],position,scroll:dialog.scrollTop});queue=list.filter(Boolean).map(r=>r.id);position=queue.indexOf(id);if(position<0){queue=[id];position=0}render("listen",id)}
+function startListening(id,list){if(current)stack.push({...current,queue:[...queue],position,scroll:dialog.scrollTop});queue=L.session({ids:list.filter(Boolean).map(r=>r.id)},validIDs).ids;position=queue.indexOf(id);if(position<0){queue=[id];position=0}render("listen",id)}
 function move(delta){const p=position+delta;if(p<0||p>=queue.length)return;position=p;render("listen",queue[p])}
 function show(mode,arg,replace=false){if(current&&!replace)stack.push({...current,queue:[...queue],position,scroll:dialog.scrollTop});render(mode,arg)}
 function open(mode="hub"){if(!dialog){dialog=create("dialog","sl-discovery-dialog");if(typeof dialog.showModal!=="function")return;const bar=create("header","sl-d-bar");back=button("← Close",()=>{if(stack.length){const p=stack.pop();queue=p.queue||[];position=p.position||0;render(p.mode,p.arg);dialog.scrollTop=p.scroll||0}else dialog.close()},"sl-d-back");heading=create("strong",null,"Discover more");const close=button("×",()=>dialog.close(),"sl-d-close");close.setAttribute("aria-label","Close discovery");bar.append(back,heading,close);content=create("main","sl-d-content");notice=create("div","sl-d-notice");notice.setAttribute("role","status");dialog.append(bar,content,notice);document.body.append(dialog);dialog.addEventListener("close",()=>{document.body.classList.remove("sl-discovery-lock");stack=[];current=null;lastFocus?.focus?.({preventScroll:true})})}
