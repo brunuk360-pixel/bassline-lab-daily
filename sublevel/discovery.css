@@ -137,3 +137,22 @@ html body #app .sl-d-track-link{margin:0 0 12px;color:#a0decf!important}
 .sl-d-queue-save[hidden]{display:none!important}
 .sl-d-queue button:focus-visible,.sl-d-playlist-picker summary:focus-visible,.sl-d-resume-session:focus-visible{outline:2px solid #79c9b7;outline-offset:2px}
 @media(max-width:360px){.sl-d-queue-icon{min-width:34px}.sl-d-queue-controls{gap:1px}.sl-d-queue-track strong{font-size:13px}}
+
+
+/* Personal library — one dashboard, six compact destinations. */
+.sl-library-tabs{display:flex;flex-wrap:wrap;gap:5px 7px;margin:0 0 20px;border-block:1px solid #79c9b755;padding:9px 0}
+.sl-library-tab{font:inherit;font-size:12px;font-weight:650;color:#b5c5c0;background:transparent;border:1px solid transparent;min-height:44px;padding:8px 10px;cursor:pointer}
+.sl-library-tab[aria-current="page"]{color:#eaf5f0;background:#19312c;border-color:#79c9b777}
+.sl-library-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px;margin:12px 0 20px}
+.sl-library-shortcut{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;gap:3px 8px;align-items:center;min-height:70px;padding:11px 0;color:#eef0e7;background:transparent;border:0;border-bottom:1px solid #79c9b755;text-align:left;cursor:pointer;font:inherit}
+.sl-library-shortcut span:first-child{font-size:12px;color:#b5c5c0;grid-column:1/-1}
+.sl-library-shortcut strong{font-size:28px;line-height:1.1;font-weight:700;font-variant-numeric:tabular-nums;color:#79c9b7}
+.sl-library-shortcut span:last-child{font-size:16px;color:#79c9b7}
+.sl-library-account{margin:22px 0 16px;padding:15px 13px;background:#142321;border-top:2px solid #79c9b7;border-bottom:1px solid #79c9b755}
+.sl-library-account h3{font-size:20px!important;line-height:1.25;margin:8px 0!important}
+.sl-library-account p{font-size:13px!important;line-height:1.55}
+.sl-library-tab:focus-visible,.sl-library-shortcut:focus-visible{outline:2px solid #79c9b7;outline-offset:2px}
+html body #app .sl-library-entry{padding:14px 12px;margin:10px 0 18px;background:#142321;border-top:2px solid #79c9b7;border-bottom:1px solid #79c9b755}
+html body #app .sl-library-entry h2{font-size:23px;line-height:1.2;margin:6px 0}
+html body #app .sl-library-entry p{font-size:12px;line-height:1.5;margin:6px 0 12px}
+@media(min-width:720px){.sl-library-shortcuts{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
