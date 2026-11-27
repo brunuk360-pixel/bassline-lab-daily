@@ -17,7 +17,7 @@ def run(mod,conn):
     def check(condition,label):
         if not condition:raise AssertionError(label)
     def post(client,path,expected=302,**data):
-        with client.session_transaction() as sess:
+        with client.session_transaction(base_url="https://beta.test") as sess:
             if "csrf" not in sess:sess["csrf"]=secrets.token_urlsafe(32)
             data["csrf"]=sess["csrf"]
         response=client.post(path,data=data,base_url="https://beta.test")
