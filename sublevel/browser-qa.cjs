@@ -41,6 +41,12 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-row",rows=>rows.length),10);
  assert.equal(await overflow(),false);
  });
+ await check("Drum & Bass room chart",async()=>{
+ const clicked=await page.evaluate(()=>{const b=[...document.querySelectorAll("#app button")].find(b=>!b.closest(".sl-chart-directory")&&b.innerText.toUpperCase().includes("DRUM & BASS")&&b.innerText.includes("Discover"));if(!b)return false;b.click();return true});assert.ok(clicked);
+ await page.waitForSelector(".sl-chart-room");await page.click(".sl-chart-room summary");await settle();
+ assert.equal(await page.$eval(".sl-chart-room .sl-chart-row",x=>x.length),10);
+ assert.equal(await overflow(),false);
+ });
  await check("Saved library tabs",async()=>{await nav("Saved");await page.waitForSelector(".sl-library-entry");await page.click(".sl-library-entry button");await page.waitForSelector(".sl-library-tabs");assert.equal(await page.$$eval(".sl-library-tab",x=>x.length),6);await page.evaluate(()=>[...document.querySelectorAll(".sl-library-tab")].find(b=>b.textContent==="Profile & data").click());assert.ok(await page.$(".sl-library-account"));await page.click(".sl-d-close")});
  await check("Unsigned link",async()=>{await nav("Today");await page.waitForSelector(".sl-u-entry");assert.equal(await page.$eval(".sl-u-primary",a=>a.href),"https://sublevel-unsigned-xvpf.onrender.com/")});
  for(const width of [320,360,430,1280])await check(width+"px homepage layout",async()=>{await page.setViewport({width,height:844,isMobile:width<700,hasTouch:width<700,deviceScaleFactor:1});await page.reload({waitUntil:"domcontentloaded"});await page.waitForSelector(".sl-home-index");assert.equal(await overflow(),false)});
