@@ -419,6 +419,76 @@
       "Classic",
       "https://floatingpoints.bandcamp.com/album/crush",
       "Compare LesAlpx with the quieter passages and listen for the Buchla synthesizer."
+    ],
+    [
+      "breathe",
+      "Breathe",
+      "The Prodigy",
+      "1996",
+      "Electronic / big beat",
+      "Classic",
+      "https://theprodigy.info/discography/official/breathe/",
+      "Listen for the sharp sword-like sound and the interplay of guitar, bass and vocals."
+    ],
+    [
+      "breathe-remix",
+      "Breathe (Mefjus & Camo & Krooked Remix)",
+      "The Prodigy, Mefjus & Camo & Krooked",
+      "2022-10-28",
+      "Drum & Bass",
+      "Remix",
+      "https://music.apple.com/us/album/breathe-mefjus-camo-krooked-remix-single/1648574351",
+      "Compare the original with the remix’s drum & bass rhythmic treatment."
+    ],
+    [
+      "voodoo",
+      "Voodoo People",
+      "The Prodigy",
+      "1994-09-12",
+      "Electronic / big beat",
+      "Classic",
+      "https://theprodigy.info/discography/official/voodoo-people/",
+      "Compare its grunge-derived guitar riff with Nirvana’s Very Ape."
+    ],
+    [
+      "chessboxin",
+      "Da Mystery of Chessboxin'",
+      "Wu-Tang Clan",
+      "1993",
+      "Hip hop",
+      "Sample source",
+      "https://open.spotify.com/search/Wu-Tang%20Clan%20Da%20Mystery%20of%20Chessboxin",
+      "Listen to the introductory sword sounds reused in Breathe."
+    ],
+    [
+      "veryape",
+      "Very Ape",
+      "Nirvana",
+      "1993",
+      "Alternative rock",
+      "Sample source",
+      "https://open.spotify.com/search/Nirvana%20Very%20Ape",
+      "Listen to the guitar riff and compare it with Voodoo People."
+    ],
+    [
+      "sos",
+      "S.O.S.",
+      "The Breeders",
+      "1993",
+      "Alternative rock",
+      "Sample source",
+      "https://open.spotify.com/search/The%20Breeders%20S.O.S.",
+      "Compare the guitar texture with Firestarter."
+    ],
+    [
+      "close-edit",
+      "Close (to the Edit)",
+      "Art of Noise",
+      "",
+      "Electronic",
+      "Sample source",
+      "https://open.spotify.com/search/Art%20of%20Noise%20Close%20to%20the%20Edit",
+      "Compare the sampled vocal sound with Firestarter."
     ]
   ],
   "profiles": [
@@ -429,7 +499,8 @@
       [
         "allnight",
         "movearound",
-        "between"
+        "between",
+        "breathe-remix"
       ],
       "https://www.hospitalrecords.com/products/camo-krooked-x-kolonovits-orchestra-red-bull-symphonic"
     ],
@@ -439,7 +510,10 @@
       "Firestarter’s crossover sound and its later Andy C remix provide an entry point into their catalogue.",
       [
         "original",
-        "fire"
+        "fire",
+        "breathe",
+        "breathe-remix",
+        "voodoo"
       ],
       "https://shop.xlrecordings.com/release/346570-the-prodigy-andy-c-firestarter-andy-c-remix"
     ],
@@ -548,6 +622,16 @@
       "2019-10-18",
       "Crush",
       "fp-crush"
+    ],
+    [
+      "2022-10-28",
+      "Breathe (Mefjus & Camo & Krooked Remix)",
+      "breathe-remix"
+    ],
+    [
+      "1994-09-12",
+      "Voodoo People",
+      "voodoo"
     ]
   ],
   "research": {
@@ -623,6 +707,81 @@
           "https://planetecommunications.bandcamp.com/album/the-world-ep-2026-remaster"
         ]
       ]
+    },
+    "The Prodigy": {
+      "timeline": [
+        [
+          "1994",
+          "Voodoo People — connections to Nirvana's Very Ape"
+        ],
+        [
+          "1996",
+          "Firestarter and Breathe released"
+        ],
+        [
+          "2022",
+          "Breathe remixed by Mefjus and Camo & Krooked"
+        ]
+      ],
+      "listen": "Trace the original recordings, sampled sounds and subsequent drum & bass remixes through Sample Detective.",
+      "links": [
+        [
+          "Breathe discography",
+          "https://theprodigy.info/discography/official/breathe/"
+        ],
+        [
+          "Voodoo People discography",
+          "https://theprodigy.info/discography/official/voodoo-people/"
+        ],
+        [
+          "Remix release credits",
+          "https://www.qobuz.com/gb-en/album/breathe-the-prodigy-mefjus-camo-krooked/j419glokn1kma"
+        ]
+      ]
     }
-  }
+  },
+  "connections": [
+    {
+      "from": "breathe",
+      "to": "chessboxin",
+      "type": "Sample",
+      "note": "Sword sound effect",
+      "source": "https://theprodigy.info/discography/official/breathe/"
+    },
+    {
+      "from": "breathe",
+      "to": "breathe-remix",
+      "type": "Remix",
+      "note": "2022 drum & bass interpretation by Mefjus and Camo & Krooked",
+      "source": "https://music.apple.com/us/album/breathe-mefjus-camo-krooked-remix-single/1648574351"
+    },
+    {
+      "from": "original",
+      "to": "fire",
+      "type": "Remix",
+      "note": "Andy C anniversary remix",
+      "source": "https://theprodigy.com/2022/10/27/fat-of-the-land-25th-anniversary-re-issue/"
+    },
+    {
+      "from": "original",
+      "to": "sos",
+      "type": "Sample",
+      "note": "Guitar sample",
+      "source": "https://theprodigy.info/discography/official/firestarter/"
+    },
+    {
+      "from": "original",
+      "to": "close-edit",
+      "type": "Sample",
+      "note": "Vocal sample",
+      "source": "https://theprodigy.info/discography/official/firestarter/"
+    },
+    {
+      "from": "voodoo",
+      "to": "veryape",
+      "type": "Sample",
+      "note": "Guitar riff source",
+      "source": "https://theprodigy.info/discography/official/voodoo-people/"
+    }
+  ]
 }
