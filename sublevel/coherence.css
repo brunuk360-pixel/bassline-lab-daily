@@ -1,0 +1,96 @@
+
+/* SUBLEVEL / unified editorial system. Keep existing controls, content and routes. */
+:root{
+ --sl-ink:#f3f5ef;--sl-muted:#b5c5c0;--sl-teal:#79c9b7;--sl-rule:#b5cbc32a;--sl-bg:#080e10;
+ --base:#080e10!important;--surface:#101a1b!important;--raised:#182526!important;
+ --text:#f3f5ef!important;--sub:#b5c5c0!important;--rule:#b5cbc32a!important;
+ --design-accent:#79c9b7!important;--ed-accent:#79c9b7!important;--weekly-accent:#79c9b7!important;
+ --crate-heading:"Space Grotesk",Arial,sans-serif;--crate-reading:"Space Grotesk","DM Sans",Arial,sans-serif;
+ --sl-gap:16px;
+}
+html{color-scheme:only dark}
+html body{background-color:var(--sl-bg)!important;color:var(--sl-ink)!important}
+html body #app :is(.pagehead,.xhero,.xhead){background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:14px 0!important;margin:0 0 14px!important}
+html body #app :is(.pagehead,.xhero,.xhead) h1{font-family:var(--crate-heading)!important;font-size:clamp(27px,7.5vw,44px)!important;font-weight:700!important;line-height:1.1!important;letter-spacing:-.045em!important;margin:0 0 7px!important}
+html body #app :is(.pagehead,.xhero,.xhead) p{font-size:14px!important;line-height:1.55!important;color:var(--sl-muted)!important;margin:0!important}
+html body #app :is(.xgrid,.grid){gap:12px!important;border-radius:0!important;overflow:visible!important}
+html body #app .xgrid{row-gap:20px!important;align-items:stretch!important;margin:0 0 20px!important}
+html body #app .xgrid .xmode{
+ display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto 1fr!important;align-content:start!important;align-items:start!important;
+ position:relative!important;min-height:0!important;height:auto!important;padding:0 0 10px!important;gap:5px!important;
+ border:0!important;border-bottom:1px solid var(--sl-rule)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+ backdrop-filter:none!important;isolation:isolate!important;animation:none!important;text-align:left!important;overflow:hidden!important;
+}
+html body #app .xgrid .xmode .xgraphic{
+ position:relative!important;inset:auto!important;display:block!important;width:100%!important;height:auto!important;aspect-ratio:1.55!important;z-index:0!important;
+ border-radius:0!important;opacity:1!important;filter:brightness(1.27) saturate(.90) contrast(1.05)!important;
+ background-size:cover!important;background-position:center!important;transform:none!important;
+}
+html body #app .xgrid .xmode::before,html body #app .xgrid .xmode::after{display:none!important;content:none!important;filter:none!important}
+html body #app .xgrid .xmode .xmode-icon{
+ top:8px!important;left:8px!important;z-index:3!important;width:27px!important;height:27px!important;border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;color:#f3f5ef!important;filter:drop-shadow(0 1px 3px #000b)!important;
+}
+html body #app .xgrid .xmode .xmode-icon svg{width:20px!important;height:20px!important}
+html body #app .xgrid .xmode b{padding:4px 18px 0 0!important;line-height:1.2!important;font-size:clamp(15px,4vw,20px)!important;font-weight:700!important;letter-spacing:-.025em!important;color:var(--sl-ink)!important;white-space:normal!important}
+html body #app .xgrid .xmode small{font-size:12px!important;line-height:1.45!important;color:var(--sl-muted)!important;padding:0!important;white-space:normal!important}
+html body #app .xgrid .xmode .xarrow{top:8px!important;right:8px!important;z-index:3!important;color:#f3f5ef!important;filter:drop-shadow(0 1px 3px #000b)!important}
+html body #app .xgrid .xmode:hover .xgraphic{filter:brightness(1.36) saturate(.95)!important}
+html body #app :is(.xrecord,.xspot,.xfilm,.connection,.release-row,.bass-group,.style-room-card,.random-room,.record-panel,.integrated-room,.u-panel,.account-sheet){
+ border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important;border-color:var(--sl-rule)!important;
+}
+html body #app :is(.xrecord,.xspot,.xfilm,.connection,.release-row){background:transparent!important;border-width:0 0 1px!important;padding-block:12px!important}
+html body #app .genre.genre-sleeve{border:0!important;border-radius:0!important;box-shadow:none!important}
+html body #app .genre.genre-sleeve .scene-photo{filter:brightness(1.12) saturate(.88)!important;opacity:.94!important}
+html body #app .genre-sleeve .sleeve-inner .genre-name{font-family:var(--crate-heading)!important;font-style:normal!important;line-height:1.07!important;font-weight:700!important}
+html body #app :is(.sectionhead,.night-heading,.home-mood-label){margin-bottom:10px!important}
+html body #app :is(.tabs,.record-tabs){border-radius:0!important;box-shadow:none!important}
+html body #app :is(.tabs,.record-tabs) button{min-height:44px!important}
+html body #app :is(.u-pad,.account-sheet) p{line-height:1.6!important}
+html body #app :is(.weekly-index select,.u-panel input,.u-panel select,.u-panel textarea,.account-sheet input,.account-sheet select){border-radius:5px!important;background:#182526!important;border-color:var(--sl-rule)!important;color:var(--sl-ink)!important}
+html body #app .weekly-page{margin-top:12px!important}
+/* Ivory cover is deliberately light in a dark site. Set color-scheme explicitly for mobile auto-darkening. */
+html body #app .weekly-page .weekly-cover{
+ color-scheme:only light!important;forced-color-adjust:none;
+ isolation:isolate!important;position:relative!important;overflow:hidden!important;
+ display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;
+ background:#e9e9df!important;color:#14211f!important;opacity:1!important;filter:none!important;mix-blend-mode:normal!important;
+ min-height:clamp(128px,37vw,184px)!important;height:auto!important;max-height:none!important;
+ padding:16px 32% 16px 13.5%!important;gap:0!important;border:0!important;border-radius:0!important;
+}
+html body #app .weekly-page .weekly-cover::before{
+ content:""!important;position:absolute!important;inset:0 0 0 57%!important;z-index:-2!important;
+ background-image:url("section-art/underground.jpg"),var(--weekly-art)!important;background-size:cover,cover!important;
+ background-position:65% center,center!important;background-repeat:no-repeat!important;
+ filter:brightness(1.25) saturate(.95)!important;opacity:1!important;mix-blend-mode:normal!important;
+}
+html body #app .weekly-page .weekly-cover::after{
+ content:""!important;position:absolute!important;inset:0!important;z-index:-1!important;opacity:1!important;
+ clip-path:polygon(0 0,77% 0,69% 100%,0 100%)!important;filter:none!important;mix-blend-mode:normal!important;
+ background:
+ url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 84'%3E%3Cpath fill='%2314211f' d='M7 24 53 0v13L18 31l29 15-12 7L7 38Zm50 23L11 71V58l35-18L17 25l12-7 28 15Z'/%3E%3C/svg%3E") 3.7% center / 7.5% auto no-repeat,
+ url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath fill='%23e9e9df' d='M0 0h32v32H0z'/%3E%3Cpath fill='%2314211f' opacity='.025' d='M0 4h32v1H0zM0 20h32v1H0z'/%3E%3C/svg%3E") 0 0 / 32px 32px repeat!important;
+}
+html body #app .weekly-page .weekly-cover :is(h1,p,small,.weekly-kicker),html body #app .weekly-page .weekly-cover :is(h1,p,small,.weekly-kicker) *{
+ color-scheme:only light!important;color:#14211f!important;text-shadow:none!important;filter:none!important;opacity:1!important;
+ font-family:var(--crate-heading)!important;-webkit-text-fill-color:#14211f!important;
+}
+html body #app .weekly-page .weekly-cover .weekly-kicker{
+ font-size:clamp(9px,2.35vw,12px)!important;letter-spacing:.035em!important;color:#21695e!important;-webkit-text-fill-color:#21695e!important;font-weight:700!important;margin:0 0 4px!important;line-height:1.2!important;
+}
+html body #app .weekly-page .weekly-cover h1{
+ font-size:clamp(25px,7.3vw,51px)!important;line-height:1.04!important;font-weight:700!important;letter-spacing:-.05em!important;margin:4px 0 7px!important;max-width:100%!important;text-wrap:balance;
+}
+html body #app .weekly-page .weekly-cover p{font-size:clamp(10px,2.75vw,13px)!important;line-height:1.3!important;margin:0 0 5px!important;font-weight:600!important}
+html body #app .weekly-page .weekly-cover small{font-size:clamp(8px,2.1vw,10px)!important;letter-spacing:.045em!important;line-height:1.3!important;font-weight:600!important}
+html body #app .weekly-index{padding:10px 0 14px!important;margin:0!important}
+html body #app .weekly-story{padding-top:18px!important}
+html body .bottom button.active :is(span,svg){color:var(--sl-teal)!important;filter:none!important}
+html body .bottom button.active::before{background:var(--sl-teal)!important}
+@media(min-width:800px){
+ html body #app .xgrid{gap:22px 16px!important}
+ html body #app .weekly-page .weekly-cover{min-height:166px!important;padding:22px 28% 22px 13%!important}
+ html body #app .weekly-page .weekly-cover h1{font-size:clamp(36px,4.1vw,55px)!important}
+}
+@media(max-width:360px){html body #app .weekly-page .weekly-cover{padding:12px 28% 12px 13%!important}html body #app .weekly-page .weekly-cover h1{font-size:24px!important}}
+@media(prefers-reduced-motion:reduce){html body #app .xgrid .xmode{transition:none!important}}
