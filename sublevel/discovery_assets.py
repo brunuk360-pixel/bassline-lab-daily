@@ -123,6 +123,29 @@ def apple_cover(spec):
     except Exception:pass
     return "",""
 
+def trusted_cover_url(art):
+    p=urlparse(art)
+    host=p.hostname or ""
+    return p.scheme=="https" and not p.username and not p.password and (host.endswith((".bcbits.com",".mzstatic.com",".shopify.com")) or host in ("coverartarchive.org","i.scdn.co"))
+
+def apply_reviewed_covers(data):
+    for row in data["items"]:
+        key=row[0]
+        item=data.get("reviewedArtwork",{}).get(key,{})
+        art,source=item.get("art",""),item.get("source","")
+        if (item.get("title")==row[1] and item.get("artist")==row[2]
+            and item.get("releaseUrl")==row[6] and trusted_cover_url(art)
+            and urlparse(source).scheme=="https" and urlparse(source).hostname):
+            data["artwork"][key]=art
+            data["artworkSources"][key]=source
+
+def cover_manifest(data):
+    """Public release metadata only. No tokens, user data or audio URLs."""
+    return {row[0]:{"title":row[1],"artist":row[2],"releaseUrl":row[6],
+        "art":data["artwork"][row[0]],"source":data["artworkSources"][row[0]]}
+        for row in data["items"] if row[0] in data["artwork"]
+        and row[0] in data["artworkSources"] and trusted_cover_url(data["artwork"][row[0]])}
+
 def load_discovery(root):
     data=json.loads((root/"discovery-data.json").read_text(encoding="utf-8"))
     unique=list(dict.fromkeys(row[6] for row in data["items"]))
@@ -130,18 +153,9 @@ def load_discovery(root):
         images=dict(zip(unique,pool.map(get_art,unique)))
     data["artwork"]={row[0]:images[row[6]] for row in data["items"] if images[row[6]]}
     data["artworkSources"]={row[0]:row[6] for row in data["items"] if images[row[6]]}
-    # Persist only reviewed artwork metadata paired with a release source.
-    # A failed lookup is not permission to assign an unverified catalogue ID.
-    reviewed=data.get("reviewedArtwork",{})
-    for row in data["items"]:
-        key=row[0]
-        if key in data["artwork"] or key not in reviewed:continue
-        item=reviewed[key]
-        art,source=item.get("art",""),item.get("source","")
-        host=urlparse(art).hostname or ""
-        if item.get("title")==row[1] and item.get("artist")==row[2] and art.startswith("https://") and source.startswith("https://") and host.endswith((".bcbits.com",".mzstatic.com",".shopify.com","coverartarchive.org")):
-            data["artwork"][key]=art
-            data["artworkSources"][key]=source
+    # Durable manifest: verified release identities survive transient provider failures.
+    # Reviewed metadata takes precedence over a new, potentially different lookup.
+    apply_reviewed_covers(data)
     group_cache={}
     deadline=time.monotonic()+24
     for k,(artist,title) in ALBUMS.items():
@@ -207,6 +221,8 @@ def fill_embed_covers(data,embeds):
                 added+=1
     print("Official Spotify oEmbed cover additions:",added,flush=True)
     print("Final discovery artwork available:",len(data["artwork"]),"of",len(data["items"]),flush=True)
+    for key,item in cover_manifest(data).items():
+        print("SUBLEVEL_COVER "+json.dumps({"id":key,**item},ensure_ascii=True,separators=(",",":")),flush=True)
 
 def fill_chart_covers(feed):
     jobs=[]
