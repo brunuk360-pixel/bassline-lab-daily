@@ -1,5 +1,5 @@
 {
-  "checked": "2026-11-27",
+  "checked": "2026-11-28",
   "charts": [
     {
       "id": "uk-dance",
@@ -932,6 +932,68 @@
           "artist": "FONTAINES DC"
         }
       ]
+    },
+    {
+      "id": "hip-hop-rnb",
+      "genre": "UK Hip Hop & R&B",
+      "source": "Official Charts — UK Hip Hop & R&B Singles (sales)",
+      "url": "https://www.officialcharts.com/charts/official-hip-hop-and-r-and-b-singles-chart/20261127/114/",
+      "from": "2026-11-27",
+      "through": "2026-12-03",
+      "checked": "2026-11-28",
+      "status": "verified",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "SHOTTA'S.",
+          "artist": "SEASON 25"
+        },
+        {
+          "rank": 2,
+          "title": "RAINDANCE",
+          "artist": "DAVE/TEMS"
+        },
+        {
+          "rank": 3,
+          "title": "NO SCRUBS",
+          "artist": "TLC"
+        },
+        {
+          "rank": 4,
+          "title": "BURN THIS S**T DOWN",
+          "artist": "TRAVIS SCOTT"
+        },
+        {
+          "rank": 5,
+          "title": "MATERIAL LOVER",
+          "artist": "SIENNA SPIRO"
+        },
+        {
+          "rank": 6,
+          "title": "PURPLE RAIN",
+          "artist": "PRINCE & THE REVOLUTION"
+        },
+        {
+          "rank": 7,
+          "title": "SURE THING",
+          "artist": "MIGUEL"
+        },
+        {
+          "rank": 8,
+          "title": "IMPULSIVE",
+          "artist": "KIDSZN"
+        },
+        {
+          "rank": 9,
+          "title": "SAVE YOUR TEARS",
+          "artist": "WEEKND"
+        },
+        {
+          "rank": 10,
+          "title": "JANICE STFU",
+          "artist": "DRAKE"
+        }
+      ]
     }
   ],
   "sources": [
@@ -1060,7 +1122,8 @@
     ],
     [
       "UK Hip Hop & R&B",
-      "https://www.officialcharts.com/charts/official-hip-hop-and-r-and-b-singles-chart/"
+      "https://www.officialcharts.com/charts/official-hip-hop-and-r-and-b-singles-chart/",
+      "hip-hop-rnb"
     ],
     [
       "140 / Deep Dubstep / Grime",
