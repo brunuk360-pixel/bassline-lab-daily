@@ -722,7 +722,10 @@
         {
           "rank": 2,
           "title": "BRING ME TO LIFE",
-          "artist": "EVANESCENCE"
+          "artist": "EVANESCENCE",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/10/4c/21/104c21e6-9ef0-4d3a-d1bd-d47167f121e5/00601501406300.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/bring-me-to-life/1440665838?i=1440666111&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/bring-me-to-life/1440665838?i=1440666111"
         },
         {
           "rank": 3,
@@ -787,7 +790,10 @@
         {
           "rank": 2,
           "title": "STOP THE WEDDING",
-          "artist": "ASHE"
+          "artist": "ASHE",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b7/55/7a/b7557aef-bb0a-cc57-25bf-979eee194f16/075679571403.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/stop-the-wedding/6795697684?i=6795697687&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/stop-the-wedding/6795697684?i=6795697687"
         },
         {
           "rank": 3,
@@ -852,7 +858,10 @@
         {
           "rank": 2,
           "title": "WHERE IS MY HUSBAND",
-          "artist": "RAYE"
+          "artist": "RAYE",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/69/10/8a/69108a18-55ec-d774-a653-90b2242733db/199538765458.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/where-is-my-husband/1838737596?i=1838737598&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/where-is-my-husband/1838737596?i=1838737598"
         },
         {
           "rank": 3,
@@ -916,7 +925,9 @@
           "title": "RAINDANCE",
           "artist": "DAVE/TEMS",
           "embedUrl": "https://open.spotify.com/track/5XDOInNwslPcQM8xv2rUkL",
-          "url": "https://open.spotify.com/track/5XDOInNwslPcQM8xv2rUkL"
+          "url": "https://open.spotify.com/track/5XDOInNwslPcQM8xv2rUkL",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/99/49/24/9949241c-e52c-3018-eae8-c686013a7474/25UM1IM68216.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/raindance/1847992481?i=1847992612&uo=4"
         },
         {
           "rank": 3,
@@ -983,7 +994,10 @@
         {
           "rank": 2,
           "title": "Give It Up (Extended Mix)",
-          "artist": "The Good Men, Les Castizos, MANU BS, Chocolate Puma"
+          "artist": "The Good Men, Les Castizos, MANU BS, Chocolate Puma",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/13/22/e4/1322e419-08ce-bfc3-acb6-e619748ceed8/8718522637483.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/give-it-up-extended-mix/6830545261?i=6830545263&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/give-it-up-extended-mix/6830545261?i=6830545263"
         },
         {
           "rank": 3,
@@ -1111,7 +1125,10 @@
         {
           "rank": 2,
           "title": "Blow Your Trumpet",
-          "artist": "Ezra Collective"
+          "artist": "Ezra Collective",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/af/84/ba/af84ba41-bcb5-0002-26b6-0647fee2272e/0720841306900_Cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/blow-your-trumpet/6767014278?i=6767014282&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/blow-your-trumpet/6767014278?i=6767014282"
         },
         {
           "rank": 3,
@@ -1178,7 +1195,10 @@
         {
           "rank": 2,
           "title": "Go All Night",
-          "artist": "Armin van Buuren & Mary Jensen"
+          "artist": "Armin van Buuren & Mary Jensen",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/cf/7b/34/cf7b3463-d5c1-aa25-494c-c9b1874a3c23/8718522636295.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/go-all-night/6823678647?i=6823678648&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/go-all-night/6823678647?i=6823678648"
         },
         {
           "rank": 3,
@@ -1242,7 +1262,10 @@
         {
           "rank": 2,
           "title": "No Good (Start The Dance)",
-          "artist": "The Prodigy"
+          "artist": "The Prodigy",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b9/f5/97/b9f59771-77ae-6f8d-0a1f-e16fdc2fc1ee/634904011482.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/no-good-start-the-dance/1450123784?i=1450123793&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/no-good-start-the-dance/1450123784?i=1450123793"
         },
         {
           "rank": 3,
@@ -1306,7 +1329,10 @@
         {
           "rank": 2,
           "title": "Redhead Girl",
-          "artist": "Air"
+          "artist": "Air",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/62/78/02/6278024a-46bd-8698-9fa2-457365e48c29/094638583455.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/redhead-girl/1811656319?i=1811656526&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/redhead-girl/1811656319?i=1811656526"
         },
         {
           "rank": 3,
@@ -1431,7 +1457,10 @@
         {
           "rank": 2,
           "artist": "Simula",
-          "title": "Avarice"
+          "title": "Avarice",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ab/03/eb/ab03ebdf-7f25-10c1-fece-e46fac7d85d5/5063879077967.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/avarice/6827246864?i=6827246866&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/avarice/6827246864?i=6827246866"
         },
         {
           "rank": 3,
@@ -1807,5 +1836,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 24
+  "lookupCursor": 36
 }
