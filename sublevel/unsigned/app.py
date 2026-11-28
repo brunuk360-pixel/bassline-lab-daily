@@ -106,17 +106,23 @@ def home():
     genre=request.args.get("genre","")
     if genre not in GENRES:genre=""
     tracks=rows("""SELECT t.id,t.title,t.genre,t.url,t.note,m.handle,
-      count(f.id) FILTER(WHERE f.status='approved') AS votes,
-      round(avg(f.rating) FILTER(WHERE f.status='approved'),1) AS rating
-      FROM tracks t JOIN members m ON m.id=t.owner LEFT JOIN feedback f ON f.track=t.id
+      count(f.id) FILTER(WHERE f.status='approved' AND reviewer.active AND f.author<>t.owner) AS votes,
+      round(avg(f.rating) FILTER(WHERE f.status='approved' AND reviewer.active AND f.author<>t.owner),1) AS rating
+      FROM tracks t JOIN members m ON m.id=t.owner LEFT JOIN feedback f ON f.track=t.id LEFT JOIN members reviewer ON reviewer.id=f.author
       WHERE t.status='approved' AND m.active AND (%s='' OR t.genre=%s)
       GROUP BY t.id,m.handle ORDER BY t.created DESC LIMIT 60""",(genre,genre))
-    chart=rows("""SELECT m.handle,count(f.id) AS votes,
-      round(avg(f.rating),1) AS rating,
-      round((sum(f.rating)+5*10.0)/(count(f.id)+5),2) AS score
-      FROM members m JOIN tracks t ON t.owner=m.id AND t.status='approved'
-      JOIN feedback f ON f.track=t.id AND f.status='approved'
-      WHERE m.active GROUP BY m.id,m.handle HAVING count(f.id)>=5
+    # One equally weighted contribution per active reviewer per producer.
+    chart=rows("""WITH reviewer_scores AS (
+      SELECT t.owner AS producer,f.author,avg(f.rating) AS rating
+      FROM tracks t JOIN feedback f ON f.track=t.id AND f.status='approved'
+      JOIN members reviewer ON reviewer.id=f.author AND reviewer.active
+      WHERE t.status='approved' AND f.author<>t.owner
+      GROUP BY t.owner,f.author
+      )
+      SELECT m.handle,count(s.author) AS votes,round(avg(s.rating),1) AS rating,
+      round((sum(s.rating)+5*10.0)/(count(s.author)+5),2) AS score
+      FROM members m JOIN reviewer_scores s ON s.producer=m.id
+      WHERE m.active GROUP BY m.id,m.handle HAVING count(s.author)>=5
       ORDER BY score DESC,votes DESC,m.handle LIMIT 20""")
     return render_template("page.html",view="home",tracks=tracks,chart=chart,genre=genre,genres=GENRES)
 @app.get("/community-guide")
@@ -203,7 +209,7 @@ def rate(track_id):
 def withdraw_track(track_id):
     uid=member();limit("withdraw",20,uid)
     # An owner can withdraw their own pending or published recording only.
-    changed=one("UPDATE tracks SET status='hidden' WHERE id=%s AND owner=%s RETURNING id",(track_id,uid))
+    changed=one("UPDATE tracks SET status='hidden',withdrawn=true WHERE id=%s AND owner=%s RETURNING id",(track_id,uid))
     if not changed:abort(404)
     flash("Track withdrawn from public discovery and rankings. Your linked release has not been deleted.")
     return redirect(url_for("profile",handle=g.user["handle"]))
@@ -223,8 +229,8 @@ def moderation():
     member()
     if not g.user["is_admin"]:return render_template("page.html",view="unlock")
     return render_template("page.html",view="moderation",
-      tracks=rows("SELECT t.*,m.handle FROM tracks t JOIN members m ON m.id=t.owner WHERE t.status='pending' ORDER BY t.created LIMIT 100"),
-      feedback=rows("SELECT f.*,m.handle,t.title FROM feedback f JOIN members m ON m.id=f.author JOIN tracks t ON t.id=f.track WHERE f.status='pending' ORDER BY f.created LIMIT 100"),
+      tracks=rows("SELECT t.*,m.handle FROM tracks t JOIN members m ON m.id=t.owner WHERE t.status='pending' AND NOT t.withdrawn AND m.active ORDER BY t.created LIMIT 100"),
+      feedback=rows("SELECT f.*,m.handle,t.title FROM feedback f JOIN members m ON m.id=f.author JOIN tracks t ON t.id=f.track WHERE f.status='pending' AND t.status='approved' AND NOT t.withdrawn AND m.active ORDER BY f.created LIMIT 100"),
       reports=rows("SELECT r.*,t.title FROM reports r JOIN tracks t ON t.id=r.track WHERE NOT r.resolved ORDER BY r.created LIMIT 100"))
 @app.post("/moderation/unlock")
 def unlock():
@@ -239,9 +245,19 @@ def moderate(kind,item_id):
     if kind=="report" and action=="resolve":
         db().execute("UPDATE reports SET resolved=true WHERE id=%s",(item_id,))
     elif kind=="track" and action in ("approve","hide"):
-        db().execute("UPDATE tracks SET status=%s WHERE id=%s",("approved" if action=="approve" else "hidden",item_id))
+        if action=="approve":
+            changed=one("""UPDATE tracks SET status='approved' WHERE id=%s AND status='pending' AND NOT withdrawn
+              AND EXISTS(SELECT 1 FROM members m WHERE m.id=tracks.owner AND m.active) RETURNING id""",(item_id,))
+            if not changed:abort(409,"This submission is no longer awaiting approval.")
+        else:db().execute("UPDATE tracks SET status='hidden' WHERE id=%s",(item_id,))
     elif kind=="feedback" and action in ("approve","hide"):
-        db().execute("UPDATE feedback SET status=%s WHERE id=%s",("approved" if action=="approve" else "hidden",item_id))
+        if action=="approve":
+            changed=one("""UPDATE feedback SET status='approved' WHERE id=%s AND status='pending'
+              AND EXISTS(SELECT 1 FROM tracks t JOIN members m ON m.id=t.owner AND m.active
+              WHERE t.id=feedback.track AND t.status='approved' AND NOT t.withdrawn AND t.owner<>feedback.author)
+              AND EXISTS(SELECT 1 FROM members r WHERE r.id=feedback.author AND r.active) RETURNING id""",(item_id,))
+            if not changed:abort(409,"This review is no longer eligible for approval.")
+        else:db().execute("UPDATE feedback SET status='hidden' WHERE id=%s",(item_id,))
     else:abort(400)
     return redirect(url_for("moderation"))
 def confirm_account(uid,password):
@@ -319,6 +335,7 @@ def delete_account():
 @app.errorhandler(401)
 @app.errorhandler(403)
 @app.errorhandler(404)
+@app.errorhandler(409)
 @app.errorhandler(413)
 @app.errorhandler(429)
 def error(e):return render_template("page.html",view="error",error=e),e.code
