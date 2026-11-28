@@ -131,9 +131,9 @@
       "genre": "House",
       "url": "https://www.traxsource.com/genre/4/house",
       "source": "Traxsource — retailer Top 10 tracks",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "status": "verified",
-      "note": "Source page indexed 27 November; chart period not published. Retailer ranking, not a national chart.",
+      "note": "Source page indexed 28 November; chart period not published. Retailer ranking, not a national chart.",
       "rows": [
         {
           "rank": 1,
@@ -314,9 +314,9 @@
       "genre": "Garage",
       "url": "https://www.traxsource.com/genre/29/garage",
       "source": "Traxsource — retailer Top 10 tracks",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "status": "verified",
-      "note": "Source page indexed 27 November; chart period not published. Retailer ranking, not a national chart.",
+      "note": "Source page indexed 28 November; chart period not published. Retailer ranking, not a national chart.",
       "rows": [
         {
           "rank": 1,
@@ -554,74 +554,13 @@
       ]
     },
     {
-      "id": "tech-house",
-      "genre": "Tech House",
-      "url": "https://www.traxsource.com/genre/18/tech-house",
-      "source": "Traxsource — retailer Top 10 tracks",
-      "checked": "2026-11-27",
-      "status": "snapshot",
-      "note": "Complete source snapshot indexed 25 November; current ranking not independently confirmed.",
-      "rows": [
-        {
-          "rank": 1,
-          "title": "Dam - Dam (Original Mix)",
-          "artist": "Stanny Abram, Mikel Wonic"
-        },
-        {
-          "rank": 2,
-          "title": "Doctor (Extended Mix)",
-          "artist": "DJ Minx"
-        },
-        {
-          "rank": 3,
-          "title": "Feel It (Extended Mix)",
-          "artist": "Roland Clark, Amy Alexander"
-        },
-        {
-          "rank": 4,
-          "title": "Love Strong (Extended Mix)",
-          "artist": "DJ PP"
-        },
-        {
-          "rank": 5,
-          "title": "Miami Vice (Extended Mix)",
-          "artist": "DJ PP, Mark Knight, James Hurr"
-        },
-        {
-          "rank": 6,
-          "title": "Strike",
-          "artist": "Tiger Stripes"
-        },
-        {
-          "rank": 7,
-          "title": "The Wetdown",
-          "artist": "Tiger Stripes"
-        },
-        {
-          "rank": 8,
-          "title": "Mayona (Extended Mix)",
-          "artist": "Kevin McKay, Gianmarco Limenta"
-        },
-        {
-          "rank": 9,
-          "title": "BODYCHECK (Extended Mix)",
-          "artist": "Afriqua, A-Trak"
-        },
-        {
-          "rank": 10,
-          "title": "Kid Funk (The Deepshakerz Tribe mix)",
-          "artist": "The Deepshakerz, Turntables Night Fever"
-        }
-      ]
-    },
-    {
       "id": "dnb",
       "genre": "Drum & Bass",
       "url": "https://www.traxsource.com/genre/31/drum-and-bass",
       "source": "Traxsource — retailer Top 10 tracks",
-      "checked": "2026-11-27",
+      "checked": "2026-11-28",
       "status": "verified",
-      "note": "Source page indexed 27 November; retailer chart period not published. Beatport's ranking is separate and not confirmed current.",
+      "note": "Source page indexed 28 November; chart period not published. Retailer ranking, not a national chart.",
       "rows": [
         {
           "rank": 1,
@@ -1004,6 +943,128 @@
           "artist": "DRAKE"
         }
       ]
+    },
+    {
+      "id": "tech-house",
+      "genre": "Tech House",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "url": "https://www.traxsource.com/genre/18/tech-house",
+      "checked": "2026-11-28",
+      "status": "verified",
+      "note": "Source page indexed 28 November; chart period not published. Retailer ranking, not a national chart.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Dam - Dam (Original Mix)",
+          "artist": "Stanny Abram, Mikel Wonic"
+        },
+        {
+          "rank": 2,
+          "title": "Give It Up (Extended Mix)",
+          "artist": "The Good Men, Les Castizos, MANU BS, Chocolate Puma"
+        },
+        {
+          "rank": 3,
+          "title": "Kid Funk (The Deepshakerz Tribe mix)",
+          "artist": "The Deepshakerz, Turntables Night Fever"
+        },
+        {
+          "rank": 4,
+          "title": "Feel It (Extended Mix)",
+          "artist": "Roland Clark, Amy Alexander"
+        },
+        {
+          "rank": 5,
+          "title": "Doctor (Extended Mix)",
+          "artist": "DJ Minx"
+        },
+        {
+          "rank": 6,
+          "title": "Strike",
+          "artist": "Tiger Stripes"
+        },
+        {
+          "rank": 7,
+          "title": "Miami Vice (Extended Mix)",
+          "artist": "DJ PP, Mark Knight, James Hurr"
+        },
+        {
+          "rank": 8,
+          "title": "Love Strong (Extended Mix)",
+          "artist": "DJ PP"
+        },
+        {
+          "rank": 9,
+          "title": "Mayona (Extended Mix)",
+          "artist": "Kevin McKay, Gianmarco Limenta"
+        },
+        {
+          "rank": 10,
+          "title": "Habit (Extended Mix)",
+          "artist": "Sophia Guerrero"
+        }
+      ]
+    },
+    {
+      "id": "soul-funk",
+      "genre": "Soul / Funk / Disco",
+      "source": "Traxsource — retailer Top 10 tracks",
+      "url": "https://www.traxsource.com/genre/3/soul-funk-disco",
+      "checked": "2026-11-28",
+      "status": "verified",
+      "note": "Source page indexed 28 November; chart period not published. Retailer ranking, not a national chart.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Boogie Oogie Oogie (DJ Spen & Emmaculate Vocal Mix)",
+          "artist": "Kim English, Maurice Joshua, Tasha LaRae"
+        },
+        {
+          "rank": 2,
+          "title": "Born Funky (Michael Gray Remix)",
+          "artist": "Kinky Roland"
+        },
+        {
+          "rank": 3,
+          "title": "Want You In My Soul (Schmoov! Remix)",
+          "artist": "Lovebirds, Stee Downes"
+        },
+        {
+          "rank": 4,
+          "title": "Don't You Want My Love (Extended)",
+          "artist": "House Freakers, Es-V"
+        },
+        {
+          "rank": 5,
+          "title": "I'm Every Woman (Extended Mix)",
+          "artist": "Baccus"
+        },
+        {
+          "rank": 6,
+          "title": "Million Dollar Bill (Micky More & Andy Tee Extended)",
+          "artist": "Amanda Wilson"
+        },
+        {
+          "rank": 7,
+          "title": "I Believe In Miracles (Extended Mix)",
+          "artist": "MonsieurWilly, Natalie Nova"
+        },
+        {
+          "rank": 8,
+          "title": "Drinks On Me (Extended Mix)",
+          "artist": "Art Of Tones, Marc Evans"
+        },
+        {
+          "rank": 9,
+          "title": "Lose Control (Original Mix)",
+          "artist": "Emmaculate, Shannon Chambers, Stout"
+        },
+        {
+          "rank": 10,
+          "title": "Saturday Night (Extended Mix)",
+          "artist": "Soneec, Soultizer"
+        }
+      ]
     }
   ],
   "sources": [
@@ -1087,7 +1148,8 @@
     ],
     [
       "Soul / Funk / Disco",
-      "https://www.traxsource.com/genre/3/soul-funk-disco/top"
+      "https://www.traxsource.com/genre/3/soul-funk-disco",
+      "soul-funk"
     ],
     [
       "Drum & Bass — Beatport archive",
@@ -1196,8 +1258,8 @@
     ],
     [
       "Soul",
-      null,
-      "No dedicated current ten-place chart verified."
+      "Soul / Funk / Disco",
+      "Combined retailer ranking; not a soul-only chart."
     ],
     [
       "Funk & Disco",
