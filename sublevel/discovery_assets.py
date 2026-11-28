@@ -171,3 +171,55 @@ def load_discovery(root):
     print("Apple exact-match cover additions:",apple_count)
     print("Discovery artwork available:",len(data["artwork"]),"of",len(data["items"]))
     return data
+
+
+def spotify_thumbnail(source,title):
+    """Official oEmbed metadata for a reviewed Spotify identity.
+    No preview audio, arbitrary HTML or fuzzy cover matches."""
+    if not re.fullmatch(r"https://open\.spotify\.com/(?:track|album)/[A-Za-z0-9]{22}",source):
+        return ""
+    endpoint="https://open.spotify.com/oembed?"+urlencode({"url":source})
+    try:
+        with urlopen(Request(endpoint,headers={"Accept":"application/json","User-Agent":"SUBLEVEL/1.5"}),timeout=5) as res:
+            obj=json.loads(res.read(100000).decode("utf-8"))
+        if obj.get("provider_name")!="Spotify" or normalize(obj.get("title",""))!=normalize(title):
+            return ""
+        art=obj.get("thumbnail_url","")
+        p=urlparse(art)
+        if p.scheme!="https" or p.hostname!="i.scdn.co" or not re.fullmatch(r"/image/[a-zA-Z0-9]+",p.path):return ""
+        with urlopen(Request(art,headers={"Accept":"image/*"},timeout=5)) as response:
+            if not response.headers.get("Content-Type","").startswith("image/") or not response.read(16):return ""
+        return art
+    except Exception:return ""
+
+def fill_embed_covers(data,embeds):
+    jobs=[]
+    for row in data["items"]:
+        e=embeds.get(row[0],{})
+        if row[0] not in data["artwork"] and e.get("provider")=="spotify":
+            jobs.append((row[0],e.get("source",""),row[1]))
+    added=0
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        for (key,source,title),art in zip(jobs,pool.map(lambda job:spotify_thumbnail(job[1],job[2]),jobs)):
+            if art:
+                data["artwork"][key]=art
+                data["artworkSources"][key]=source
+                added+=1
+    print("Official Spotify oEmbed cover additions:",added,flush=True)
+    print("Final discovery artwork available:",len(data["artwork"]),"of",len(data["items"]),flush=True)
+
+def fill_chart_covers(feed):
+    jobs=[]
+    for chart in feed["charts"]:
+        for row in chart["rows"]:
+            source=row.get("embedUrl","")
+            if not row.get("art") and source.startswith("https://open.spotify.com/track/"):
+                jobs.append((row,source))
+    added=0
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        for (row,source),art in zip(jobs,pool.map(lambda job:spotify_thumbnail(job[1],job[0]["title"]),jobs)):
+            if art:
+                row["art"]=art
+                row["artSource"]=source
+                added+=1
+    print("Official Spotify chart cover additions:",added,flush=True)
