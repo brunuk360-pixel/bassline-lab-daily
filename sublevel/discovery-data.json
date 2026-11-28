@@ -1052,5 +1052,115 @@
       "postal-paranoia",
       "seba-paradox-conscious"
     ]
+  },
+  "reviewedEmbeds": {
+    "allnight": {
+      "title": "All Night",
+      "artist": "Camo & Krooked",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "3FToEEIBUkUpZvnYuemi4h",
+      "source": "https://open.spotify.com/track/3FToEEIBUkUpZvnYuemi4h",
+      "checked": "2026-11-28"
+    },
+    "ultra": {
+      "title": "Ultraviolet",
+      "artist": "Fred V & Grafix",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "422w50EAk1fhpXrqOsYlpv",
+      "source": "https://open.spotify.com/track/422w50EAk1fhpXrqOsYlpv",
+      "checked": "2026-11-28"
+    },
+    "blind-faith": {
+      "title": "Blind Faith",
+      "artist": "Chase & Status feat. Liam Bailey",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "3a6DcFuex0LLYBJgQrglXR",
+      "source": "https://open.spotify.com/track/3a6DcFuex0LLYBJgQrglXR",
+      "checked": "2026-11-28"
+    },
+    "disconnect": {
+      "title": "Disconnect",
+      "artist": "Becky Hill & Chase & Status",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "3VFaV7Mw0di4XFE84eHnrC",
+      "source": "https://open.spotify.com/track/3VFaV7Mw0di4XFE84eHnrC",
+      "checked": "2026-11-28"
+    },
+    "everlasting": {
+      "title": "Everlasting Days",
+      "artist": "Nu:Logic",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "44RYb3cMlUwn8AFboEMGUl",
+      "source": "https://open.spotify.com/track/44RYb3cMlUwn8AFboEMGUl",
+      "checked": "2026-11-28"
+    },
+    "memory": {
+      "title": "Memory Lane",
+      "artist": "Netsky",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "4jDHaCGAxHIqEWihIJQHZQ",
+      "source": "https://open.spotify.com/track/4jDHaCGAxHIqEWihIJQHZQ",
+      "checked": "2026-11-28"
+    },
+    "fp-crush": {
+      "title": "Crush",
+      "artist": "Floating Points",
+      "provider": "spotify",
+      "kind": "album",
+      "id": "1WwZwdTICfaZI51BIIEN9z",
+      "source": "https://open.spotify.com/album/1WwZwdTICfaZI51BIIEN9z",
+      "checked": "2026-11-28"
+    },
+    "burial-untrue": {
+      "title": "Untrue",
+      "artist": "Burial",
+      "provider": "spotify",
+      "kind": "album",
+      "id": "1iRPiEYHIX2zpF8lkW54SK",
+      "source": "https://open.spotify.com/album/1iRPiEYHIX2zpF8lkW54SK",
+      "checked": "2026-11-28"
+    },
+    "burial-debut": {
+      "title": "Burial",
+      "artist": "Burial",
+      "provider": "spotify",
+      "kind": "album",
+      "id": "1KMYOAJMs0U1rObvPuGsJE",
+      "source": "https://open.spotify.com/album/1KMYOAJMs0U1rObvPuGsJE",
+      "checked": "2026-11-28"
+    },
+    "movearound": {
+      "title": "Move Around",
+      "artist": "Camo & Krooked feat. Ian Shaw",
+      "provider": "youtube",
+      "kind": "track",
+      "id": "g2vm79u5E1I",
+      "source": "https://www.youtube.com/watch?v=g2vm79u5E1I",
+      "checked": "2026-11-28"
+    },
+    "fire": {
+      "title": "Firestarter (Andy C Remix)",
+      "artist": "The Prodigy & Andy C",
+      "provider": "youtube",
+      "kind": "track",
+      "id": "Gffc7aHcP3k",
+      "source": "https://www.youtube.com/watch?v=Gffc7aHcP3k",
+      "checked": "2026-11-28"
+    },
+    "breathe-remix": {
+      "title": "Breathe (Mefjus & Camo & Krooked Remix)",
+      "artist": "The Prodigy, Mefjus & Camo & Krooked",
+      "provider": "youtube",
+      "kind": "track",
+      "id": "q1NYiZ21U3c",
+      "source": "https://www.youtube.com/watch?v=q1NYiZ21U3c",
+      "checked": "2026-11-28"
+    }
   }
 }
