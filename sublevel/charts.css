@@ -31,3 +31,6 @@ html body #app .night-home .sl-rod-copy>strong{font-size:clamp(27px,7.8vw,44px)!
 .sl-rod-copy>small{font-size:14px;color:#e0e8e3;line-height:1.35}.sl-rod-copy .sl-rod-kicker{font-size:10px;letter-spacing:.15em;color:#a3dfd1;font-weight:700;text-transform:uppercase}.sl-rod-copy .sl-rod-rank{font-size:11px;color:#a3dfd1}
 .sl-rod-actions{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin-top:4px}.sl-rod-actions a{color:#a3dfd1;font-size:11px}.sl-rod-date{font-size:10px;color:#b5c5c0;line-height:1.35;margin:0}
 @media(min-width:800px){html body #app .night-home .ed-rotation .sl-rod-feature{margin:0!important}}
+
+/* Override the original full-bleed button's important display declaration. */
+html body #app .night-home .stream-listen .ed-rotation .sl-rod-feature>button.ed-record.sl-rod-hidden{display:none!important}
