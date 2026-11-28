@@ -96,6 +96,16 @@ def archive_art(mbid,kind="release-group"):
 # Apple catalogue metadata is a secondary source for identifiable releases.
 # Match both fields strictly; a search hit alone is not a cover match.
 APPLE_TARGETS={
+ "breathe":("The Prodigy","Breathe","song"),
+ "voodoo":("The Prodigy","Voodoo People","song"),
+ "veryape":("Nirvana","Very Ape","song"),
+ "chessboxin":("Wu-Tang Clan","Da Mystery of Chessboxin'","song"),
+ "nu-album":("Nu:Logic","What I've Always Waited For","album"),
+ "nu-remix":("Nu:Logic","Remixes I've Always Waited For","album"),
+ "zinc-motive-extended":("DJ Zinc","Motive (Extended Mix)","song"),
+ "silas-rain":("Cousin Silas","Sudden Rain","album"),
+ "empty-dominion":("Empty House","The Derelict Dominion","album"),
+
  "gold":("DJ Fresh","Gold Dust (Shy FX Re-Edit)","song"),
  "fire":("The Prodigy","Firestarter (Andy C Remix)","song"),
  "sos":("The Breeders","S.O.S.","song"),
