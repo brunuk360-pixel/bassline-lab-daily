@@ -292,3 +292,22 @@ html body #app .night-home .sl-d-entry{background:linear-gradient(90deg,#080e10e
 .sl-d-dig-facts>span{background:#1b302c;padding:5px 8px}.sl-d-dig-facts small{display:block;width:100%;line-height:1.5;color:#b5c5c0}
 @media(max-width:360px){.sl-d-content .sl-d-daily-shelf .sl-d-daily-row{padding-inline:9px!important}.sl-d-content .sl-d-daily-row .sl-d-daily-detail{grid-template-columns:56px minmax(0,1fr);gap:8px}.sl-d-daily-row .sl-d-daily-art{width:56px;height:56px}}
 @media(min-width:720px){.sl-d-content .sl-d-daily-shelf .sl-d-daily-row{padding:17px 20px 10px!important}.sl-d-content .sl-d-daily-row .sl-d-daily-detail{grid-template-columns:100px minmax(0,1fr)}.sl-d-daily-row .sl-d-daily-art{width:100px;height:100px}.sl-d-content .sl-d-dig-teaser{font-size:14px!important}}
+
+/* Release Wishlist — scoped to Saved, using the existing library styles. */
+.sl-wishlist{display:grid;gap:12px;min-width:0}
+.sl-wishlist h2,.sl-wishlist h3{margin:8px 0 0;line-height:1.2}
+.sl-wishlist-form{display:grid;gap:10px;padding:12px 0 16px;border-bottom:1px solid #b5cbc32a}
+.sl-wishlist-form label{display:grid;gap:5px;min-width:0;font-size:12px;color:#b5c5c0}
+.sl-wishlist-form input{width:100%;min-width:0;max-width:100%;min-height:44px;box-sizing:border-box;color-scheme:dark}
+.sl-wishlist-form .sl-d-primary{justify-self:start;margin:0;min-height:44px}
+.sl-wishlist-item,.sl-wishlist-row{padding:12px 0;border-bottom:1px solid #b5cbc32a;min-width:0}
+.sl-wishlist-head,.sl-wishlist-row{display:flex;align-items:center;gap:12px}
+.sl-wishlist-copy,.sl-wishlist-row>div{flex:1;min-width:0;display:grid;gap:4px;overflow-wrap:anywhere}
+.sl-wishlist-copy strong,.sl-wishlist-row strong{font-size:17px;color:#eef0e7}
+.sl-wishlist-copy small,.sl-wishlist-row small{font-size:12px;color:#b5c5c0}
+.sl-wishlist-item .sl-d-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.sl-wishlist-item .sl-d-actions>*{min-height:44px;max-width:100%;white-space:normal}
+.sl-wishlist-alert{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid #b5cbc32a;color:#eef0e7;font-size:13px}
+.sl-wishlist-alert button{min-height:44px}
+.sl-wishlist-entry{margin-top:8px}
+@media(min-width:720px){.sl-wishlist-form{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-wishlist-form h3{grid-column:1/-1}}
