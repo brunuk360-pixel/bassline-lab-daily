@@ -108,7 +108,7 @@ const server=http.createServer((req,res)=>{
  await page.evaluate(()=>history.back());await page.waitForFunction(()=>[...document.querySelectorAll(".sl-library-tab")].some(b=>b.textContent==="Overview"&&b.getAttribute("aria-current")==="page"));
  await page.evaluate(()=>history.back());await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);await settle();
  await nav("Today");await nav("Genres");await page.waitForSelector("#app .genre");
- await tapNamed("#app .genre","Drum & Bass");
+ await page.evaluate(()=>{const norm=s=>(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");const card=[...document.querySelectorAll("#app .genre")].find(n=>norm(n.querySelector(".genre-name")?.textContent)==="drumbass");if(!card)throw Error("D&B card missing");card.setAttribute("data-qa-history-target","true")});await clickStable('[data-qa-history-target="true"]');await page.evaluate(()=>document.querySelectorAll('[data-qa-history-target]').forEach(n=>n.removeAttribute("data-qa-history-target")));
  await page.waitForSelector("#app .roomhead");await settle();
  await tapNamed("#app .tabs button","Top 10");
  await page.waitForSelector(".sl-chart-inline");await settle();
