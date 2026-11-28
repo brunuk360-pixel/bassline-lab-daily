@@ -50,6 +50,18 @@ const server=http.createServer((req,res)=>{
  const restored=await page.$eval(selector,n=>({sameNode:n===window.__qaRecordBanner,text:n.textContent,art:n.querySelector(".cover img")?.getAttribute("src"),count:document.querySelectorAll(".ed-rotation .ed-record").length,random:n.classList.contains("sl-rod-random")}));
  assert.ok(restored.sameNode&&restored.count===1&&!restored.random);assert.equal(restored.text,original.text);assert.equal(restored.art,original.art);
  });
+ await check("Homepage editorial banner coherence",async()=>{
+ await nav("Today");await page.waitForSelector(".sl-d-entry .sl-d-dig-image");
+ for(const width of [320,390,430,1280]){
+  await page.setViewport({width,height:844,isMobile:width<800,hasTouch:width<800,deviceScaleFactor:1});await page.waitForSelector(".sl-d-entry .sl-d-dig-copy");await page.waitForSelector(".sl-rod-feature");
+  const geometry=await page.evaluate(()=>{const dig=document.querySelector(".sl-d-entry"),record=document.querySelector(".sl-rod-feature"),image=dig.querySelector(".sl-d-dig-image"),copy=dig.querySelector(".sl-d-dig-copy"),a=dig.getBoundingClientRect(),b=record.getBoundingClientRect(),c=copy.getBoundingClientRect(),d=image.getBoundingClientRect();return {width:a.width,recordWidth:b.width,aligned:Math.abs(a.left-b.left)<2,copy:c.width,image:d.width,height:a.height,angle:getComputedStyle(image).clipPath,border:getComputedStyle(dig).borderLeftColor,recordBorder:getComputedStyle(record).borderLeftColor,copyInside:c.left>=a.left&&c.right<=a.right&&c.top>=a.top&&c.bottom<=a.bottom,art:image.getAttribute("src"),kind:image.dataset.artKind}});
+  console.log("SUBLEVEL_HOME_EDITORIAL "+JSON.stringify({width,...geometry}));
+  assert.ok(geometry.copyInside&&geometry.copy>=120&&geometry.image>=100&&geometry.angle.startsWith("polygon(")&&geometry.height<=200,width+" compact readable Daily Dig");
+  assert.equal(geometry.border,geometry.recordBorder,"Shared editorial accent");if(width<800){assert.ok(geometry.aligned&&Math.abs(geometry.width-geometry.recordWidth)<2,"Mobile feature alignment")}
+  assert.equal(await overflow(),false);
+ }
+ await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await nav("Today");
+ });
  await check("Daily Dig and listening queue",async()=>{
  await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
  const edition=await page.evaluate(()=>{const D=window.__slDiscovery,today=new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());const f=D.editorialFeature;if(f?.date!==today||f.ids.length!==10)return null;return {expected:f.ids.map(id=>D.items.find(r=>r[0]===id)?.[1]),actual:[...document.querySelectorAll(".sl-discovery-dialog .sl-d-list")][0]&&[...document.querySelectorAll(".sl-discovery-dialog .sl-d-list:first-of-type .sl-d-record h3")].slice(0,10).map(x=>x.textContent),firstList:[...document.querySelector(".sl-discovery-dialog .sl-d-list")?.querySelectorAll(".sl-d-record h3")||[]].map(x=>x.textContent)}});
