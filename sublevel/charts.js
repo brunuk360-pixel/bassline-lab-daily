@@ -117,25 +117,39 @@ function recordHitPool(){
  return pool
 }
 function recordRotation(){
- const original=app.querySelector(".night-home .ed-rotation .ed-record:not(.sl-rod-hit)");
- if(!original||original.parentElement.querySelector(".sl-rod-controls"))return;
+ const original=app.querySelector(".night-home .ed-rotation button.ed-record");
+ if(!original||original.closest(".sl-rod-feature"))return;
  const pool=recordHitPool();if(!pool.length)return;
- const feature=make("div","sl-rod-feature"),wrap=make("div","sl-rod-controls"),shuffle=make("button","sl-rod-shuffle","⤨ Random"),restore=make("button","sl-rod-restore","↶ Today");
- shuffle.type=restore.type="button";restore.hidden=true;
+ const feature=make("div","sl-rod-feature"),wrap=make("div","sl-rod-controls"),shuffle=make("button","sl-rod-shuffle","⤨ Random"),restore=make("button","sl-rod-restore","↶ Today"),chartSource=make("a","sl-rod-chart-source","Chart ↗");
+ shuffle.type=restore.type="button";restore.hidden=true;chartSource.hidden=true;chartSource.target="_blank";chartSource.rel="noopener noreferrer";
  shuffle.setAttribute("aria-label","Choose another top ten chart hit");
- const output=make("section","sl-rod-output");output.setAttribute("aria-live","polite");output.hidden=true;
+ const children=[...original.childNodes],originalText=norm(original.textContent),originalLabel=original.getAttribute("aria-label"),originalTitle=original.getAttribute("title");
+ const templateCover=original.querySelector(".cover"),templateCopy=original.querySelector(".ed-recordtext");
+ if(!templateCover||!templateCopy)return;
+ const status=make("span","sl-rod-status");status.setAttribute("aria-live","polite");
+ let current=null;
  function draw(hit){
-  const {track,chart,rank}=hit,card=make("article","ed-record sl-rod-hit");
-  card.dataset.recordKey=hit.key;card.dataset.chartId=chart.id;card.dataset.rank=String(rank);
-  const img=make("img","sl-rod-cover");img.src=track.art;img.alt=track.title+" release artwork";img.addEventListener("error",()=>img.remove(),{once:true});
-  const copy=make("div","sl-rod-copy");copy.append(make("span","sl-rod-kicker","RECORD OF THE DAY / RANDOM HIT"),make("strong",null,track.title),make("small",null,track.artist),make("small","sl-rod-rank","#"+rank+" · "+chart.genre));
-  const actions=make("div","sl-rod-actions");actions.append(window.SUBLEVELPlayer.action(track,[track]),link("Chart source ↗",chart.url));
-  const meta=make("p","sl-rod-date",chart.source+" · "+(chart.from?chart.from+" to "+chart.through:"Checked "+chart.checked));
-  copy.append(actions,meta);card.append(img,copy);
-  output.replaceChildren(card);original.classList.add("sl-rod-hidden");output.hidden=false;restore.hidden=false
+  current=hit;
+  const {track,chart,rank}=hit;
+  const cover=templateCover.cloneNode(false),img=make("img","sl-rod-cover");
+  img.src=track.art;img.alt=track.title+" release artwork";cover.append(img);
+  const copy=templateCopy.cloneNode(false);
+  const tag=make("span","ed-tag","RECORD OF THE DAY"),title=make("b",null,track.title),artist=make("small",null,track.artist);
+  copy.append(tag,title,artist);
+  original.replaceChildren(cover,copy);
+  original.classList.add("sl-rod-random");original.dataset.recordKey=hit.key;original.dataset.chartId=chart.id;original.dataset.rank=String(rank);
+  original.setAttribute("aria-label","Play "+track.title+" by "+track.artist+" here");
+  original.title=track.title+" — "+track.artist;
+  chartSource.href=chart.url;chartSource.title="#"+rank+" · "+chart.genre+" · "+chart.source+" · "+(chart.from?chart.from+" to "+chart.through:"Checked "+chart.checked);
+  chartSource.setAttribute("aria-label","Chart source: "+chartSource.title);chartSource.hidden=false;restore.hidden=false;
+  status.textContent="Selected "+track.title+" by "+track.artist;
  }
+ feature.addEventListener("click",e=>{
+  if(!current||!original.contains(e.target))return;
+  e.preventDefault();e.stopImmediatePropagation();
+  window.SUBLEVELPlayer.play(current.track,[current.track])
+ },true);
  shuffle.addEventListener("click",()=>{
-  const originalText=norm(original.textContent);
   const live=recordHitPool().filter(h=>!(originalText.includes(norm(h.track.title))&&originalText.includes(norm(h.track.artist))));
   let remaining=live.filter(h=>!recordSeen.has(h.key));
   if(!remaining.length){recordSeen.clear();remaining=live}
@@ -144,8 +158,14 @@ function recordRotation(){
   const hit=remaining[Math.floor(Math.random()*remaining.length)];
   recordSeen.add(hit.key);recordLast=hit.key;draw(hit)
  });
- restore.addEventListener("click",()=>{output.hidden=true;output.replaceChildren();original.classList.remove("sl-rod-hidden");restore.hidden=true});
- wrap.append(shuffle,restore);original.before(feature);feature.append(original,output,wrap)
+ restore.addEventListener("click",()=>{
+  current=null;original.replaceChildren(...children);original.classList.remove("sl-rod-random");
+  delete original.dataset.recordKey;delete original.dataset.chartId;delete original.dataset.rank;
+  if(originalLabel===null)original.removeAttribute("aria-label");else original.setAttribute("aria-label",originalLabel);
+  if(originalTitle===null)original.removeAttribute("title");else original.setAttribute("title",originalTitle);
+  restore.hidden=true;chartSource.hidden=true;status.textContent="Restored today's record"
+ });
+ wrap.append(chartSource,shuffle,restore);original.before(feature);feature.append(original,wrap,status)
 }
 function mount(){
  recordRotation();
