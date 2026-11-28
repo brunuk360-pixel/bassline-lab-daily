@@ -249,16 +249,31 @@ function collectionStats(){
  const section=create("section");section.append(box);if(list.length)section.append(create("h2","sl-d-section","Your saved genres"),chart);return section;
 }
 
+// One artwork selection policy for both Explore entry points.
+function roomArtwork(){
+ const used=new Set(),out={};
+ const pools={daily:daily(),artists:D.profiles.flatMap(p=>p[3].map(byId)),samples:connections.flatMap(e=>[byId(e.from),byId(e.to)]),history:D.events.map(e=>byId(e[2])),early:[byId("between"),byId("spiders"),byId("cnc"),byId("owl")],gems:records.filter(r=>r.tag==="Deep cut"),journey:state.saved.map(byId),playable:records.filter(r=>window.SUBLEVELPlayer?.available(r))};
+ const preferred={daily:"warehouse",artists:"underground",samples:"genres",history:"afterhours",early:"genres",gems:"late-drive",journey:"afterhours",playable:"underground"};
+ const fallback=["warehouse","underground","genres","afterhours","late-drive"];
+ for(const [id] of modes){
+  const release=(pools[id]||[]).find(r=>r?.art&&!used.has(r.art));
+  const photo=[preferred[id],...fallback].map(n=>"section-art/"+n+".jpg").find(src=>!used.has(src));
+  if(release){used.add(release.art);out[id]={src:release.art,alt:release.title+" release artwork",cover:true}}
+  else if(photo){used.add(photo);out[id]={src:photo,alt:"",cover:false}}
+ }
+ return out;
+}
+function roomImage(spec,cls){
+ if(!spec)return null;
+ const img=create("img",cls+(spec.cover?" sl-room-cover":" sl-room-photo"));img.src=spec.src;img.alt=spec.alt;img.loading="lazy";img.decoding="async";img.referrerPolicy="no-referrer";img.addEventListener("error",()=>{img.parentElement?.classList.add("sl-room-image-unavailable");img.remove()},{once:true});return img
+}
 function render(mode,arg){
  current={mode,arg};dialog.dataset.room=mode;if(notice)notice.textContent="";content.replaceChildren();heading.textContent=labels[mode]||({artist:"Artist DNA",listen:"Listening room",graph:"Connections",hub:"Discover more",label:"Label catalogue",playlist:"Your playlist"}[mode]||"SUBLEVEL");back.textContent=stack.length?"← Back":"← Back";dialog.scrollTop=0;dialog.querySelectorAll(".sl-d-nav-button").forEach(b=>{const on=(b.textContent==="Explore"&&mode==="hub")||(b.textContent==="Library"&&mode==="journey");if(on)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
  if(mode==="hub"){
  titleBlock("SUBLEVEL / DISCOVERY","Go deeper.","Explore beyond the charts, or search the entire curated catalogue.");
- const grid=create("div","sl-d-hub");const usedPhotos=new Set();modes.forEach(([id,name,desc,img])=>{
- const b=button("",()=>show(id),"sl-d-tile");const heroIds={daily:daily().find(r=>r.art)?.id||"edlan",artists:"allnight",samples:"fire",history:"nookie",early:"spiders",gems:"posij",journey:"photek",playable:"allnight"};
- const cover=byId(heroIds[id]);const src=cover?.art||"section-art/"+img;
- if(src&&!usedPhotos.has(src)){
-  usedPhotos.add(src);const photo=create("img",cover?.art?"sl-d-tile-cover":"sl-d-tile-photo");photo.src=src;photo.alt=cover?.art?cover.title+" release artwork":"";photo.loading="lazy";photo.decoding="async";photo.addEventListener("error",()=>{photo.remove();b.classList.add("sl-d-tile-text")},{once:true});b.append(photo);
- }else b.classList.add("sl-d-tile-text");
+ const grid=create("div","sl-d-hub"),images=roomArtwork();modes.forEach(([id,name,desc])=>{
+ const b=button("",()=>show(id),"sl-d-tile"),photo=roomImage(images[id],"sl-d-tile-image");
+ if(photo)b.append(photo);else b.classList.add("sl-d-tile-text");
  b.append(create("strong",null,name),create("small",null,desc));grid.append(b)
 });content.append(grid);section("For you");content.append(personalized());section("Browse record labels");const labelNav=create("div","sl-d-label-nav");labelsData.forEach(l=>labelNav.append(button(l[0]+" →",()=>show("label",l[0]))));content.append(labelNav);section("Browse the catalogue");content.append(catalogue(records));
  }else if(mode==="playable"){
@@ -387,10 +402,10 @@ function mount(){const home=app.querySelector(".night-home"),explore=app.querySe
  if(explore&&!app.querySelector(".sl-d-explore")){
  const panel=create("section","sl-d-explore");
  panel.append(create("span","sl-d-kicker","SUBLEVEL / DISCOVERY ROOMS"),create("h2",null,"Go deeper"),create("p","sl-d-muted","Choose a destination, or browse the complete catalogue."));
- const shortcuts=create("div","sl-d-shortcuts");
+ const shortcuts=create("div","sl-d-shortcuts"),images=roomArtwork();
  const icons={daily:"01",artists:"02",samples:"03",history:"04",early:"05",gems:"06",journey:"07",playable:"08"};
  modes.forEach(([id,name,desc])=>{
-  const b=button("",()=>open(id),"sl-d-shortcut");const copy=create("span","sl-d-shortcut-copy");copy.append(create("strong",null,name),create("small",null,desc));b.append(create("span","sl-d-shortcut-num",icons[id]),copy,create("span","sl-d-shortcut-arrow","↗"));shortcuts.append(b);
+  const b=button("",()=>open(id),"sl-d-shortcut");const copy=create("span","sl-d-shortcut-copy");copy.append(create("strong",null,name),create("small",null,desc));const photo=roomImage(images[id],"sl-d-shortcut-image");if(photo)b.append(photo);b.append(create("span","sl-d-shortcut-num",icons[id]),copy,create("span","sl-d-shortcut-arrow","↗"));shortcuts.append(b);
  });
  panel.append(shortcuts,button("Browse complete catalogue →",()=>open(),"sl-d-button sl-d-primary"));explore.before(panel);
 }
