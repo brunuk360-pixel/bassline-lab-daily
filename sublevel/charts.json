@@ -629,7 +629,8 @@
           "url": "https://www.traxsource.com/track/12796032/smokescreen",
           "art": "https://geo-static.traxsource.com/files/images/46b78969bad9716e3eae08b4275fc796.jpg",
           "artSource": "https://www.traxsource.com/title/2374508/seventeen",
-          "reviewedBandcamp": "https://integralrecords.bandcamp.com/track/smokescreen"
+          "reviewedBandcamp": "https://integralrecords.bandcamp.com/track/smokescreen",
+          "embedUrl": "https://music.apple.com/gb/album/smokescreen/1771316989?i=1771316993"
         },
         {
           "rank": 3,
@@ -678,7 +679,10 @@
           "rank": 8,
           "title": "Imminent",
           "artist": "Blade (Dnb)",
-          "url": "https://www.traxsource.com/track/14773474/imminent"
+          "url": "https://www.traxsource.com/track/14773474/imminent",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/51/d6/70/51d67076-b2c3-f22c-98bf-b6aee7438ab2/8721555427792.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/imminent/6778479863?i=6778479864&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/imminent/6778479863?i=6778479864"
         },
         {
           "rank": 9,
@@ -827,7 +831,10 @@
         {
           "rank": 8,
           "title": "THUNDERSTRUCK",
-          "artist": "AC/DC"
+          "artist": "AC/DC",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/fc/c2/f8/fcc2f850-1d81-7440-c0a0-de7fcef1e911/dj.rrgizfic.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/thunderstruck/574049507?i=574051407&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/thunderstruck/574049507?i=574051407"
         },
         {
           "rank": 9,
@@ -901,7 +908,10 @@
         {
           "rank": 8,
           "title": "ALL I WANT FOR CHRISTMAS IS YOU",
-          "artist": "MARIAH CAREY"
+          "artist": "MARIAH CAREY",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/1f/db/b1/1fdbb174-b7f3-2cb9-1e28-83e8137b95ae/886447958520.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/all-i-want-for-christmas-is-you/1480780245?i=1480780254&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/all-i-want-for-christmas-is-you/1480780245?i=1480780254"
         },
         {
           "rank": 9,
@@ -1255,7 +1265,10 @@
         {
           "rank": 8,
           "title": "Nice 'N' Easy",
-          "artist": "Susan Cadogan"
+          "artist": "Susan Cadogan",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/91/62/a0/9162a0f9-0ec9-1f99-0cf3-d33797852947/5414939536571.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/nice-n-easy/1436067592?i=1436067594&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/nice-n-easy/1436067592?i=1436067594"
         },
         {
           "rank": 9,
@@ -1983,8 +1996,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 108,
-  "lookupPriority": [
-    "dnb"
-  ]
+  "lookupCursor": 120
 }
