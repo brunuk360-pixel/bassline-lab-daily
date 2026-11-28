@@ -250,6 +250,18 @@ function collectionStats(){
 }
 
 // One artwork selection policy for both Explore entry points.
+function labelDirectory(){
+ const list=create("div","sl-d-label-directory"),used=new Set();
+ for(const l of labelsData){
+  const recordsForLabel=l[2].map(byId).filter(Boolean);
+  const r=recordsForLabel.find(r=>r.art&&!used.has(r.art));
+  const item=button("",()=>show("label",l[0]),"sl-d-label-card");
+  if(r){const img=smallCover(r);used.add(r.art);item.append(img)}
+  const copy=create("span","sl-d-label-copy");copy.append(create("strong",null,l[0]),create("small",null,recordsForLabel.length+" catalogue releases"+(r?" · "+r.title:"")));
+  item.append(copy,create("span","sl-d-row-arrow","→"));list.append(item)
+ }
+ return list
+}
 function roomArtwork(){
  const used=new Set(),out={};
  const pools={daily:daily(),artists:D.profiles.flatMap(p=>p[3].map(byId)),samples:connections.flatMap(e=>[byId(e.from),byId(e.to)]),history:D.events.map(e=>byId(e[2])),early:[byId("between"),byId("spiders"),byId("cnc"),byId("owl")],gems:records.filter(r=>r.tag==="Deep cut"),journey:state.saved.map(byId),playable:records.filter(r=>window.SUBLEVELPlayer?.available(r))};
@@ -275,7 +287,7 @@ function render(mode,arg){
  const b=button("",()=>show(id),"sl-d-tile"),photo=roomImage(images[id],"sl-d-tile-image");
  if(photo)b.append(photo);else b.classList.add("sl-d-tile-text");
  b.append(create("strong",null,name),create("small",null,desc));grid.append(b)
-});content.append(grid);section("For you");content.append(personalized());section("Browse record labels");const labelNav=create("div","sl-d-label-nav");labelsData.forEach(l=>labelNav.append(button(l[0]+" →",()=>show("label",l[0]))));content.append(labelNav);section("Browse the catalogue");content.append(catalogue(records));
+});content.append(grid);section("For you");content.append(personalized());section("Browse record labels");content.append(labelDirectory());section("Browse the catalogue");content.append(catalogue(records));
  }else if(mode==="playable"){
  const playable=records.filter(r=>window.SUBLEVELPlayer?.available(r));
  titleBlock("SUBLEVEL / ON-SITE LISTENING","Listen here","Browse releases with an identified official embedded player. Streaming availability and preview length depend on the music service.");
@@ -302,7 +314,7 @@ function render(mode,arg){
  const now=new Date(),parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/London",month:"2-digit",day:"2-digit"}).formatToParts(now),md=parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;
  const anniversaries=D.events.filter(e=>e[0].slice(5)===md);
  section("Today's release anniversaries");
- function event(e){const [date,name,id,url]=e;const r=byId(id);const a=create("article","sl-d-event sl-d-history-event"),cover=smallCover(r);if(cover)a.append(cover);const copy=create("div","sl-d-history-copy");copy.append(create("time",null,date),create("h3",null,name));if(r)copy.append(create("p","sl-d-muted",r.artist),button("Listen / details →",()=>startListening(r.id,[r])));const href=url||r?.url;if(href)copy.append(link("Source ↗",href));a.append(copy);return a}
+ function event(e){const [date,name,id,url]=e;const candidate=byId(id),r=candidate?.title===name?candidate:null;const a=create("article","sl-d-event sl-d-history-event"),cover=smallCover(r);if(cover)a.append(cover);const copy=create("div","sl-d-history-copy");copy.append(create("time",null,date),create("h3",null,name));if(r)copy.append(create("p","sl-d-muted",r.artist),button("Listen / details →",()=>startListening(r.id,[r])));const href=url||r?.url;if(href)copy.append(link("Source ↗",href));a.append(copy);return a}
  if(anniversaries.length)anniversaries.forEach(e=>content.append(event(e)));else content.append(create("p","sl-d-muted","No verified anniversaries for this date in the current archive."));
  section("Explore the timeline");const controls=create("div","sl-d-actions");const select=create("select","sl-d-select");select.setAttribute("aria-label","Filter timeline by decade");["All decades","1990s","2000s","2010s","2020s"].forEach(s=>{const o=create("option",null,s);o.value=s;select.append(o)});controls.append(select);content.append(controls);const timeline=create("div","sl-d-timeline");content.append(timeline);
  function draw(){timeline.replaceChildren();const filtered=D.events.filter(e=>select.value==="All decades"||e[0].startsWith(select.value.slice(0,3))).sort((a,b)=>a[0].localeCompare(b[0]));filtered.forEach(e=>timeline.append(event(e)));if(!filtered.length)timeline.append(create("p","sl-d-muted","No dated entries in this decade yet."))}
