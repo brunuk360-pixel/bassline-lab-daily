@@ -45,7 +45,7 @@ const server=http.createServer((req,res)=>{
  await nav("Today");await page.waitForSelector("#app .night-home");await nav("Genres");
  const clicked=await page.evaluate(()=>{const b=[...document.querySelectorAll("#app button")].find(b=>!b.closest(".sl-chart-directory")&&/drum\s*(?:&|and)\s*bass/i.test(b.textContent)&&/discover/i.test(b.textContent));if(!b)return false;b.click();return true});assert.ok(clicked,"Could not locate D&B genre card after fresh navigation");
  await page.waitForSelector(".sl-chart-room");await page.click(".sl-chart-room summary");await settle();
- assert.equal(await page.$eval(".sl-chart-room .sl-chart-row",x=>x.length),10);
+ assert.equal(await page.$$eval(".sl-chart-room .sl-chart-row",x=>x.length),10);
  assert.equal(await overflow(),false);
  });
  await check("Persistent official player",async()=>{
