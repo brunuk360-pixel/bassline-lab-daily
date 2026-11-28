@@ -244,6 +244,16 @@ for key, story in discovery.get("dailyEditorial",{}).items():
     assert all(story[k].strip() for k in ("artistContext","releaseContext","listenFor"))
     assert story["artistSource"].startswith("https://") and date.fromisoformat(story["checked"])
 print("Source-reviewed Daily Dig stories:",len(discovery.get("dailyEditorial",{})))
+upcoming=discovery.get("upcomingReleases",[])
+upcoming_ids=set()
+for item in upcoming:
+    assert item["id"] not in upcoming_ids and item["id"] not in ids, "Duplicate or mixed upcoming release"
+    upcoming_ids.add(item["id"])
+    assert all(item[k].strip() for k in ("id","title","artist","genre"))
+    assert date.fromisoformat(item["date"]) and date.fromisoformat(item["checked"])
+    assert re.fullmatch(r"https://[a-z0-9-]+\.bandcamp\.com/(?:album|track)/[a-z0-9-]+",item["url"]), "Unverified pre-order source format"
+print("Source-reviewed upcoming releases:",len(upcoming))
+
 
 
 assert all(set(profile[3]).issubset(ids) for profile in discovery["profiles"])
