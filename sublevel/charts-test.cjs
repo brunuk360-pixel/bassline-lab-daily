@@ -15,6 +15,8 @@ a.equal(f.sourceFor("Garage")[2],"garage");
 a.equal(f.sourceFor("House")[2],"house");
 a.equal(feed.rooms.length,20);a.equal(new Set(feed.rooms.map(r=>r[0])).size,20);
 for(const r of feed.rooms){if(r[1])a.equal(f.sourceFor(r[0])[0],r[1]);else {a.equal(f.sourceFor(r[0]),undefined);a.ok(r[2])}}
-a.equal(f.sourceFor("Rock")[0],"UK Rock & Metal");a.equal(f.sourceFor("Soul"),undefined);
+a.equal(f.sourceFor("Rock")[0],"UK Rock & Metal");a.equal(f.sourceFor("Soul")[0],"Soul / Funk / Disco");
+a.equal(f.sourceFor("Funk & Disco")[2],"soul-funk");
+a.equal(f.sourceFor("Reggae & Dub"),undefined);
 for(const c of feed.charts){a.equal(c.rows.length,10);a.deepEqual(c.rows.map(r=>r.rank),Array.from({length:10},(_,i)=>i+1));a.equal(new Set(c.rows.map(r=>r.title+'|'+r.artist)).size,10)}
 console.log("Chart checks passed: source matching and honest freshness labels.");
