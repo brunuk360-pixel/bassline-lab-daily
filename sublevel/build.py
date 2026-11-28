@@ -231,6 +231,18 @@ for item in native_sources:
     assert re.fullmatch(r"https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}",item["source"]),"Invalid native reviewed video"
     assert item["evidence"].strip() and date.fromisoformat(item["checked"])
 print("Reviewed native editorial video sources:",len(native_sources))
+# The catalogue is derived from the browser audit of the original genre rows.
+# Do not substitute results from another remix, artist or search identity.
+native_catalogue=discovery.get("nativeCatalogue",[])
+native_catalogue_urls=set()
+for row in native_catalogue:
+    assert all(row[k].strip() for k in ("genre","title","artist"))
+    expected="https://music.youtube.com/search?q="+quote(row["artist"]+" "+row["title"],safe="~!*'()")
+    assert row["originalUrl"]==expected and expected not in native_catalogue_urls
+    native_catalogue_urls.add(expected)
+from discovery_assets import enrich_native_apple
+enrich_native_apple(discovery)
+
 for key,fact in discovery.get("releaseFacts",{}).items():
     row=next((r for r in discovery["items"] if r[0]==key),None)
     assert row and (fact["title"],fact["artist"],fact["source"])==(row[1],row[2],row[6]),"Release fact identity mismatch"
