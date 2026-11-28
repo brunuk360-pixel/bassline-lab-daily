@@ -9,7 +9,42 @@ const link=(text,url)=>{const a=make("a","sl-chart-link",text);a.href=url;a.targ
 function status(c,now=today()){if(c.status==="weekly")return c.checked===now?"Latest checked weekly DJ report · published "+c.published:"Weekly DJ report · last checked "+c.checked;if(c.status!=="verified")return "Archived snapshot — not confirmed current";if(c.through)return now>=c.from&&now<=c.through?"Current published chart period":"Past chart period";return c.checked===now?"Verified on "+c.checked:"Last verified "+c.checked+" · refresh needed"}
 function roomFor(genre){return (feed.rooms||[]).find(r=>norm(r[0])===norm(genre))}
 function sourceFor(genre){const room=roomFor(genre);if(room)return room[1]?feed.sources.find(s=>norm(s[0])===norm(room[1])):undefined;const key=norm(genre);return feed.sources.find(s=>norm(s[0])===key)||feed.sources.find(s=>norm(s[0])===(alias[key]||key)||s[2]===(alias[key]||key))}
-function chartPanel(genre){
+// Build chart rows with the original genre-room track classes and structure.
+ // Copy presentation classes only: never clone stale record data, art, links,
+ // IDs, inline handlers or saved-state controls from the editorial list.
+function nativeShell(sample,tag,classes=""){
+ const safeTags=["DIV","ARTICLE","SECTION","LI","OL","UL","SPAN","BUTTON","B","STRONG","SMALL","P"];
+ const el=make(sample&&safeTags.includes(sample.tagName)?sample.tagName.toLowerCase():tag,sample?.className||classes);
+ return el
+}
+function nativeChartRows(chart,template){
+ const original=template?.querySelector(".track"),sample=original?.querySelector(".trackline"),sampleTitle=sample?.querySelector(".tracktitle"),sampleCover=sample?.querySelector(".cover");
+ if(!sample||!sampleTitle||!sampleCover)return null;
+ const list=nativeShell(template,"div","tracks");list.classList.add("tracks","sl-chart-native-list");
+ const tracks=chart.rows.map(r=>({id:"chart:"+chart.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title),embedUrl:r.embedUrl}));
+ const sampleRank=Array.from(sample.children).find(n=>!n.contains(sampleTitle)&&!n.contains(sampleCover)&&(/^#?\d{1,2}$/.test(n.textContent.trim())||/rank|number|position/i.test(n.className||"")));
+ const sampleEnd=Array.from(sample.children).find(n=>n!==sampleRank&&!n.contains(sampleTitle)&&!n.contains(sampleCover));
+ for(const r of chart.rows){
+  const row=nativeShell(original,"article","track");row.classList.add("track","sl-chart-native-row");row.dataset.rank=String(r.rank);
+  const line=nativeShell(sample,"button","trackline");line.classList.add("trackline");if(line.tagName==="BUTTON")line.type="button";else{line.setAttribute("role","button");line.tabIndex=0}
+  line.setAttribute("aria-expanded","false");
+  const rank=nativeShell(sampleRank,"span","rank");rank.classList.add("sl-chart-native-rank");rank.textContent=String(r.rank).padStart(2,"0");
+  const cover=nativeShell(sampleCover,"div","cover");cover.classList.add("cover","sl-chart-native-cover");
+  if(r.art){const img=make("img");img.src=r.art;img.alt="";img.loading="lazy";img.decoding="async";img.addEventListener("error",()=>{img.remove();cover.classList.add("sl-chart-cover-unavailable")},{once:true});cover.append(img)}else cover.classList.add("sl-chart-cover-unavailable");
+  const copy=nativeShell(sampleTitle,"div","tracktitle");copy.classList.add("tracktitle");
+  const title=nativeShell(sampleTitle.querySelector("strong,b"),"strong");title.textContent=r.title;title.classList.add("sl-chart-native-title");
+  const artist=nativeShell(sampleTitle.querySelector("small"),"small");artist.textContent=r.artist;copy.append(title,artist);
+  const end=nativeShell(sampleEnd,"span");if(end.tagName==="BUTTON"){const span=make("span",end.className,"›");span.classList.add("sl-chart-native-chevron");line.append(rank,cover,copy,span)}else{end.textContent="›";end.classList.add("sl-chart-native-chevron");line.append(rank,cover,copy,end)}
+  const details=make("div","sl-chart-native-detail");details.hidden=true;
+  details.append(link(r.url?"Listen / release ↗":"Find music ↗",tracks[r.rank-1].url));
+  if(window.SUBLEVELPlayer?.available(tracks[r.rank-1])){const play=make("button","sl-chart-link sl-chart-play","▶ Play here");play.type="button";play.addEventListener("click",()=>window.SUBLEVELPlayer.play(tracks[r.rank-1],tracks));details.append(play)}
+  const toggle=()=>{details.hidden=!details.hidden;line.setAttribute("aria-expanded",String(!details.hidden))};
+  line.addEventListener("click",toggle);if(line.tagName!=="BUTTON")line.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}});
+  row.append(line,details);list.append(row)
+ }
+ return list
+}
+function chartPanel(genre,template=null){
  const source=sourceFor(genre);const chart=source&&feed.charts.find(c=>c.id===source[2]);
  const panel=make("section","sl-chart-panel");
  panel.dataset.chartGenre=genre;panel.append(make("span","sl-chart-kicker","SUBLEVEL / CHART DESK"),make("h2",null,chart?chart.genre+" — Top 10":genre+" — chart sources"));
@@ -17,11 +52,15 @@ function chartPanel(genre){
  if(chart){
  panel.append(make("p","sl-chart-status",status(chart)),make("p","sl-chart-meta",chart.source+" · "+(chart.from?chart.from+" to "+chart.through:"Checked "+chart.checked)));
  if(chart.note)panel.append(make("p","sl-chart-meta",chart.note));
+ const native=template&&nativeChartRows(chart,template);
+ if(native){panel.classList.add("sl-chart-native-panel");panel.prepend(native)}
+ else{
  const list=make("ol","sl-chart-list");const tracks=chart.rows.map(r=>({id:"chart:"+chart.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title),embedUrl:r.embedUrl}));for(const r of chart.rows){
  const row=make("li","sl-chart-row");row.append(make("span","sl-chart-rank",String(r.rank).padStart(2,"0")));
  if(r.art){const img=make("img","sl-chart-cover");img.src=r.art;img.alt="";img.loading="lazy";img.addEventListener("error",()=>img.remove(),{once:true});row.append(img)}
  const copy=make("div","sl-chart-copy");copy.append(make("strong",null,r.title),make("small",null,r.artist));row.append(copy,link(r.url?"Listen / release ↗":"Find music ↗",r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title)));const track=tracks[r.rank-1];if(window.SUBLEVELPlayer?.available(track)){const play=make("button","sl-chart-link sl-chart-play","▶ Play here");play.type="button";play.addEventListener("click",()=>window.SUBLEVELPlayer.play(track,tracks));row.append(play)}list.append(row)}
  panel.append(list)
+ }
  }else panel.append(make("p","sl-chart-meta",source?"A full verified Top 10 is not available in this edition. Check the live source rather than relying on an incomplete ranking.":"No verified dedicated chart has been linked for this genre. Editorial recommendations below are not current rankings."));
  if(source)panel.append(link("View latest source chart ↗",source[1]));
  return panel
@@ -73,7 +112,8 @@ function mount(){
  previous?.remove();
  const panel=make("div","sl-chart-room sl-chart-inline");panel.dataset.chartGenre=name;
  panel.setAttribute("aria-label",name+" Top 10");
- panel.append(chartPanel(name));tabs.after(panel);
+ const template=app.querySelector(".tracks:not(.sl-chart-native-list)");
+ panel.append(chartPanel(name,template));tabs.after(panel);
 }
 
 let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{pending=false;mount()})}};
