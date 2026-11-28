@@ -150,7 +150,11 @@ function nativeRecord(row){
  if(!title||!artist||!urlOf(url))return null;
  // The original search link identifies the exact editorial row even when
  // metadata chips share the artist container. Never embed the search itself.
- const reviewed=(data?.reviewedNativeEmbeds||[]).find(v=>v.title===title&&v.originalUrl===url);
+ // Compare the same exact search query after URL serialization (apostrophes
+ // can become %27 when an href is resolved by the browser).
+ const searchIdentity=value=>{const u=urlOf(value);if(!u||u.hostname!=="music.youtube.com"||u.pathname!=="/search"||u.hash||[...u.searchParams.keys()].some(k=>k!=="q")||u.searchParams.getAll("q").length!==1)return null;return u.searchParams.get("q")};
+ const query=searchIdentity(url);
+ const reviewed=(data?.reviewedNativeEmbeds||[]).find(v=>v.title===title&&(v.originalUrl===url||(query!==null&&searchIdentity(v.originalUrl)===query)));
  if(reviewed&&identityText(artist).startsWith(identityText(reviewed.artist))){
   const track={id:"native:"+reviewed.title+":"+reviewed.artist,title,artist:reviewed.artist,url,embedUrl:reviewed.source};
   if(available(track))return track
