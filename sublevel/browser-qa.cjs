@@ -78,18 +78,18 @@ const server=http.createServer((req,res)=>{
  await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
  });
  await check("Illustrated Explore shortcuts and unique room artwork",async()=>{
- await nav("Explore");await page.waitForSelector(".sl-d-shortcut-image");
+ await nav("Explore");await page.waitForFunction(()=>document.querySelectorAll(".sl-d-shortcut-image").length===8);
  const inspect=selector=>page.evaluate(sel=>{const imgs=[...document.querySelectorAll(sel)];return {count:imgs.length,unique:new Set(imgs.map(n=>n.getAttribute("src"))).size,known:imgs.every(n=>Object.values(window.__slDiscovery.artwork).includes(n.getAttribute("src"))||/^section-art\/(genres|warehouse|underground|afterhours|late-drive)\.jpg$/.test(n.getAttribute("src"))) }},selector);
  const entry=await inspect(".sl-d-shortcut-image");assert.equal(entry.count,8);assert.equal(entry.unique,8);assert.ok(entry.known);
  const readable=()=>page.evaluate(()=>[...document.querySelectorAll(".sl-d-shortcut")].map(b=>{const row=b.getBoundingClientRect(),copy=b.querySelector(".sl-d-shortcut-copy").getBoundingClientRect(),img=b.querySelector(".sl-d-shortcut-image")?.getBoundingClientRect(),arrow=b.querySelector(".sl-d-shortcut-arrow").getBoundingClientRect();return {row:row.width,height:row.height,copy:copy.width,copyLeft:copy.left,copyRight:copy.right,artRight:img?.right||row.left,arrowLeft:arrow.left,titleHeight:b.querySelector("strong").getBoundingClientRect().height}}));
  for(const width of [320,360,390,430,700,1280]){
-   await page.setViewport({width,height:844,isMobile:width<700,hasTouch:width<700,deviceScaleFactor:1});await settle();
+   await page.setViewport({width,height:844,isMobile:width<700,hasTouch:width<700,deviceScaleFactor:1});await settle();await page.waitForFunction(()=>document.querySelectorAll(".sl-d-shortcut").length===8);
    const cards=await readable();assert.equal(cards.length,8);
    for(const card of cards){assert.ok(card.copy>=Math.min(120,card.row*.42),width+" readable text: "+JSON.stringify(card));assert.ok(card.copyLeft>=card.artRight-1&&card.copyRight<=card.arrowLeft+1,width+" correct column order");assert.ok(card.height<=130&&card.titleHeight<=42,width+" compact readable card "+JSON.stringify(card))}
  }
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await settle();
 
- await page.evaluate(()=>[...document.querySelectorAll(".sl-d-explore button")].find(b=>b.textContent.includes("Browse complete catalogue")).click());await page.waitForSelector(".sl-d-hub");
+ await page.evaluate(()=>[...document.querySelectorAll(".sl-d-explore button")].find(b=>b.textContent.includes("Browse complete catalogue")).click());await page.waitForFunction(()=>document.querySelectorAll(".sl-d-hub .sl-d-tile-image").length===8);
  const hub=await inspect(".sl-d-tile-image");assert.equal(hub.count,8);assert.equal(hub.unique,8);assert.ok(hub.known);
  const labels=await page.evaluate(()=>{const cards=[...document.querySelectorAll(".sl-d-label-card")],imgs=cards.flatMap(c=>[...c.querySelectorAll("img")]);return {count:cards.length,art:imgs.length,unique:new Set(imgs.map(i=>i.src)).size,expected:window.__slDiscovery.labelCatalogue.length,valid:imgs.every(i=>Object.values(window.__slDiscovery.artwork).includes(i.getAttribute("src")))}});
  assert.equal(labels.count,labels.expected);assert.ok(labels.art>0&&labels.valid&&labels.unique===labels.art);
