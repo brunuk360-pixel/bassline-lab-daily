@@ -33,3 +33,17 @@ for(const tab of ["overview","collection","wishlist","playlists","following","hi
 }
 assert.deepEqual(state.saved,["test"]);assert.deepEqual(listening.playlists[0].ids,["test"]);
 console.log("Personal library dashboard checks passed: all seven tabs, navigation shortcuts, saved queue, producer login and backup controls; existing state unchanged.");
+
+const wStart=src.indexOf("function wishDate("),wEnd=src.indexOf("state.wishlist=wishMerge",wStart);
+assert.ok(wStart>=0&&wEnd>wStart);
+const wish=vm.runInNewContext(src.slice(wStart,wEnd)+"\n({wishDate,wishClean,wishMerge})",{Date,URL,Map,Array,Number});
+const sample={title:"Example release",artist:"Example artist",date:"2026-12-04",url:"https://example.org/preorder"};
+assert.equal(wish.wishDate("2026-02-30"),false);
+assert.equal(wish.wishDate("2028-02-29"),true);
+assert.equal(wish.wishClean({...sample,url:"javascript:alert(1)"}),null);
+assert.equal(wish.wishClean({...sample,url:"https://user:pass@example.org/"}),null);
+assert.equal(wish.wishMerge([sample,{...sample,date:"2026-12-11"}]).length,1);
+assert.equal(wish.wishMerge([sample,{...sample,date:"2026-12-11"}])[0].date,"2026-12-11");
+assert.equal(wish.wishClean({...sample,dismissed:"2026-12-03"}).dismissed,"");
+assert.equal(wish.wishClean({...sample,dismissed:sample.date}).dismissed,sample.date);
+console.log("Release wishlist validation checks passed: dates, HTTPS sources, deduplication, changed release dates and alert state.");
