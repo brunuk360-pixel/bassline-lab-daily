@@ -2,7 +2,7 @@
 import os, re, secrets, hmac, hashlib
 from datetime import timedelta
 from urllib.parse import urlsplit, urlencode, parse_qs
-from flask import Flask, request, session, g, abort, redirect, url_for, render_template, flash
+from flask import Flask, request, session, g, abort, redirect, url_for, render_template, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg
 from psycopg.rows import dict_row
@@ -70,7 +70,7 @@ def protect():
         if not session.get("csrf") or not hmac.compare_digest(token.encode(),session["csrf"].encode()):abort(403)
     g.user=None
     if request.endpoint not in ("static","health") and isinstance(session.get("uid"),int):
-        g.user=one("SELECT id,handle,bio,is_admin FROM members WHERE id=%s AND active",(session["uid"],))
+        g.user=one("SELECT id,handle,bio,is_admin FROM members WHERE id=%s AND active AND session_version=%s",(session["uid"],session.get("version") if isinstance(session.get("version"),int) else 0))
         if not g.user:session.clear()
 @app.after_request
 def headers(response):
@@ -130,9 +130,9 @@ def join():
     password=request.form.get("password","")
     if not HANDLE.fullmatch(handle) or not 12<=len(password)<=128:abort(400,"Use a valid handle and a password of 12–128 characters.")
     if not secret_matches("INVITE_CODE",request.form.get("invite","")):abort(403,"A beta invitation is required.")
-    row=one("INSERT INTO members(handle,password_hash) VALUES(%s,%s) ON CONFLICT(handle) DO NOTHING RETURNING id",(handle,generate_password_hash(password,method="scrypt")))
+    row=one("INSERT INTO members(handle,password_hash) VALUES(%s,%s) ON CONFLICT(handle) DO NOTHING RETURNING id,session_version",(handle,generate_password_hash(password,method="scrypt")))
     if not row:abort(400,"Handle unavailable.")
-    session.clear();session["uid"]=row["id"];session.permanent=True
+    session.clear();session["uid"]=row["id"];session["version"]=row["session_version"];session.permanent=True
     return redirect(url_for("profile",handle=handle))
 @app.get("/login")
 def login_page():return render_template("page.html",view="login")
@@ -142,9 +142,9 @@ def login():
     limit("login-ip",30);limit("login-account",8,handle)
     password=request.form.get("password","")
     if not 12<=len(password)<=128:abort(400)
-    user=one("SELECT id,password_hash FROM members WHERE handle=%s AND active",(handle,))
+    user=one("SELECT id,password_hash,session_version FROM members WHERE handle=%s AND active",(handle,))
     if not user or not check_password_hash(user["password_hash"],password):abort(401,"Incorrect handle or password.")
-    session.clear();session["uid"]=user["id"];session.permanent=True
+    session.clear();session["uid"]=user["id"];session["version"]=user["session_version"];session.permanent=True
     return redirect(url_for("home"))
 @app.post("/logout")
 def logout():
@@ -244,6 +244,38 @@ def moderate(kind,item_id):
         db().execute("UPDATE feedback SET status=%s WHERE id=%s",("approved" if action=="approve" else "hidden",item_id))
     else:abort(400)
     return redirect(url_for("moderation"))
+def confirm_account(uid,password):
+    if not 12<=len(password)<=128:abort(403,"Incorrect password.")
+    user=one("SELECT password_hash,session_version FROM members WHERE id=%s AND active",(uid,))
+    if not user or not check_password_hash(user["password_hash"],password):abort(403,"Incorrect password.")
+    return user
+@app.post("/account/password")
+def change_password():
+    uid=member();limit("password-change",5,uid)
+    current=request.form.get("password","")
+    replacement=request.form.get("new_password","")
+    if not 12<=len(replacement)<=128 or replacement!=request.form.get("confirm_password","") or replacement==current:
+        abort(400,"Choose a different password of 12–128 characters and confirm it.")
+    user=confirm_account(uid,current)
+    changed=one("UPDATE members SET password_hash=%s,session_version=session_version+1 WHERE id=%s AND session_version=%s RETURNING session_version",(generate_password_hash(replacement,method="scrypt"),uid,user["session_version"]))
+    if not changed:abort(403,"Account changed. Please sign in again.")
+    session.clear()
+    flash("Password updated. All previous sessions have been signed out. Sign in with your new password.")
+    return redirect(url_for("login_page"))
+@app.post("/account/export")
+def export_account():
+    uid=member();limit("account-export",5,uid)
+    confirm_account(uid,request.form.get("password",""))
+    # Explicit fields: no password hashes, session versions, rate-limit keys,
+    # private reviews by other members, or moderator credentials.
+    profile=one("SELECT handle,bio,created FROM members WHERE id=%s",(uid,))
+    payload={"format":"sublevel-unsigned-member-v1","profile":profile,
+      "submissions":rows("SELECT id,title,genre,url,note,status,created,embed_url FROM tracks WHERE owner=%s ORDER BY created",(uid,)),
+      "feedback":rows("SELECT track,rating,body,status,created FROM feedback WHERE author=%s ORDER BY created",(uid,)),
+      "reports":rows("SELECT track,reason,resolved,created FROM reports WHERE author=%s ORDER BY created",(uid,))}
+    response=jsonify(payload)
+    response.headers["Content-Disposition"]='attachment; filename="unsigned-account.json"'
+    return response
 @app.post("/account/delete")
 def delete_account():
     uid=member();password=request.form.get("password","");limit("delete",5,uid)
