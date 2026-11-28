@@ -56,7 +56,7 @@ const server=http.createServer((req,res)=>{
   await page.setViewport({width,height:844,isMobile:width<800,hasTouch:width<800,deviceScaleFactor:1});await page.waitForSelector(".sl-d-entry .sl-d-dig-copy");await page.waitForSelector(".sl-rod-feature");await page.waitForFunction(()=>{const i=document.querySelector(".sl-d-dig-image");return i?.complete&&i.naturalWidth>0});
   const geometry=await page.evaluate(()=>{const dig=document.querySelector(".sl-d-entry"),record=document.querySelector(".sl-rod-feature"),image=dig.querySelector(".sl-d-dig-image"),copy=dig.querySelector(".sl-d-dig-copy"),a=dig.getBoundingClientRect(),b=record.getBoundingClientRect(),c=copy.getBoundingClientRect(),d=image.getBoundingClientRect();return {width:a.width,recordWidth:b.width,aligned:Math.abs(a.left-b.left)<2,copy:c.width,image:d.width,height:a.height,angle:getComputedStyle(image).clipPath,border:getComputedStyle(dig).borderLeftWidth,recordBorder:getComputedStyle(record).borderLeftWidth,imageHeight:d.height,decoded:image.complete&&image.naturalWidth>0,copyInside:c.left>=a.left&&c.right<=a.right&&c.top>=a.top&&c.bottom<=a.bottom,art:image.getAttribute("src"),kind:image.dataset.artKind}});
   console.log("SUBLEVEL_HOME_EDITORIAL "+JSON.stringify({width,...geometry}));
-  assert.ok(geometry.copyInside&&geometry.copy>=120&&Math.abs(geometry.image-geometry.width)<2&&Math.abs(geometry.imageHeight-geometry.height)<2&&geometry.angle==="none"&&geometry.height<=200&&geometry.kind==="scene"&&geometry.art==="section-art/warehouse.jpg"&&geometry.decoded,width+" full-bleed photographic Daily Dig");
+  assert.ok(geometry.copyInside&&geometry.copy>=120&&Math.abs(geometry.image-geometry.width)<2&&Math.abs(geometry.imageHeight-geometry.height)<2&&geometry.angle==="none"&&geometry.height<=200&&geometry.kind==="scene"&&geometry.art==="section-art/daily-dig.jpg"&&geometry.decoded,width+" full-bleed photographic Daily Dig");
   assert.equal(geometry.border,"0px","No Daily Dig green edge strip");assert.equal(geometry.recordBorder,"0px","No Record of the Day green edge strip");if(width<800){assert.ok(geometry.aligned&&Math.abs(geometry.width-geometry.recordWidth)<2,"Mobile feature alignment")}
   assert.equal(await overflow(),false);
  }
@@ -87,7 +87,7 @@ const server=http.createServer((req,res)=>{
  await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
  });
  await check("Mobile browser Back and Forward across discovery and native navigation",async()=>{
- const tapNamed=async(selector,fragment)=>{const found=await page.evaluate((selector,fragment)=>{const node=[...document.querySelectorAll(selector)].find(n=>n.textContent.trim().includes(fragment)&&n.getClientRects().length);if(!node)return false;node.setAttribute("data-qa-history-target","true");return true},selector,fragment);assert.ok(found,"Visible navigation control: "+fragment);await clickStable('[data-qa-history-target="true"]');await page.evaluate(()=>document.querySelectorAll('[data-qa-history-target]').forEach(n=>n.removeAttribute("data-qa-history-target")))};
+ const tapNamed=async(selector,fragment)=>{const found=await page.evaluate((selector,fragment)=>{const node=[...document.querySelectorAll(selector)].find(n=>n.textContent.trim().toLowerCase().includes(fragment.toLowerCase())&&n.getClientRects().length);if(!node)return false;node.setAttribute("data-qa-history-target","true");return true},selector,fragment);assert.ok(found,"Visible navigation control: "+fragment);await clickStable('[data-qa-history-target="true"]');await page.evaluate(()=>document.querySelectorAll('[data-qa-history-target]').forEach(n=>n.removeAttribute("data-qa-history-target")))};
  await nav("Today");await clickStable(".sl-d-entry");await page.waitForSelector('.sl-discovery-dialog[open][data-room="daily"]');
  await tapNamed(".sl-d-content button","Start listening");
  await page.waitForSelector('.sl-discovery-dialog[open][data-room="listen"]');
@@ -361,7 +361,7 @@ const server=http.createServer((req,res)=>{
  });
  await check("Apple Music official preview and catalogue availability filter",async()=>{
  await nav("Today");await page.waitForSelector(".sl-d-entry");await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
- const select='select[aria-label="Filter by availability"]';await page.waitForSelector(select);await page.select(select,"covered");await settle();
+ await page.evaluate(()=>[...document.querySelectorAll(".sl-d-daily-link")].find(b=>b.textContent.includes("Browse new release archive")).click());await page.waitForSelector('.sl-discovery-dialog[data-room="dailyarchive"]');const select='select[aria-label="Filter by availability"]';await page.waitForSelector(select);await page.select(select,"covered");await settle();
  const count=await page.evaluate(()=>{const r=document.querySelector(".sl-d-results");return {all:r.querySelectorAll(".sl-d-record").length,empty:r.querySelectorAll(".sl-d-record.sl-d-no-art").length}});assert.ok(count.all>0);
  // Provider images are deliberately blocked, so inspect filter membership using original record titles.
  const shown=await page.evaluate(()=>Array.from(document.querySelectorAll(".sl-d-results .sl-d-record h3"),x=>x.textContent));const valid=await page.evaluate(()=>window.__slDiscovery.items.filter(r=>window.__slDiscovery.artwork[r[0]]).map(r=>r[1]));assert.ok(shown.every(t=>valid.includes(t)));
@@ -371,19 +371,20 @@ const server=http.createServer((req,res)=>{
  assert.ok(factTitles.length>0&&factTitles.every(t=>factExpected.includes(t)),"Tracklist filter includes only documented releases");
  await page.select(select,"playable");await settle();assert.equal(await page.evaluate(()=>document.querySelectorAll(".sl-d-results .sl-p-source").length),0);
  const started=await page.evaluate(()=>{const row=window.__slDiscovery.items.find(r=>r[0]==="dusky-bindweed");if(!row)return false;const [id,title,artist,date,genre,tag,url]=row;const record={id,title,artist,url};if(!window.SUBLEVELPlayer.available(record))return false;window.SUBLEVELPlayer.play(record);return true});assert.ok(started);
- await page.waitForSelector(".sl-player iframe");assert.equal(await page.$eval(".sl-player iframe",f=>new URL(f.src).hostname),"embed.music.apple.com");await page.click('.sl-player button[aria-label="Stop and close player"]');await page.click(".sl-d-close");
+ await page.waitForSelector(".sl-player iframe");assert.equal(await page.$eval(".sl-player iframe",f=>new URL(f.src).hostname),"embed.music.apple.com");await page.click('.sl-player button[aria-label="Stop and close player"]');await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open&&!document.querySelector("#app").inert);await settle();
  });
  await check("Source-reviewed release tracklist in listening room",async()=>{
  await nav("Today");await page.waitForSelector(".sl-d-entry");await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
- const launched=await page.evaluate(()=>{const row=Array.from(document.querySelectorAll(".sl-d-record")).find(r=>r.querySelector("h3")?.textContent==="Bindweed (Limonata Mix)");const b=Array.from(row?.querySelectorAll("button")||[]).find(x=>x.textContent.includes("Listen / details"));if(!b)return false;b.click();return true});assert.ok(launched,"Expected curated Dusky release");
+ const launched=await page.evaluate(()=>{const row=Array.from(document.querySelectorAll(".sl-d-record")).find(r=>r.querySelector("h3")?.textContent==="Bindweed (Limonata Mix)");const b=row?.querySelector(".sl-d-daily-detail")||Array.from(row?.querySelectorAll("button")||[]).find(x=>x.textContent.includes("Listen / details"));if(!b)return false;b.click();return true});assert.ok(launched,"Expected curated Dusky release");
  await page.waitForSelector(".sl-d-release-tracks");
  const actual=await page.evaluate(()=>Array.from(document.querySelectorAll(".sl-d-release-tracks li"),r=>[r.querySelector("strong").textContent,r.querySelector("time").textContent]));const expected=await page.evaluate(()=>window.__slDiscovery.releaseFacts["dusky-bindweed"].tracks);assert.deepEqual(actual,expected);
  assert.equal(await page.$eval(".sl-d-release-tracklist a",a=>a.href),"https://duskymusic.bandcamp.com/album/bindweed-limonata-mix");assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
- await page.click(".sl-d-close");
+ await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open&&!document.querySelector("#app").inert);await settle();
  });
  await check("Release wishlist saves dates and displays due alerts",async()=>{
  if(await page.$(".sl-discovery-dialog[open]")){await clickStable(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);await settle()}
  await nav("Saved");await page.waitForSelector(".sl-wishlist-entry");await clickStable(".sl-wishlist-entry");await page.waitForSelector(".sl-wishlist-form");
+ const preorders=await page.evaluate(()=>{const upcoming=window.__slDiscovery.upcomingReleases;return {count:document.querySelectorAll(".sl-wishlist-upcoming .sl-wishlist-row").length,expected:upcoming.filter(r=>r.date>new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date())).length,disjoint:upcoming.every(r=>!window.__slDiscovery.items.some(x=>x[0]===r.id))}});assert.equal(preorders.count,preorders.expected);assert.ok(preorders.disjoint);
  const fields={artist:"QA test artist",title:"QA test release",date:"2020-01-01",url:"https://example.org/qa-test-release"};
  await page.evaluate(fields=>{for(const [name,value] of Object.entries(fields))document.querySelector(".sl-wishlist-form input[name="+name+"]").value=value},fields);
  await clickStable(".sl-wishlist-form button[type=submit]");
