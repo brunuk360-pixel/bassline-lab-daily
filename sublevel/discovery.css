@@ -184,3 +184,12 @@ html body #app .sl-d-playable-entry{display:flex;justify-content:space-between;w
 .sl-d-record .sl-d-art{object-fit:contain}
 @media(min-width:720px){.sl-d-release-hero:not(.sl-d-release-no-cover){grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:28px}.sl-d-filters{grid-template-columns:minmax(160px,2fr) repeat(3,minmax(0,1fr))}.sl-d-filters .sl-d-search{grid-column:auto}}
 @media(max-width:360px){.sl-d-release-primary .sl-d-button{min-height:44px}.sl-d-release-meta{gap:1px 8px}}
+
+/* Source-reviewed tracklist, styled to match the listening room. */
+.sl-d-release-tracklist{margin:20px 0;padding:16px 0;border-block:1px solid #79c9b744}
+.sl-d-release-tracklist h2{margin:5px 0 8px;font-size:23px}
+.sl-d-release-tracks{list-style:none;padding:0;margin:10px 0}
+.sl-d-release-tracks li{display:grid;grid-template-columns:25px minmax(0,1fr) auto;align-items:baseline;gap:10px;padding:10px 0;border-bottom:1px solid #b5cbc329}
+.sl-d-release-tracks li strong{min-width:0;font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+.sl-d-release-tracks li time,.sl-d-track-number{font:12px ui-monospace,monospace;color:#a0decf;font-variant-numeric:tabular-nums}
+.sl-d-release-tracklist .sl-d-art-credit{display:inline-block;font-size:12px;padding:10px 0;color:#a0decf}
