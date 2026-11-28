@@ -6,6 +6,13 @@ a.match(P.frame(P.fromURL("https://open.spotify.com/track/2ZWmmrWUgDBcPSLihBMvhg
 a.match(P.frame({provider:"bandcamp",kind:"album",id:"12345"}).src,/^https:\/\/bandcamp.com\/EmbeddedPlayer\/album=12345\//);
 for(const url of ["javascript:alert(1)","https://soundcloud.com.evil.test/a/b","https://open.spotify.com/search/test","https://youtube.com/watch?v=bad","https://user@soundcloud.com/a/b","http://soundcloud.com/a/b","https://soundcloud.com:123/a/b"])a.equal(P.fromURL(url),null);
 a.equal(P.frame({provider:"bandcamp",kind:"track",id:"1/evil"}),null);
+const apple="https://music.apple.com/gb/album/bindweed-limonata-mix/6818548338";
+a.equal(P.frame(P.fromURL(apple)).src,"https://embed.music.apple.com/gb/album/bindweed-limonata-mix/6818548338");
+a.equal(P.frame(P.fromURL(apple+"?i=6818548340&uo=4")).src,"https://embed.music.apple.com/gb/album/bindweed-limonata-mix/6818548338?i=6818548340");
+a.equal(P.fromURL("https://music.apple.com/gb/search?term=dusky"),null);
+a.equal(P.fromURL("https://music.apple.com.evil.test/gb/album/a/123"),null);
+a.equal(P.fromURL(apple+"?i=not-a-track"),null);
+a.equal(P.frame({provider:"apple",kind:"album",id:"1",source:apple}),null);
 const r={id:"a",title:"Test",artist:"Artist",url:"https://example.org/track"};
 a.equal(P.clean([r,r,{...r,id:"b",url:"javascript:alert(1)"}]).length,1);
 console.log("Player tests passed: exact provider URLs, hostile URLs rejected, duplicate-free queue.");
