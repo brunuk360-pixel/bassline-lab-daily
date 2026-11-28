@@ -167,7 +167,12 @@ def submit():
     genre=field("genre",40);url=music_link(field("url",500))
     if genre not in GENRES or not url:abort(400,"Choose a genre and a supported public music link.")
     if request.form.get("rights")!="yes":abort(400,"Confirm that you have permission to share the recording.")
-    row=one("INSERT INTO tracks(owner,title,genre,url,note) VALUES(%s,%s,%s,%s,%s) RETURNING id",(uid,field("title",100),genre,url,field("note",1200,0)))
+    embed=field("embed_url",500,0)
+    if embed:
+        spec=player_spec(url,embed)
+        if not spec or spec["name"]!="Bandcamp":abort(400,"Use the official Bandcamp embed URL, not HTML.")
+        embed=spec["src"]
+    row=one("INSERT INTO tracks(owner,title,genre,url,note,embed_url) VALUES(%s,%s,%s,%s,%s,%s) RETURNING id",(uid,field("title",100),genre,url,field("note",1200,0),embed))
     flash("Submitted for moderation. It will appear publicly after approval.")
     return redirect(url_for("track",track_id=row["id"]))
 def accessible_track(track_id):
