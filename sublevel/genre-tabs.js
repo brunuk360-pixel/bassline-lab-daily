@@ -77,7 +77,7 @@ const sceneFallback={
 };
 const sceneCredits={genres:["Pixels and Blue Skies","https://unsplash.com/photos/MN_P-C0CXb4"],underground:["Emmanuel Black","https://unsplash.com/photos/vuZOquKODGs"],warehouse:["Colton Sturgeon","https://unsplash.com/photos/YViBSFfKubI"],afterhours:["Ramin Talebi","https://unsplash.com/photos/2_KldkmLkzQ"],"late-drive":["MChe Lee","https://unsplash.com/photos/DHwy7bYDmhk"]};
 function nativeScene(head){
- const valid=raw=>{try{const u=new URL(raw,document.baseURI);return (u.protocol==="https:"&&!u.username&&!u.password)||u.origin===location.origin||/^data:image\/(?:jpeg|png|webp);base64,/.test(raw)?raw:null}catch{return null}};
+ const valid=raw=>{if(!raw||typeof raw!=="string")return null;try{const u=new URL(raw,document.baseURI);return (u.protocol==="https:"&&!u.username&&!u.password)||u.origin===location.origin||/^data:image\/(?:jpeg|png|webp);base64,/.test(raw)?raw:null}catch{return null}};
  // Original hero may use a CSS background, pseudo-element or a scene image.
  const nodes=[head,...head.querySelectorAll(":scope > :not(.roomcopy)")];
  for(const n of nodes){
@@ -95,13 +95,20 @@ function decorateGenre(name){
  const head=app.querySelector(".roomhead"),copy=head?.querySelector(".roomcopy"),h=copy?.querySelector("h1");
  if(!head||!copy||!h)return;
  const k=norm(name),p=genrePalettes[k];if(!p)return;
+ app.style.setProperty("--sl-genre-panel",p[0]);
+ app.style.setProperty("--sl-genre-accent",p[1]);
  if(head.dataset.slGenreTheme===k&&head.querySelector(".sl-genre-scene"))return;
+ // Reusing a native header must not retain a previous genre's artwork.
+ head.querySelectorAll(".sl-genre-scene,.sl-genre-banner-credit").forEach(n=>n.remove());
+ head.classList.remove("sl-genre-angled");
  // Read the original public visual layer before applying our scoped CSS.
  const original=nativeScene(head),fallback=sceneFallback[k]||"genres";
  head.classList.add("sl-genre-angled");head.dataset.slGenreTheme=k;
  head.style.setProperty("--sl-genre-panel",p[0]);head.style.setProperty("--sl-genre-accent",p[1]);
  app.style.setProperty("--sl-genre-accent",p[1]);
- if(!copy.querySelector(".sl-genre-banner-kicker"))h.before(make("div","sl-genre-banner-kicker","SUBLEVEL / "+name.toUpperCase()));
+ let kicker=copy.querySelector(".sl-genre-banner-kicker");
+ if(!kicker){kicker=make("div","sl-genre-banner-kicker");h.before(kicker)}
+ kicker.textContent="SUBLEVEL / "+name.toUpperCase();
  const photo=make("img","sl-genre-scene");photo.alt="";photo.decoding="async";
  const credit=make("a","sl-genre-banner-credit");credit.target="_blank";credit.rel="noopener noreferrer";credit.hidden=true;
  const useFallback=()=>{if(photo.dataset.sceneOrigin==="fallback")return;photo.dataset.sceneOrigin="fallback";photo.src="section-art/"+fallback+".jpg";credit.href=sceneCredits[fallback][1];credit.textContent="Banner photo: "+sceneCredits[fallback][0]+" ↗";credit.hidden=false};
@@ -111,7 +118,7 @@ function decorateGenre(name){
 }
 function mount(){
  const name=title(),tabs=app.querySelector(".roomhead")&&app.querySelector(".tabs");
- if(name&&tabs)decorateGenre(name);else app.style.removeProperty("--sl-genre-accent");
+ if(name&&tabs)decorateGenre(name);else{app.style.removeProperty("--sl-genre-accent");app.style.removeProperty("--sl-genre-panel")}
  if(!name||!tabs){clear();room="";tabBar=null;return}
  if(name!==room||tabs!==tabBar){clear();room=name;tabBar=tabs}
  const all=[...tabs.querySelectorAll("button")];
