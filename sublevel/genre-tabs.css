@@ -37,3 +37,35 @@ html body #app .roomhead.sl-genre-angled .room-actions button:focus-visible{outl
 html body #app:has(.sl-genre-angled) .sl-unified-genre-tabs button.active{color:var(--sl-genre-accent)!important;border-bottom-color:var(--sl-genre-accent)!important}
 @media(max-width:360px){html body #app .roomhead.sl-genre-angled{padding:12px 10px!important;min-height:150px!important}html body #app .roomhead.sl-genre-angled .roomcopy{width:66%!important;max-width:66%!important}html body #app .roomhead.sl-genre-angled .roomcopy p{font-size:11px!important}}
 @media(min-width:700px){html body #app .roomhead.sl-genre-angled{padding:22px 24px!important}}
+
+/* Final editorial refinement: charcoal is the common brand surface;
+   genre colours are ink washes and accents, rather than separate themes. */
+html body #app .roomhead.sl-genre-angled{
+ background:#0a1214!important;border:0!important;border-bottom:1px solid #79c9b733!important;
+ box-shadow:none!important;min-height:clamp(148px,36vw,208px)!important;padding:15px 15px!important
+}
+html body #app .roomhead.sl-genre-angled::before{display:none!important;content:none!important}
+html body #app .roomhead.sl-genre-angled::after{
+ background:linear-gradient(112deg,#0a1214 4%,color-mix(in srgb,var(--sl-genre-panel) 65%,#0a1214) 100%)!important;
+ clip-path:polygon(0 0,72% 0,53% 100%,0 100%)!important;z-index:1!important
+}
+html body #app .roomhead.sl-genre-angled>.sl-genre-scene{
+ width:58%!important;filter:brightness(.87) saturate(.8) contrast(1.05)!important;
+ mask-image:linear-gradient(90deg,transparent,#000 23%)!important
+}
+html body #app .roomhead.sl-genre-angled .roomcopy{width:62%!important;max-width:62%!important}
+html body #app .roomhead.sl-genre-angled .roomcopy::before{width:23px;height:2px;margin-bottom:6px;background:#79c9b7}
+html body #app .roomhead.sl-genre-angled .sl-genre-banner-kicker{font-size:9px!important;letter-spacing:.14em!important;color:var(--sl-genre-accent,#79c9b7)!important}
+html body #app .roomhead.sl-genre-angled .roomcopy h1{font-size:clamp(23px,5.5vw,36px)!important;letter-spacing:-.035em!important;margin-bottom:5px!important}
+html body #app .roomhead.sl-genre-angled .roomcopy p{color:#c5d3ce!important;max-width:96%!important;margin:0 0 5px!important}
+html body #app .roomhead.sl-genre-angled .room-actions{gap:0 12px!important;margin:3px 0 0!important}
+html body #app .roomhead.sl-genre-angled .room-actions button{min-height:44px!important;font-size:11px!important;padding:4px 0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+html body #app .roomhead.sl-genre-angled .room-actions button:not(:first-child){color:#b5c5c0!important}
+html body #app .roomhead.sl-genre-angled .room-actions button:focus-visible{outline:2px solid #79c9b7!important;outline-offset:-2px!important}
+html body #app .sl-unified-genre-tabs{border-bottom-color:#b5cbc32a!important}
+html body #app:has(.sl-genre-angled) .sl-genre-editorial{background:#10191b;color:#f3f5ef;min-height:94px;border-bottom:1px solid #79c9b735}
+html body #app:has(.sl-genre-angled) .sl-genre-editorial>div{background:linear-gradient(90deg,color-mix(in srgb,var(--sl-genre-panel,#10191b) 55%,#10191b) 55%,transparent)}
+html body #app:has(.sl-genre-angled) .sl-genre-editorial h2{color:#f3f5ef!important}
+html body #app:has(.sl-genre-angled) .sl-genre-editorial .sl-genre-kicker{color:var(--sl-genre-accent,#79c9b7)}
+@media(max-width:360px){html body #app .roomhead.sl-genre-angled{padding:12px 10px!important;min-height:144px!important}html body #app .roomhead.sl-genre-angled .roomcopy{width:66%!important;max-width:66%!important}}
+@media(min-width:700px){html body #app .roomhead.sl-genre-angled{padding:20px 24px!important}}
