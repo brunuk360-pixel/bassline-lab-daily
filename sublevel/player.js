@@ -29,7 +29,7 @@ const records=(data?.items||[]).map(([id,title,artist,date,genre,tag,url])=>({id
 const byId=id=>records.find(r=>r.id===id);
 const make=(tag,cls,txt)=>{const n=doc.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n};
 function button(txt,fn,cls="sl-p-button"){const b=make("button",cls,txt);b.type="button";b.addEventListener("click",fn);return b}
-function source(r){return embeds[r.id]||fromURL(r.embedUrl)||fromURL(r.url)}
+function source(r){const reviewed=embeds[r.id]||fromURL(r.embedUrl);if(reviewed)return reviewed;const direct=fromURL(r.url);return direct?.kind==="album"||direct?.kind==="playlist"?null:direct}
 function available(r){return !!frame(source(r))}
 let items=[],index=-1,panel,host,title,meta,previous,next,original,queueList,queueDetails,notice,compactButton,playableButton,activeID=null,playableOnly=false,compact=false;
 const key="sublevel.player.queue.v1";
