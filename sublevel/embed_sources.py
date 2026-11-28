@@ -51,5 +51,8 @@ def resolve_embeds(data):
     # Reviewed official video recording, exact release identity.
     if any(r[0]=="voodoo-pendulum" for r in data["items"]):
         entries["voodoo-pendulum"]={"provider":"youtube","id":"ZYCm2cUjU7Y","source":"https://www.youtube.com/watch?v=ZYCm2cUjU7Y"}
+    for key,id in {"allnight":"3FToEEIBUkUpZvnYuemi4h","backbone":"3HrHhTWonBqF4mDasi8xvC","baddadan":"2ZWmmrWUgDBcPSLihBMvhg"}.items():
+        if any(r[0]==key for r in data["items"]):
+            entries[key]={"provider":"spotify","kind":"track","id":id,"source":"https://open.spotify.com/track/"+id}
     print("Official embed identities resolved:",len(entries),"of",len(data["items"]),flush=True)
     return entries
