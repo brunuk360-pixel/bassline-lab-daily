@@ -651,14 +651,14 @@
       "Xelima's release spans electro, breakbeat and minimal techno tags. Listen for rhythmic contrasts."
     ],
     [
-      "edan-uncommon",
-      "UNCOMMON",
-      "EDAN EVERYWHERE",
+      "zinc-motive-extended",
+      "Motive (Extended Mix)",
+      "DJ Zinc",
       "2026-11-27",
-      "Deep house / tech house",
+      "UK garage / bass",
       "New release",
-      "https://naturalrhythm.bandcamp.com/album/uncommon-2",
-      "Natural Rhythm's release listing connects experimental electronics with deep and tech house. Source listed the scheduled release date; confirm streaming availability on the release page."
+      "https://djzinc.bandcamp.com/track/motive",
+      "Zinc identifies this Bandcamp version as the extended mix; streaming platforms carry the radio edit. Keep the two versions distinct."
     ],
     [
       "siwotha-fall",
@@ -691,14 +691,14 @@
       "A multi-artist sampler bringing together electronic body music, industrial and electro. Treat this as a compilation, not a single recording."
     ],
     [
-      "damisfitz",
-      "DaMisfitz",
-      "BlabberMouf, Merlin Alexander",
+      "physics-invisible-prvail",
+      "Invisible Line (PRVAIL Remix)",
+      "Physics",
       "2026-11-27",
-      "Hip hop",
-      "New release",
-      "https://besser-samstag.bandcamp.com/album/damisfitz",
-      "The label lists this collaboration for 27 November. Check the artist page for the full release and available tracks."
+      "Liquid / techstep drum & bass",
+      "Remix",
+      "https://msrdnb.bandcamp.com/track/physics-invisible-line-prvail-remix",
+      "Midnight Sun Recordings describes this as a rework of Physics's earlier 2026 track. Compare the original and remix for their different approaches to atmosphere and rhythm."
     ]
   ],
   "profiles": [
@@ -1143,20 +1143,20 @@
     ]
   ],
   "editorialFeature": {
-    "title": "Friday releases: beyond the bassline",
+    "title": "Friday releases: from bass to the dancefloor",
     "date": "2026-11-28",
-    "intro": "A Saturday catch-up on Friday's underground releases, from house and hypnotic techno to electro, industrial and hip hop. Listening notes are based on published release listings, not audio measurements.",
+    "intro": "A Saturday catch-up on Friday's underground releases, spanning Zinc's extended garage mix, drum & bass, hypnotic techno, house, electro and industrial. Listening prompts draw on published release listings, not audio measurements.",
     "ids": [
       "dusky-bindweed",
       "onho-entropic",
       "pursefurst-pimp",
       "kenlai-eclipse",
       "anteac-lights",
-      "edan-uncommon",
+      "zinc-motive-extended",
       "siwotha-fall",
       "hedust-ketacid",
       "mqrot-sampler",
-      "damisfitz"
+      "physics-invisible-prvail"
     ]
   },
   "reviewedEmbeds": {
