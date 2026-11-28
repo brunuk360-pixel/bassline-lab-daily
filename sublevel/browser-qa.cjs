@@ -68,12 +68,19 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-row",x=>x.length),expected.count);
  assert.equal(await overflow(),false);
  });
- await check("Drum & Bass room chart",async()=>{
+ await check("Genre room Top 10 is a native tab beside Discover 10",async()=>{
  await nav("Today");await page.waitForSelector("#app .night-home");await nav("Genres");
- const clicked=await page.evaluate(()=>{const b=[...document.querySelectorAll("#app button")].find(b=>!b.closest(".sl-chart-directory")&&/drum\s*(?:&|and)\s*bass/i.test(b.textContent)&&/discover/i.test(b.textContent));if(!b)return false;b.click();return true});assert.ok(clicked,"Could not locate D&B genre card after fresh navigation");
- await page.waitForSelector(".sl-chart-room");await page.click(".sl-chart-room summary");await settle();
- assert.equal(await page.$$eval(".sl-chart-room .sl-chart-row",x=>x.length),10);
- assert.equal(await overflow(),false);
+ const clicked=await page.evaluate(()=>{const b=[...document.querySelectorAll("#app button")].find(b=>!b.closest(".sl-chart-directory")&&/drum\s*(?:&|and)\s*bass/i.test(b.textContent)&&/discover/i.test(b.textContent));if(!b)return false;b.click();return true});assert.ok(clicked,"Could not locate D&B genre card");
+ await page.waitForSelector("#app .roomhead");await settle();
+ const inspect=()=>page.evaluate(()=>{const tabs=document.querySelector("#app .tabs"),buttons=Array.from(tabs?.querySelectorAll("button")||[]);const top=buttons.find(b=>b.textContent.trim()==="Top 10"),discover=buttons.find(b=>/^discover\s*10$/i.test(b.textContent.trim()));return {labels:buttons.map(b=>({text:b.textContent.trim(),class:b.className})),adjacent:!!top&&!!discover&&discover.nextElementSibling===top,visibleTracks:Array.from(document.querySelectorAll("#app .track")).filter(x=>x.getClientRects().length).length,chart:!!document.querySelector("#app .sl-chart-inline")}});
+ const clickTab=async name=>{assert.ok(await page.evaluate(name=>{const b=Array.from(document.querySelectorAll("#app .tabs button")).find(b=>b.textContent.trim().toLowerCase()===name.toLowerCase());if(!b)return false;b.click();return true},name),"Missing native tab "+name);await settle()};
+ let state=await inspect();console.log("SUBLEVEL genre tab diagnostic: "+JSON.stringify(state));assert.ok(state.adjacent,"Top 10 must be immediately beside Discover 10");
+ await clickTab("Discover 10");state=await inspect();assert.ok(!state.chart,"Discover tab must not show the chart");assert.ok(state.visibleTracks>0,"Discover 10 tracks visible");
+ await clickTab("Top 10");await page.waitForSelector(".sl-chart-inline .sl-chart-row");state=await inspect();assert.ok(state.chart&&state.adjacent);assert.equal(state.visibleTracks,0,"No legacy archive shown under current chart");
+ const actual=await page.evaluate(()=>Array.from(document.querySelectorAll(".sl-chart-inline .sl-chart-row strong"),x=>x.textContent));const expected=await page.evaluate(()=>window.__slCharts.charts.find(c=>c.id==="dnb").rows.map(r=>r.title));assert.deepEqual(actual,expected);assert.equal(await overflow(),false);
+ await clickTab("Discover 10");state=await inspect();assert.ok(!state.chart&&state.visibleTracks>0,"Switching back restores Discover 10");
+ await clickTab("Top 10");await page.waitForSelector(".sl-chart-inline .sl-chart-row");assert.equal(await page.evaluate(()=>document.querySelectorAll(".sl-chart-inline").length),1);assert.equal(await overflow(),false);
+ await nav("Today");assert.equal(await page.evaluate(()=>document.getElementById("app").hasAttribute("data-sl-chart-mode")),false,"No chart state leaks to home");
  });
  await check("Persistent official player",async()=>{
  await nav("Today");await page.waitForSelector(".sl-d-entry");
