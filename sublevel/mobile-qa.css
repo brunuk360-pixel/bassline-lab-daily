@@ -49,3 +49,20 @@ html body #app .sl-chart-panel>.sl-chart-link{max-width:100%}
 #app .sl-chart-room .sl-chart-rank{flex-shrink:0}
 #app .sl-chart-room .sl-chart-copy{min-width:0}
 }
+
+
+/* Native genre tabs: current ranking replaces only the legacy track list. */
+html body #app[data-sl-chart-mode="top"] :is(.tracks,.track){display:none!important}
+html body #app .sl-chart-room.sl-chart-inline{margin:0;padding:0;background:transparent;border:0}
+html body #app .sl-chart-inline>.sl-chart-panel{margin:0;padding:10px 0 14px;border:0;background:transparent}
+html body #app .sl-chart-inline .sl-chart-kicker{display:none}
+html body #app .sl-chart-inline .sl-chart-panel h2{font-size:17px!important;letter-spacing:-.025em;margin:5px 0}
+html body #app .sl-chart-inline .sl-chart-status{font-size:11px!important;line-height:1.4;color:var(--sl-teal,#79c9b7)}
+html body #app .sl-chart-inline .sl-chart-list{margin:12px 0 8px}
+html body #app .sl-chart-inline .sl-chart-row{gap:9px;padding:11px 0;border-bottom:1px solid var(--sl-rule,#b5cbc32a);background:transparent}
+html body #app .sl-chart-inline .sl-chart-copy strong{font-size:14px;font-weight:700;color:var(--sl-ink,#f3f5ef)}
+html body #app .sl-chart-inline .sl-chart-copy small{font-size:12px;color:var(--sl-muted,#b5c5c0)}
+html body #app .sl-chart-inline .sl-chart-rank{min-width:23px;font-size:13px}
+html body #app .sl-chart-inline .sl-chart-cover{width:52px;height:52px;flex-shrink:0;object-fit:contain}
+html body #app .sl-chart-inline .sl-chart-link{min-height:44px;border-radius:0}
+@media(max-width:420px){html body #app .sl-chart-inline .sl-chart-row{flex-wrap:wrap;gap:6px}html body #app .sl-chart-inline .sl-chart-copy{flex:1 1 100px}html body #app .sl-chart-inline .sl-chart-row .sl-chart-link{max-width:90px}}
