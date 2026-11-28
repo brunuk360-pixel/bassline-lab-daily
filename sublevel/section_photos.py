@@ -35,7 +35,9 @@ def install_photos(publish):
         except Exception as e:
             image=url
             print("Section photo remote fallback:",name,type(e).__name__)
-        if selector is None:\n            return ""\n        # The original embedded artwork remains the second layer if the new image fails.
+        if selector is None:
+            return ""
+        # The original embedded artwork remains the second layer if the new image fails.
         return f'html body #app .night-home {selector}::before {{background-image:url("{image}"),var(--night-photo)!important;background-size:cover,cover!important;background-repeat:no-repeat,no-repeat!important;background-position:center,center!important;filter:brightness(1.10) saturate(.90) contrast(1.03)!important;opacity:1!important;}}'
     with ThreadPoolExecutor(max_workers=5) as pool:
         css="\n".join(pool.map(fetch,PHOTOS+GENRE_PHOTOS))
