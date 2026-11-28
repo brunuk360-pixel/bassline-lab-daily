@@ -68,6 +68,11 @@ const server=http.createServer((req,res)=>{
  if(edition)assert.deepEqual(edition.firstList,edition.expected,"today's editorial release order");
  const shelf=await page.evaluate(()=>{const rows=[...document.querySelectorAll(".sl-d-daily-shelf>.sl-d-daily-row")];return {count:rows.length,unique:new Set(rows.map(n=>n.querySelector(".sl-d-daily-detail").getAttribute("aria-label"))).size,archiveInline:!!document.querySelector(".sl-d-catalogue"),visibleExtras:[...document.querySelectorAll(".sl-d-daily-more")].every(d=>!d.open),controls:rows.every(n=>[...n.querySelectorAll(".sl-d-daily-controls button")].every(b=>b.getBoundingClientRect().height>=44)),art:rows.every(n=>{const i=n.querySelector(".sl-d-small-cover");return !i||Object.values(window.__slDiscovery.artwork).includes(i.getAttribute("src"))})}});
  assert.equal(shelf.count,10);assert.equal(shelf.unique,10);assert.ok(!shelf.archiveInline&&shelf.visibleExtras&&shelf.controls&&shelf.art,"Compact verified daily shelf without expanded archive or guide");
+ const stories=await page.evaluate(()=>{const rows=[...document.querySelectorAll(".sl-d-daily-row")];return rows.map(row=>({teaser:row.querySelector(".sl-d-dig-teaser")?.textContent.trim(),closed:row.querySelector(".sl-d-dig-story-toggle")?.open===false,labels:[...row.querySelectorAll(".sl-d-dig-story-block>.sl-d-kicker")].map(n=>n.textContent),sources:[...row.querySelectorAll(".sl-d-dig-source")].every(a=>a.href.startsWith("https://"))}))});
+ assert.ok(stories.every(s=>s.teaser&&s.closed&&s.labels.length>=2&&s.sources),"Every Daily Dig pick has compact editorial context and sourced expandable notes");
+ await clickStable(".sl-d-daily-row:first-child .sl-d-dig-story-toggle summary");assert.equal(await page.$eval(".sl-d-dig-story-toggle",n=>n.open),true);
+ await clickStable(".sl-d-daily-row:first-child .sl-d-dig-story-toggle summary");assert.equal(await page.$eval(".sl-d-dig-story-toggle",n=>n.open),false);
+
  for(const width of [320,390,430]){await page.setViewport({width,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await settle();assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false,width+" daily shelf overflow");}
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await settle();
 
