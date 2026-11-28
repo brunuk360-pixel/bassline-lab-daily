@@ -1397,6 +1397,56 @@
       "source": "https://open.spotify.com/album/4L32TId0gPtwdghxqtkyMY",
       "checked": "2026-11-28",
       "evidence": "https://drumandbassuk.com/artist/source-direct/dangerous-curves-11536"
+    },
+    "edlan": {
+      "title": "Know It All / Stand Alone",
+      "artist": "Edlan & TENEM",
+      "provider": "apple",
+      "kind": "album",
+      "id": "6827650043",
+      "source": "https://music.apple.com/gb/album/know-it-all-stand-alone-single/6827650043",
+      "evidence": "https://music.apple.com/gb/album/know-it-all-stand-alone-single/6827650043?uo=4",
+      "checked": "2026-11-28"
+    },
+    "posij": {
+      "title": "Chrysalis",
+      "artist": "Posij",
+      "provider": "apple",
+      "kind": "album",
+      "id": "1489067247",
+      "source": "https://music.apple.com/gb/album/chrysalis-ep/1489067247",
+      "evidence": "https://music.apple.com/gb/album/chrysalis-ep/1489067247?uo=4",
+      "checked": "2026-11-28"
+    },
+    "buttermere-touch": {
+      "title": "Touch Typing",
+      "artist": "Buttermere",
+      "provider": "apple",
+      "kind": "album",
+      "id": "6826221672",
+      "source": "https://music.apple.com/gb/album/touch-typing-ep/6826221672",
+      "evidence": "https://music.apple.com/gb/album/touch-typing-ep/6826221672?uo=4",
+      "checked": "2026-11-28"
+    },
+    "dusky-bindweed": {
+      "title": "Bindweed (Limonata Mix)",
+      "artist": "Dusky",
+      "provider": "apple",
+      "kind": "album",
+      "id": "6818548338",
+      "source": "https://music.apple.com/gb/album/bindweed-limonata-mix/6818548338",
+      "evidence": "https://music.apple.com/gb/album/bindweed-limonata-mix/6818548338?uo=4",
+      "checked": "2026-11-28"
+    },
+    "pursefurst-pimp": {
+      "title": "PIMP",
+      "artist": "PurseFurst",
+      "provider": "apple",
+      "kind": "album",
+      "id": "6820636776",
+      "source": "https://music.apple.com/gb/album/pimp-ep/6820636776",
+      "evidence": "https://music.apple.com/gb/album/pimp-ep/6820636776?uo=4",
+      "checked": "2026-11-28"
     }
   },
   "reviewedArtwork": {
