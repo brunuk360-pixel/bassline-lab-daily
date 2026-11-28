@@ -1806,6 +1806,51 @@
       "source": "https://music.apple.com/gb/album/nach-dem-fall-single/6809747193?uo=4",
       "checked": "2026-11-28",
       "evidence": "Exact release artwork validated in 28 November build."
+    },
+    "breathe": {
+      "title": "Breathe",
+      "artist": "The Prodigy",
+      "releaseUrl": "https://theprodigy.info/discography/official/breathe/",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/35/45/9a/35459ad9-effb-70f1-3361-ab1cc3d05236/634904012182.png/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/breathe/1450123945?i=1450124067&uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact recording or release metadata match in verified production build"
+    },
+    "voodoo": {
+      "title": "Voodoo People",
+      "artist": "The Prodigy",
+      "releaseUrl": "https://theprodigy.info/discography/official/voodoo-people/",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b9/f5/97/b9f59771-77ae-6f8d-0a1f-e16fdc2fc1ee/634904011482.png/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/voodoo-people/1450123784?i=1450123789&uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact recording or release metadata match in verified production build"
+    },
+    "veryape": {
+      "title": "Very Ape",
+      "artist": "Nirvana",
+      "releaseUrl": "https://open.spotify.com/search/Nirvana%20Very%20Ape",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/e3/20/03/e32003a4-99bc-1c70-40ba-001882f35dba/00602537526840.rgb.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/very-ape/1440858699?i=1440859386&uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact recording or release metadata match in verified production build"
+    },
+    "nu-album": {
+      "title": "What I've Always Waited For",
+      "artist": "Nu:Logic",
+      "releaseUrl": "https://www.hospitalrecords.com/products/nulogic-what-ive-always-waited-for",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/94/64/16/94641687-64e9-9b45-8574-b401b8c7afb9/NHS231-Digital-Packshot-2400px.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/what-ive-always-waited-for/608361798?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact recording or release metadata match in verified production build"
+    },
+    "nu-remix": {
+      "title": "Remixes I've Always Waited For",
+      "artist": "Nu:Logic",
+      "releaseUrl": "https://www.hospitalrecords.com/products/nulogic-remixes-ive-always-waited-for",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/54/37/56/54375648-75ff-9a7c-77ce-643aff8dfe3e/cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/remixes-ive-always-waited-for-ep/1677313109?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact recording or release metadata match in verified production build"
     }
   },
   "releaseFacts": {
