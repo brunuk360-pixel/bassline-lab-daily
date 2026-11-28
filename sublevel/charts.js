@@ -120,7 +120,7 @@ function recordRotation(){
  const original=app.querySelector(".night-home .ed-rotation .ed-record:not(.sl-rod-hit)");
  if(!original||original.parentElement.querySelector(".sl-rod-controls"))return;
  const pool=recordHitPool();if(!pool.length)return;
- const wrap=make("div","sl-rod-controls"),shuffle=make("button","sl-rod-shuffle","⤨ Random hit"),restore=make("button","sl-rod-restore","↶ Today's record");
+ const feature=make("div","sl-rod-feature"),wrap=make("div","sl-rod-controls"),shuffle=make("button","sl-rod-shuffle","⤨ Random"),restore=make("button","sl-rod-restore","↶ Today");
  shuffle.type=restore.type="button";restore.hidden=true;
  shuffle.setAttribute("aria-label","Choose another top ten chart hit");
  const output=make("section","sl-rod-output");output.setAttribute("aria-live","polite");output.hidden=true;
@@ -129,10 +129,10 @@ function recordRotation(){
   card.dataset.recordKey=hit.key;card.dataset.chartId=chart.id;card.dataset.rank=String(rank);
   const img=make("img","sl-rod-cover");img.src=track.art;img.alt=track.title+" release artwork";img.addEventListener("error",()=>img.remove(),{once:true});
   const copy=make("div","sl-rod-copy");copy.append(make("span","sl-rod-kicker","RECORD OF THE DAY / RANDOM HIT"),make("strong",null,track.title),make("small",null,track.artist),make("small","sl-rod-rank","#"+rank+" · "+chart.genre));
-  card.append(img,copy);
   const actions=make("div","sl-rod-actions");actions.append(window.SUBLEVELPlayer.action(track,[track]),link("Chart source ↗",chart.url));
   const meta=make("p","sl-rod-date",chart.source+" · "+(chart.from?chart.from+" to "+chart.through:"Checked "+chart.checked));
-  output.replaceChildren(card,actions,meta);original.classList.add("sl-rod-hidden");output.hidden=false;restore.hidden=false
+  copy.append(actions,meta);card.append(img,copy);
+  output.replaceChildren(card);original.classList.add("sl-rod-hidden");output.hidden=false;restore.hidden=false
  }
  shuffle.addEventListener("click",()=>{
   const originalText=norm(original.textContent);
@@ -145,7 +145,7 @@ function recordRotation(){
   recordSeen.add(hit.key);recordLast=hit.key;draw(hit)
  });
  restore.addEventListener("click",()=>{output.hidden=true;output.replaceChildren();original.classList.remove("sl-rod-hidden");restore.hidden=true});
- wrap.append(shuffle,restore);original.after(wrap,output)
+ wrap.append(shuffle,restore);original.before(feature);feature.append(original,output,wrap)
 }
 function mount(){
  recordRotation();
