@@ -299,13 +299,26 @@ fill_embed_covers(discovery,embeds)
 discovery_json=json.dumps(discovery,ensure_ascii=True).replace("<",r"\u003c")
 embed_json=json.dumps(embeds,ensure_ascii=True).replace("<",r"\u003c")
 player_js=(root/"player.js").read_text(encoding="utf-8")
+metrics_js=(root/"track-metrics.js").read_text(encoding="utf-8")
+metrics_seen=set()
+for row in discovery.get("trackMetrics",[]):
+    identity=(row["title"].strip().casefold(),row["artist"].strip().casefold())
+    assert all(identity) and identity not in metrics_seen
+    metrics_seen.add(identity)
+    assert row["bpm"] is None or isinstance(row["bpm"],(int,float)) and 20<=row["bpm"]<=300
+    assert row["key"] is None or re.fullmatch(r"[A-G][♯♭#b]? (?:major|minor)",row["key"])
+    assert row["source"].startswith("https://") and row["method"] in ("catalogue estimate","measured")
+    assert date.fromisoformat(row["checked"])
+print("Reviewed BPM/key records:",len(metrics_seen))
+
 player_css=(root/"player.css").read_text(encoding="utf-8")
 if shutil.which("node"):
     subprocess.run(["node","--check",str(root/"player.js")],check=True)
+    subprocess.run(["node","--check",str(root/"track-metrics.js")],check=True)
     subprocess.run(["node",str(root/"player-test.cjs")],check=True)
 data,n=re.subn(br"</head\s*>",lambda m:('<style id="sublevel-player">'+player_css+'</style>').encode("utf-8")+m.group(0),data,count=1,flags=re.I)
 assert n==1
-discovery_script=('<script>window.__slDiscovery='+discovery_json+';window.__slEmbeds='+embed_json+';</script><script>'+player_js+'</script><script>'+listening_js+'</script><script>'+discovery_js+'</script>').encode("utf-8")
+discovery_script=('<script>window.__slDiscovery='+discovery_json+';window.__slEmbeds='+embed_json+';</script><script>'+metrics_js+'</script><script>'+player_js+'</script><script>'+listening_js+'</script><script>'+discovery_js+'</script>').encode("utf-8")
 data,n=re.subn(br"</body\s*>",lambda m:discovery_script+m.group(0),data,count=1,flags=re.I)
 assert n==1
 print("Discovery catalogue validated:",len(ids),"entries;",len(discovery["profiles"]),"artist profiles.")
