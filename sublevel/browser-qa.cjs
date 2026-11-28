@@ -36,6 +36,20 @@ const server=http.createServer((req,res)=>{
  assert.ok(await page.$(".sl-d-release-hero h1"));assert.equal(await page.evaluate(()=>document.querySelectorAll(".sl-d-release-meta dt").length),3);assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
  await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
  });
+ await check("Discovery room theme and on-screen navigation",async()=>{
+ await nav("Today");await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open] .sl-d-editorial-head");
+ const go=async label=>{assert.ok(await page.evaluate(label=>{const b=[...document.querySelectorAll(".sl-d-screen-nav button")].find(n=>n.textContent.includes(label));if(!b)return false;b.click();return true},label));await settle()};
+ await page.waitForFunction(()=>document.querySelector(".sl-d-editorial-photo")?.naturalWidth>0);
+ assert.equal(await page.$eval(".sl-d-editorial-head",n=>getComputedStyle(n).backgroundColor),"rgb(236, 236, 227)");
+ await go("Explore");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"hub");
+ await go("Library");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"journey");
+ await page.click(".sl-d-back");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"hub");
+ await page.setViewport({width:320,height:700,isMobile:true,hasTouch:true,deviceScaleFactor:1});await settle();
+ assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.scrollWidth>n.clientWidth+2),false);
+ const controls=await page.$$eval(".sl-d-screen-nav button",nodes=>nodes.map(n=>n.getBoundingClientRect().height));assert.ok(controls.every(h=>h>=44));
+ await go("Genres");await page.waitForSelector(".sl-chart-directory");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.open),false);
+ await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await nav("Today");await page.click(".sl-d-entry");await go("Home");await page.waitForSelector("#app .night-home");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.open),false);
+ });
  await check("Genre directory and chart selector",async()=>{
  await nav("Genres");await page.waitForSelector(".sl-chart-directory");
  const labels=await page.evaluate(()=>[...document.querySelectorAll("#app button")].filter(b=>!b.closest(".sl-chart-directory")&&b.getClientRects().length).map(b=>b.innerText.trim().replace(/\s+/g," ").slice(0,85)).filter(Boolean).slice(0,50));
