@@ -50,6 +50,16 @@ const server=http.createServer((req,res)=>{
  await go("Genres");await page.waitForSelector(".sl-chart-directory");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.open),false);
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await nav("Today");await page.click(".sl-d-entry");await go("Home");await page.waitForSelector("#app .night-home");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.open),false);
  });
+ await check("Artwork-linked archive and listening queue",async()=>{
+ await nav("Today");await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
+ await page.evaluate(()=>[...document.querySelectorAll(".sl-d-screen-nav button")].find(b=>b.textContent==="Explore").click());await settle();
+ await page.evaluate(()=>[...document.querySelectorAll(".sl-d-tile")].find(b=>b.textContent.includes("On This Day")).click());await page.waitForSelector(".sl-d-history-event");
+ const art=await page.evaluate(()=>[...document.querySelectorAll(".sl-d-history-event .sl-d-small-cover")].every(img=>img.alt.endsWith("release artwork")&&Object.values(window.__slDiscovery.artwork).includes(img.getAttribute("src"))));
+ assert.ok(art,"archive uses only verified release art");
+ assert.ok(await page.$(".sl-d-history-event .sl-d-history-copy button"));
+ await page.click(".sl-d-back");await page.waitForSelector(".sl-d-hub");await page.click(".sl-d-close");
+ await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
+ });
  await check("Genre directory and chart selector",async()=>{
  await nav("Genres");await page.waitForSelector(".sl-chart-directory");
  const labels=await page.evaluate(()=>[...document.querySelectorAll("#app button")].filter(b=>!b.closest(".sl-chart-directory")&&b.getClientRects().length).map(b=>b.innerText.trim().replace(/\s+/g," ").slice(0,85)).filter(Boolean).slice(0,50));
