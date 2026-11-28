@@ -59,6 +59,16 @@ const server=http.createServer((req,res)=>{
  await page.click('.sl-player button[aria-label="Compact player details"]');assert.equal(await page.evaluate(()=>window.__qaPlayerFrame===document.querySelector(".sl-player iframe")),true,"compact preserves iframe");await page.click('.sl-player button[aria-label="Expand player details"]');await page.click(".sl-p-queue summary");await page.click(".sl-p-options button:nth-child(2)");assert.equal(await page.$eval(".sl-p-options button:nth-child(2)",b=>b.getAttribute("aria-pressed")),"true");await page.click(".sl-p-options button:first-child");await page.click(".sl-p-queue summary");await page.click('.sl-player button[aria-label="Next selection"]');assert.notEqual(await page.$eval(".sl-player iframe",f=>f.src),src);
  await page.click('.sl-player button[aria-label="Stop and close player"]');assert.equal(await page.$(".sl-player iframe"),null);
  });
+ await check("Listen here catalogue and real play button",async()=>{
+ await nav("Today");await page.waitForSelector(".sl-d-playable-entry");await page.click(".sl-d-playable-entry");await page.waitForSelector('.sl-discovery-dialog[data-room="playable"][open]');
+ const count=await page.$$eval(".sl-d-results .sl-p-launch",x=>x.length);assert.ok(count>=17,"expected expanded playable catalogue");
+ assert.equal(await page.$$eval(".sl-d-results .sl-p-source",x=>x.length),0,"only confirmed embed sources");
+ assert.equal(await page.$(".sl-player iframe"),null,"no provider before choosing track");
+ await page.click(".sl-d-results .sl-p-launch");await page.waitForSelector(".sl-player iframe");
+ const src=await page.$eval(".sl-player iframe",f=>f.src);assert.ok(["open.spotify.com","www.youtube-nocookie.com","w.soundcloud.com","bandcamp.com"].includes(new URL(src).hostname));
+ await page.click('.sl-player button[aria-label="Stop and close player"]');await page.click(".sl-d-close");
+ assert.equal(await page.$(".sl-player iframe"),null);
+ });
  await check("Saved library tabs",async()=>{await nav("Saved");await page.waitForSelector(".sl-library-entry");await page.click(".sl-library-entry button");await page.waitForSelector(".sl-library-tabs");assert.equal(await page.$$eval(".sl-library-tab",x=>x.length),6);await page.evaluate(()=>[...document.querySelectorAll(".sl-library-tab")].find(b=>b.textContent==="Profile & data").click());assert.ok(await page.$(".sl-library-account"));await page.click(".sl-d-close")});
  await check("Unsigned link",async()=>{await nav("Today");await page.waitForSelector(".sl-u-entry");assert.equal(await page.$eval(".sl-u-primary",a=>a.href),"https://sublevel-unsigned-xvpf.onrender.com/")});
  for(const width of [320,360,430,1280])await check(width+"px homepage layout",async()=>{await page.setViewport({width,height:844,isMobile:width<700,hasTouch:width<700,deviceScaleFactor:1});await page.reload({waitUntil:"domcontentloaded"});await page.waitForSelector(".sl-home-index");assert.equal(await overflow(),false)});
