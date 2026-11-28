@@ -11,6 +11,12 @@ PHOTOS=[
  ("afterhours","1788767722194-b09c018f0be9","Ramin Talebi","https://unsplash.com/photos/2_KldkmLkzQ",".stream-moods .night-tile:nth-child(2)",640),
  ("late-drive","1774876289606-81a8bc32fd72","MChe Lee","https://unsplash.com/photos/DHwy7bYDmhk",".stream-moods .night-tile:nth-child(3)",640),
 ]
+# Scene photography is separate from release artwork and homepage photos.
+GENRE_PHOTOS=[
+ ("scene-rock","1693813990038-e8fb2e49e78b","Adam Gritco","https://unsplash.com/photos/A33Dif_TpII",None,900),
+ ("scene-hiphop","1770155497036-aadb6cae3de4","David Vilches","https://unsplash.com/photos/iSWb2dnkEW4",None,900),
+ ("scene-indie","1760160741895-eade1f12d01e","Brooke Balentine","https://unsplash.com/photos/Wx66pPYvdjk",None,900),
+]
 def install_photos(publish):
     directory=Path(publish)/"section-art"
     directory.mkdir(parents=True,exist_ok=True)
@@ -29,12 +35,12 @@ def install_photos(publish):
         except Exception as e:
             image=url
             print("Section photo remote fallback:",name,type(e).__name__)
-        # The original embedded artwork remains the second layer if the new image fails.
+        if selector is None:\n            return ""\n        # The original embedded artwork remains the second layer if the new image fails.
         return f'html body #app .night-home {selector}::before {{background-image:url("{image}"),var(--night-photo)!important;background-size:cover,cover!important;background-repeat:no-repeat,no-repeat!important;background-position:center,center!important;filter:brightness(1.10) saturate(.90) contrast(1.03)!important;opacity:1!important;}}'
     with ThreadPoolExecutor(max_workers=5) as pool:
-        css="\n".join(pool.map(fetch,PHOTOS))
+        css="\n".join(pool.map(fetch,PHOTOS+GENRE_PHOTOS))
     credits='<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SUBLEVEL Photography Credits</title><body style="background:#080e10;color:#edf2ee;font:16px system-ui;padding:24px;line-height:1.7"><h1>Photography credits</h1><a style="color:#79c9b7" href="./">Back to SUBLEVEL</a><ul>'
-    for name,photo,credit,source,selector,width in PHOTOS:
+    for name,photo,credit,source,selector,width in PHOTOS+GENRE_PHOTOS:
         credits+=f'<li>{escape(name.replace("-"," ").title())}: <a style="color:#79c9b7" href="{escape(source)}">{escape(credit)} on Unsplash</a> — Unsplash License</li>'
     (Path(publish)/"photo-credits.html").write_text(credits+"</ul></body></html>",encoding="utf-8")
     css+="""
