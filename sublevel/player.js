@@ -29,12 +29,12 @@ const records=(data?.items||[]).map(([id,title,artist,date,genre,tag,url])=>({id
 const byId=id=>records.find(r=>r.id===id);
 const make=(tag,cls,txt)=>{const n=doc.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n};
 function button(txt,fn,cls="sl-p-button"){const b=make("button",cls,txt);b.type="button";b.addEventListener("click",fn);return b}
-function source(r){return embeds[r.id]||fromURL(r.embedUrl||r.url)}
+function source(r){return embeds[r.id]||fromURL(r.embedUrl)||fromURL(r.url)}
 function available(r){return !!frame(source(r))}
 let items=[],index=-1,panel,host,title,meta,previous,next,original,queueList,queueDetails,notice,compactButton,playableButton,activeID=null,playableOnly=false;
 const key="sublevel.player.queue.v1";
-function persist(){try{localStorage.setItem(key,JSON.stringify({items,index}))}catch{}}
-try{const saved=JSON.parse(localStorage.getItem(key)||"null");items=clean(saved?.items).map(r=>byId(r.id)||r);index=items.length?Math.max(0,Math.min(items.length-1,Number.isInteger(saved?.index)?saved.index:0)):-1}catch{}
+function persist(){try{localStorage.setItem(key,JSON.stringify({items,index,skipExternal,compact}))}catch{}}
+try{const saved=JSON.parse(localStorage.getItem(key)||"null");items=clean(saved?.items).map(r=>byId(r.id)||r);index=items.length?Math.max(0,Math.min(items.length-1,Number.isInteger(saved?.index)?saved.index:0)):-1;skipExternal=saved?.skipExternal===true;compact=saved?.compact===true}catch{}
 function build(){
  if(panel)return;
  panel=make("section","sl-player");panel.hidden=true;panel.setAttribute("aria-label","SUBLEVEL music player");
@@ -47,9 +47,13 @@ function build(){
  host=make("div","sl-p-frame");notice=make("p","sl-p-notice");notice.setAttribute("role","status");
  original=make("a","sl-p-link","Open original release ↗");original.target="_blank";original.rel="noopener noreferrer";
  queueDetails=make("details","sl-p-queue");playableButton=button("Skip unavailable selections: off",()=>{playableOnly=!playableOnly;playableButton.textContent="Skip unavailable selections: "+(playableOnly?"on":"off");playableButton.setAttribute("aria-pressed",String(playableOnly));refreshControls()});playableButton.setAttribute("aria-pressed","false");queueDetails.append(make("summary",null,"Listening queue"),playableButton,queueList=make("div","sl-p-list"));
- panel.append(head,host,notice,original,queueDetails);doc.body.append(panel);
+ options=make("div","sl-p-options");skipControl=button("Skip external-only: off",()=>{skipExternal=!skipExternal;refreshControls();persist()});const shuffle=button("Shuffle upcoming",()=>{for(let i=items.length-1;i>index+1;i--){const j=index+1+Math.floor(Math.random()*(i-index));[items[i],items[j]]=[items[j],items[i]]}redrawQueue();refreshControls();persist()});options.append(shuffle,skipControl);queueDetails.insertBefore(options,queueList);
+ panel.append(head,host,notice,original,queueDetails);doc.body.append(panel);applyCompact();
  if(typeof ResizeObserver==="function")new ResizeObserver(()=>doc.documentElement.style.setProperty("--sl-player-space",panel.hidden?"0px":Math.ceil(panel.getBoundingClientRect().height)+"px")).observe(panel)
 }
+function applyCompact(){panel.classList.toggle("sl-p-compact",compact);compactControl.textContent=compact?"+":"−";compactControl.setAttribute("aria-expanded",String(!compact));if(compact)queueDetails.open=false}
+function destination(d){for(let i=index+d;i>=0&&i<items.length;i+=d){if(!skipExternal||available(items[i]))return i}return -1}
+function refreshControls(){previous.disabled=destination(-1)<0;next.disabled=destination(1)<0;skipControl.textContent="Skip external-only: "+(skipExternal?"on":"off");skipControl.setAttribute("aria-pressed",String(skipExternal))}
 function redrawQueue(){queueList.replaceChildren();items.forEach((r,i)=>{const b=button((i+1)+". "+r.title+" — "+r.artist+(available(r)?"":" · external only"),()=>select(i));if(i===index)b.setAttribute("aria-current","true");queueList.append(b)});queueDetails.firstElementChild.textContent="Listening queue · "+items.length+" selections"}
 function adjacent(d){for(let i=index+d;i>=0&&i<items.length;i+=d)if(!playableOnly||available(items[i]))return i;return -1}
 function refreshControls(){previous.disabled=adjacent(-1)<0;next.disabled=adjacent(1)<0}
@@ -59,17 +63,19 @@ function select(i){
  if(activeID!==r.id||!host.firstElementChild){host.replaceChildren();activeID=r.id;
  if(spec){const f=make("iframe","sl-p-embed");f.src=spec.src;f.title=spec.name+" player — "+r.title;f.height=String(spec.height);f.allow="autoplay; encrypted-media; fullscreen; picture-in-picture";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";host.append(f);notice.textContent="Press play in the "+spec.name+" player. Availability and playback length are controlled by the provider."}
  else notice.textContent="No verified embedded source for this selection. Use the original release link or choose the next record."}
- redrawQueue();persist()
+ redrawQueue();refreshControls();persist()
 }
 function play(r,list=[r]){if(!r)return;items=clean(list);if(!items.some(x=>x.id===r.id))items=clean([r,...items]);select(items.findIndex(x=>x.id===r.id))}
 function step(d){const i=adjacent(d);if(i>=0)select(i)}
-function stop(){if(!panel)return;host.replaceChildren();activeID=null;panel.hidden=true;doc.body.classList.remove("sl-player-open");doc.documentElement.style.setProperty("--sl-player-space","0px")}
+function stop(){if(!panel)return;host.replaceChildren();activeID=null,skipExternal=false,compact=false,skipControl,compactControl,options;panel.hidden=true;doc.body.classList.remove("sl-player-open");doc.documentElement.style.setProperty("--sl-player-space","0px")}
 function resume(){if(index>=0)select(index)}
-function action(r,list){return button(available(r)?"▶ Play here":"Listen / source",()=>play(r,list),"sl-d-button sl-p-launch")}
+function action(r,list){if(available(r))return button("▶ Play here",()=>play(r,list),"sl-d-button sl-p-launch");const a=make("a","sl-d-button sl-p-source","Open release ↗");a.href=r.url;a.target="_blank";a.rel="noopener noreferrer";return a}
 function addNext(r){if(!r)return;const current=items[index];if(current?.id===r.id)return;items=clean(items.filter(x=>x.id!==r.id));index=current?items.findIndex(x=>x.id===current.id):-1;items.splice(index+1,0,r);if(index<0)index=0;items=clean(items);if(panel&&!panel.hidden){refreshControls();redrawQueue()}persist()}
-root.SUBLEVELPlayer=Object.freeze({play,action,available,resume,stop,addNext,hasSession:()=>index>=0,updateQueue(list,id){if(!panel||panel.hidden||!items.some(r=>r.id===id)||items.some(r=>r.id.startsWith("chart:")))return;const updated=clean(list);if(!updated.length)return;const current=items[index]?.id;items=updated;index=items.findIndex(r=>r.id===current);if(index<0){stop();index=0}else{refreshControls();meta.textContent=items[index].artist+" · "+(index+1)+"/"+items.length;redrawQueue()}persist()}});
+root.SUBLEVELPlayer=Object.freeze({play,action,available,resume,stop,addNext,hasSession:()=>index>=0,updateQueue(list,id){if(!panel||panel.hidden||!items.some(r=>r.id===id)||items.some(r=>r.id.startsWith("chart:")))return;const updated=clean(list);if(!updated.length)return;const current=items[index]?.id;items=updated;index=items.findIndex(r=>r.id===current);if(index<0){stop();index=0}else{refreshControls();meta.textContent=items[index].artist+" · "+(index+1)+"/"+items.length;redrawQueue();refreshControls()}persist()}});
 function mount(){
  const app=doc.getElementById("app");if(!app)return;
+ const norm=v=>(v||"").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]/gu,"");
+ for(const hero of app.querySelectorAll(".sl-dossier-hero")){if(hero.parentElement.querySelector(".sl-p-dossier"))continue;const t=norm(hero.querySelector("h2")?.textContent),a=norm(hero.querySelector(".sl-dossier-artist")?.textContent);if(!t||!a)continue;const m=records.filter(r=>norm(r.title)===t&&norm(r.artist)===a&&available(r));if(m.length===1){const b=action(m[0],records.filter(available));b.classList.add("sl-p-dossier");hero.after(b)}}
  if(index>=0&&!app.querySelector(".sl-p-resume")&&app.querySelector(".night-home")){const b=button("Resume music player →",resume,"sl-p-resume");app.querySelector(".night-home").prepend(b)}
 }
 let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{pending=false;mount()})}};
