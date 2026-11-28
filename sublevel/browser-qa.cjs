@@ -41,6 +41,18 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-row",rows=>rows.length),10);
  assert.equal(await overflow(),false);
  });
+ await check("Combined Hip Hop and R&B chart playback",async()=>{
+ await page.select(".sl-chart-select","Hip-Hop");await settle();
+ assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-row",x=>x.length),10);
+ assert.match(await page.$eval(".sl-chart-directory h2",x=>x.textContent),/Hip Hop & R&B/);
+ assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-play",x=>x.length),4);
+ await page.click(".sl-chart-directory .sl-chart-play");await page.waitForSelector(".sl-player iframe");
+ assert.match(await page.$eval(".sl-player iframe",f=>f.src),/^https:\/\/open\.spotify\.com\/embed\/track\/5XDOInNwslPcQM8xv2rUkL/);
+ await page.click('.sl-player button[aria-label="Stop and close player"]');
+ await page.select(".sl-chart-select","R&B");await settle();
+ assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-row",x=>x.length),10);
+ assert.equal(await overflow(),false);
+ });
  await check("Drum & Bass room chart",async()=>{
  await nav("Today");await page.waitForSelector("#app .night-home");await nav("Genres");
  const clicked=await page.evaluate(()=>{const b=[...document.querySelectorAll("#app button")].find(b=>!b.closest(".sl-chart-directory")&&/drum\s*(?:&|and)\s*bass/i.test(b.textContent)&&/discover/i.test(b.textContent));if(!b)return false;b.click();return true});assert.ok(clicked,"Could not locate D&B genre card after fresh navigation");
