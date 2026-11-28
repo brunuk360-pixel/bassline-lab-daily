@@ -89,7 +89,10 @@ const server=http.createServer((req,res)=>{
  }
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await settle();
 
- await page.evaluate(()=>[...document.querySelectorAll(".sl-d-explore button")].find(b=>b.textContent.includes("Browse complete catalogue")).click());await page.waitForFunction(()=>document.querySelectorAll(".sl-d-hub .sl-d-tile-image").length===8);
+ // Changing isMobile during viewport emulation can reload the native app. Restore Explore if necessary.
+  if(!await page.evaluate(()=>!!document.querySelector(".sl-d-explore .sl-d-primary")))await nav("Explore");
+  await page.waitForFunction(()=>[...document.querySelectorAll(".sl-d-explore button")].some(b=>b.textContent.includes("Browse complete catalogue")&&b.getClientRects().length));
+  await clickStable(".sl-d-explore .sl-d-primary");await page.waitForFunction(()=>document.querySelectorAll(".sl-d-hub .sl-d-tile-image").length===8);
  const hub=await inspect(".sl-d-tile-image");assert.equal(hub.count,8);assert.equal(hub.unique,8);assert.ok(hub.known);
  const labels=await page.evaluate(()=>{const cards=[...document.querySelectorAll(".sl-d-label-card")],imgs=cards.flatMap(c=>[...c.querySelectorAll("img")]);return {count:cards.length,art:imgs.length,unique:new Set(imgs.map(i=>i.src)).size,expected:window.__slDiscovery.labelCatalogue.length,valid:imgs.every(i=>Object.values(window.__slDiscovery.artwork).includes(i.getAttribute("src")))}});
  assert.equal(labels.count,labels.expected);assert.ok(labels.art>0&&labels.valid&&labels.unique===labels.art);
