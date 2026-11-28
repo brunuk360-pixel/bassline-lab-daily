@@ -70,4 +70,14 @@ class CoverManifestTests(unittest.TestCase):
         for url in ("http://i.scdn.co/image/abc","https://evilcoverartarchive.org/a","https://i.scdn.co.evil.test/a","https://bad@i.scdn.co/image/abc"):
             self.assertFalse(trusted_cover_url(url))
         self.assertTrue(trusted_cover_url("https://i.scdn.co/image/abc"))
+from discovery_assets import exact_store_title
+class StoreTitleTests(unittest.TestCase):
+    def test_exact_and_format(self):
+        self.assertTrue(exact_store_title("IONIO EP","IONIO EP","album"))
+        self.assertTrue(exact_store_title("IONIO - EP","IONIO EP","album"))
+        self.assertTrue(exact_store_title("PIMP - EP","PIMP","album"))
+    def test_not_a_different_mix(self):
+        self.assertFalse(exact_store_title("Bindweed","Bindweed (Limonata Mix)","album"))
+        self.assertFalse(exact_store_title("Track - Radio Edit","Track - Extended Mix","song"))
+        self.assertFalse(exact_store_title("Track - Single","Track","song"))
 if __name__=="__main__":unittest.main()
