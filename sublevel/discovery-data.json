@@ -1161,6 +1161,94 @@
       "id": "q1NYiZ21U3c",
       "source": "https://www.youtube.com/watch?v=q1NYiZ21U3c",
       "checked": "2026-11-28"
+    },
+    "together": {
+      "title": "Together",
+      "artist": "Logistics",
+      "provider": "youtube",
+      "kind": "video",
+      "id": "3f-XOhfDhxk",
+      "source": "https://www.youtube.com/watch?v=3f-XOhfDhxk"
+    },
+    "original": {
+      "title": "Firestarter",
+      "artist": "The Prodigy",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "4a9kr3n3e3ivD2xGIwnriv",
+      "source": "https://open.spotify.com/track/4a9kr3n3e3ivD2xGIwnriv"
+    },
+    "breathe": {
+      "title": "Breathe",
+      "artist": "The Prodigy",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "0Ja4hLKiUSw01E01pJ1yGr",
+      "source": "https://open.spotify.com/track/0Ja4hLKiUSw01E01pJ1yGr"
+    },
+    "voodoo": {
+      "title": "Voodoo People",
+      "artist": "The Prodigy",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "7H0MOWplwc6gf2AD1vTSYi",
+      "source": "https://open.spotify.com/track/7H0MOWplwc6gf2AD1vTSYi"
+    },
+    "chessboxin": {
+      "title": "Da Mystery of Chessboxin'",
+      "artist": "Wu-Tang Clan",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "2sGQPYQF50I9Racqk53O07",
+      "source": "https://open.spotify.com/track/2sGQPYQF50I9Racqk53O07"
+    },
+    "veryape": {
+      "title": "Very Ape",
+      "artist": "Nirvana",
+      "provider": "youtube",
+      "kind": "video",
+      "id": "Uyen5gPGEC8",
+      "source": "https://www.youtube.com/watch?v=Uyen5gPGEC8"
+    },
+    "sos": {
+      "title": "S.O.S.",
+      "artist": "The Breeders",
+      "provider": "youtube",
+      "kind": "video",
+      "id": "vFo_b1yYOrU",
+      "source": "https://www.youtube.com/watch?v=vFo_b1yYOrU"
+    },
+    "close-edit": {
+      "title": "Close (to the Edit)",
+      "artist": "Art of Noise",
+      "provider": "spotify",
+      "kind": "track",
+      "id": "4nIkqAYrAGz2T8RfF797Kx",
+      "source": "https://open.spotify.com/track/4nIkqAYrAGz2T8RfF797Kx"
+    },
+    "nu-album": {
+      "title": "What I've Always Waited For",
+      "artist": "Nu:Logic",
+      "provider": "spotify",
+      "kind": "album",
+      "id": "2KKD5XlPJONvBj3rmFJHg2",
+      "source": "https://open.spotify.com/album/2KKD5XlPJONvBj3rmFJHg2"
+    },
+    "nu-remix": {
+      "title": "Remixes I've Always Waited For",
+      "artist": "Nu:Logic",
+      "provider": "spotify",
+      "kind": "album",
+      "id": "5N9eeT4NjqvizaYpt7hJwW",
+      "source": "https://open.spotify.com/album/5N9eeT4NjqvizaYpt7hJwW"
+    },
+    "seba-paradox-conscious": {
+      "title": "Conscious/Life (feat. Sapele)",
+      "artist": "Seba, Paradox",
+      "provider": "spotify",
+      "kind": "album",
+      "id": "3a3Quoo1NG0K8RRgpksRIA",
+      "source": "https://open.spotify.com/album/3a3Quoo1NG0K8RRgpksRIA"
     }
   }
 }
