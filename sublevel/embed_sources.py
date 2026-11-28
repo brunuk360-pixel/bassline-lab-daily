@@ -2,7 +2,7 @@
 No audio download, no user-submitted URLs, no proxy or access bypass."""
 import json,re
 from html.parser import HTMLParser
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit,parse_qs
 from urllib.request import Request,urlopen
 from concurrent.futures import ThreadPoolExecutor
 
@@ -99,6 +99,16 @@ def resolve_embeds(data):
         provider,kind,ident,source=(item.get(k,"") for k in ("provider","kind","id","source"))
         if provider=="spotify" and kind in ("track","album") and re.fullmatch(r"[A-Za-z0-9]{22}",ident) and source=="https://open.spotify.com/"+kind+"/"+ident:
             entries[row[0]]={"provider":provider,"kind":kind,"id":ident,"source":source}
+        elif provider=="apple":
+            p=urlsplit(source)
+            m=re.fullmatch(r"/[a-z]{2}/album/[A-Za-z0-9%._~-]+/([1-9][0-9]{0,19})",p.path)
+            q=parse_qs(p.query)
+            track=q.get("i",[""])[0]
+            if p.scheme=="https" and p.netloc=="music.apple.com" and m and not p.fragment and (not track or re.fullmatch(r"[1-9][0-9]{0,19}",track)):
+                actual_kind="track" if track else "album"
+                actual_id=track or m.group(1)
+                if kind==actual_kind and ident==actual_id and row[0] not in entries:
+                    entries[row[0]]={"provider":"apple","kind":kind,"id":ident,"source":"https://music.apple.com"+p.path+("?i="+track if track else "")}
         elif provider=="youtube" and re.fullmatch(r"[A-Za-z0-9_-]{11}",ident) and source=="https://www.youtube.com/watch?v="+ident:
             entries[row[0]]={"provider":provider,"id":ident,"source":source}
     print("Official embed identities resolved:",len(entries),"of",len(data["items"]),flush=True)
