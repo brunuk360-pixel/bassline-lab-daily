@@ -25,7 +25,7 @@ const storeKey="sublevel.discovery.journey.v1";
 let state={saved:[],history:[],artists:[],labels:[]},persistent=true;
 try{const raw=JSON.parse(localStorage.getItem(storeKey)||"null");if(raw)for(const k of Object.keys(state))if(Array.isArray(raw[k]))state[k]=raw[k]}catch{persistent=false}
 function persist(){try{localStorage.setItem(storeKey,JSON.stringify(state))}catch{persistent=false}}
-let dialog,content,heading,back,lastFocus,stack=[],current,queue=[],position=0,notice;
+let dialog,content,heading,back,lastFocus,stack=[],current,queue=[],position=0,notice,pendingNav=null;
 function announce(txt){if(notice)notice.textContent=txt}
 
 const L=window.SUBLEVELListening,validIDs=new Set(records.map(r=>r.id)),listenKey="sublevel.listening.v1";
@@ -121,7 +121,13 @@ function catalogue(list){
  availability.addEventListener("change",draw);controls.append(input,select,sort,availability);wrap.append(controls,count,results);draw();return wrap;
 }
 
-function titleBlock(kicker,title,description){const top=create("header","sl-d-intro");top.append(create("span","sl-d-kicker",kicker),create("h1",null,title),create("p",null,description));content.append(top)}
+const roomPhotos={hub:"genres",daily:"warehouse",playable:"underground",artists:"underground",artist:"underground",samples:"warehouse",history:"afterhours",early:"genres",gems:"late-drive",journey:"afterhours",label:"genres",graph:"warehouse",playlist:"late-drive",listen:"underground"};
+function titleBlock(kicker,title,description){
+ const top=create("header","sl-d-intro sl-d-editorial-head");
+ const copy=create("div","sl-d-editorial-copy");copy.append(create("span","sl-d-kicker",kicker),create("h1",null,title));
+ const img=create("img","sl-d-editorial-photo");img.src="section-art/"+(roomPhotos[current?.mode]||"genres")+".jpg";img.alt="";img.decoding="async";img.addEventListener("error",()=>img.remove(),{once:true});
+ top.append(img,copy);const wrap=create("div","sl-d-editorial-intro");wrap.append(top,create("p","sl-d-editorial-description",description));content.append(wrap)
+}
 function section(title){content.append(create("h2","sl-d-section",title))}
 function dayKey(d){return new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(d)}
 function editionDate(){
@@ -239,7 +245,7 @@ function collectionStats(){
 }
 
 function render(mode,arg){
- current={mode,arg};dialog.dataset.room=mode;if(notice)notice.textContent="";content.replaceChildren();heading.textContent=labels[mode]||({artist:"Artist DNA",listen:"Listening room",graph:"Connections",hub:"Discover more",label:"Label catalogue",playlist:"Your playlist"}[mode]||"SUBLEVEL");back.textContent=stack.length?"← Back":"← Close";dialog.scrollTop=0;
+ current={mode,arg};dialog.dataset.room=mode;if(notice)notice.textContent="";content.replaceChildren();heading.textContent=labels[mode]||({artist:"Artist DNA",listen:"Listening room",graph:"Connections",hub:"Discover more",label:"Label catalogue",playlist:"Your playlist"}[mode]||"SUBLEVEL");back.textContent=stack.length?"← Back":"← Back";dialog.scrollTop=0;dialog.querySelectorAll(".sl-d-nav-button").forEach(b=>{const on=(b.textContent==="Explore"&&mode==="hub")||(b.textContent==="Library"&&mode==="journey");if(on)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
  if(mode==="hub"){
  titleBlock("SUBLEVEL / DISCOVERY","Go deeper.","Explore beyond the charts, or search the entire curated catalogue.");
  const grid=create("div","sl-d-hub");const usedPhotos=new Set();modes.forEach(([id,name,desc,img])=>{
@@ -365,7 +371,11 @@ file.addEventListener("change",async()=>{try{
 function startListening(id,list){if(current)stack.push({...current,queue:[...queue],position,scroll:dialog.scrollTop});queue=L.session({ids:list.filter(Boolean).map(r=>r.id)},validIDs).ids;position=queue.indexOf(id);if(position<0){queue=[id];position=0}render("listen",id)}
 function move(delta){const p=position+delta;if(p<0||p>=queue.length)return;position=p;render("listen",queue[p])}
 function show(mode,arg,replace=false){if(current&&!replace)stack.push({...current,queue:[...queue],position,scroll:dialog.scrollTop});render(mode,arg)}
-function open(mode="hub"){if(!dialog){dialog=create("dialog","sl-discovery-dialog");if(typeof dialog.show!=="function"){dialog=null;return;}dialog.setAttribute("aria-labelledby","sl-discovery-heading");const bar=create("header","sl-d-bar");back=button("← Close",()=>{if(stack.length){const p=stack.pop();queue=p.queue||[];position=p.position||0;render(p.mode,p.arg);dialog.scrollTop=p.scroll||0}else dialog.close()},"sl-d-back");heading=create("strong",null,"Discover more");heading.id="sl-discovery-heading";const close=button("×",()=>dialog.close(),"sl-d-close");close.setAttribute("aria-label","Close discovery");bar.append(back,heading,close);content=create("main","sl-d-content");notice=create("div","sl-d-notice");notice.setAttribute("role","status");dialog.append(bar,content,notice);document.body.append(dialog);dialog.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();dialog.close()}});dialog.addEventListener("close",()=>{app.inert=false;document.querySelector(".bottom")?.removeAttribute("inert");document.body.classList.remove("sl-discovery-lock");stack=[];current=null;lastFocus?.focus?.({preventScroll:true})})}
+function open(mode="hub"){if(!dialog){dialog=create("dialog","sl-discovery-dialog");if(typeof dialog.show!=="function"){dialog=null;return;}dialog.setAttribute("aria-labelledby","sl-discovery-heading");const bar=create("header","sl-d-bar");back=button("← Close",()=>{if(stack.length){const p=stack.pop();queue=p.queue||[];position=p.position||0;render(p.mode,p.arg);dialog.scrollTop=p.scroll||0}else dialog.close()},"sl-d-back");heading=create("strong",null,"Discover more");heading.id="sl-discovery-heading";const close=button("×",()=>dialog.close(),"sl-d-close");close.setAttribute("aria-label","Close discovery");bar.append(back,heading,close);
+ const nav=create("nav","sl-d-screen-nav");nav.setAttribute("aria-label","Discovery navigation");
+ const go=name=>{pendingNav=name;dialog.close()};
+ nav.append(button("⌂ Home",()=>go("Today"),"sl-d-nav-button"),button("Explore",()=>show("hub"),"sl-d-nav-button"),button("Library",()=>show("journey"),"sl-d-nav-button"),button("Genres",()=>go("Genres"),"sl-d-nav-button"));
+ bar.append(nav);content=create("main","sl-d-content");notice=create("div","sl-d-notice");notice.setAttribute("role","status");dialog.append(bar,content,notice);document.body.append(dialog);dialog.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();dialog.close()}});dialog.addEventListener("close",()=>{app.inert=false;document.querySelector(".bottom")?.removeAttribute("inert");document.body.classList.remove("sl-discovery-lock");stack=[];current=null;const dest=pendingNav;pendingNav=null;if(dest){const target=Array.from(document.querySelectorAll(".bottom button")).find(b=>b.dataset.navLabel===dest);if(target){target.click();window.scrollTo(0,0);target.focus();return}}lastFocus?.focus?.({preventScroll:true})})}
  if(!dialog.open){lastFocus=document.activeElement;stack=[];current=null;document.body.classList.add("sl-discovery-lock");try{dialog.show();app.inert=true;document.querySelector(".bottom")?.setAttribute("inert","");back.focus()}catch{document.body.classList.remove("sl-discovery-lock");return}}show(mode)}
 function mount(){const home=app.querySelector(".night-home"),explore=app.querySelector(".xgrid");if(home&&!home.querySelector(".sl-d-entry")){const b=button("",()=>open("daily"),"sl-d-entry");b.append(create("span","sl-d-kicker","SUBLEVEL / DAILY DISCOVERY"),create("strong",null,"The Daily Dig"),create("small",null,"10 records to explore today →"));const lead=home.querySelector(".stream-listen");if(lead)lead.after(b);else home.append(b)}
  if(home&&!home.querySelector(".sl-d-playable-entry")&&window.SUBLEVELPlayer){const count=records.filter(r=>window.SUBLEVELPlayer.available(r)).length;if(count){const b=button("Listen here · "+count+" releases →",()=>open("playable"),"sl-d-button sl-d-playable-entry");const dailyEntry=home.querySelector(".sl-d-entry");if(dailyEntry)dailyEntry.after(b);else home.append(b)}}
