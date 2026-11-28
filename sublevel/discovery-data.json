@@ -3759,8 +3759,72 @@
       "originalUrl": "https://music.youtube.com/search?q=Bonobo%20Kiara"
     }
   ],
-  "nativeLookupCursor": 0,
-  "reviewedNativeApple": [],
+  "nativeLookupCursor": 18,
+  "reviewedNativeApple": [
+    {
+      "title": "Tarantula",
+      "artist": "Pendulum",
+      "originalUrl": "https://music.youtube.com/search?q=Pendulum%20Tarantula",
+      "source": "https://music.apple.com/gb/album/tarantula/318732956?i=318733606",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Flowers (Sunship Edit)",
+      "artist": "Sweet Female Attitude",
+      "originalUrl": "https://music.youtube.com/search?q=Sweet%20Female%20Attitude%20Flowers%20(Sunship%20Edit)",
+      "source": "https://music.apple.com/gb/album/flowers-sunship-edit/1036141510?i=1036141817",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Ladbroke Grove",
+      "artist": "AJ Tracey",
+      "originalUrl": "https://music.youtube.com/search?q=AJ%20Tracey%20Ladbroke%20Grove",
+      "source": "https://music.apple.com/gb/album/ladbroke-grove/1676776339?i=1676776350",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Your Love",
+      "artist": "Frankie Knuckles",
+      "originalUrl": "https://music.youtube.com/search?q=Frankie%20Knuckles%20Your%20Love",
+      "source": "https://music.apple.com/gb/album/your-love/1601915653?i=1601915661",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Red Alert",
+      "artist": "Basement Jaxx",
+      "originalUrl": "https://music.youtube.com/search?q=Basement%20Jaxx%20Red%20Alert",
+      "source": "https://music.apple.com/gb/album/red-alert/1540691197?i=1540691212",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Deceiver",
+      "artist": "Chris Lake & Green Velvet",
+      "originalUrl": "https://music.youtube.com/search?q=Chris%20Lake%20%26%20Green%20Velvet%20Deceiver",
+      "source": "https://music.apple.com/gb/album/deceiver/1772332347?i=1772332348",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Forget",
+      "artist": "Patrick Topping",
+      "originalUrl": "https://music.youtube.com/search?q=Patrick%20Topping%20Forget",
+      "source": "https://music.apple.com/gb/album/forget/1677868871?i=1677869070",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Roped In",
+      "artist": "Gorgon City",
+      "originalUrl": "https://music.youtube.com/search?q=Gorgon%20City%20Roped%20In",
+      "source": "https://music.apple.com/gb/album/roped-in/1486982601?i=1486982603",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Deep End",
+      "artist": "John Summit",
+      "originalUrl": "https://music.youtube.com/search?q=John%20Summit%20Deep%20End",
+      "source": "https://music.apple.com/gb/album/deep-end/1783965266?i=1783965267",
+      "checked": "2026-11-28"
+    }
+  ],
   "trackMetrics": [
     {
       "title": "No Problem",
