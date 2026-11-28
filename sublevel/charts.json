@@ -1296,7 +1296,10 @@
         {
           "rank": 4,
           "title": "You Don't Love Me (No No No)",
-          "artist": "Dawn Penn"
+          "artist": "Dawn Penn",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a6/10/84/a61084e3-a254-e5ed-39bb-c20c5a4acd36/19UMGIM47724.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/you-dont-love-me-no-no-no/1466934820?i=1466934835&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/you-dont-love-me-no-no-no/1466934820?i=1466934835"
         },
         {
           "rank": 5,
@@ -1378,7 +1381,10 @@
         {
           "rank": 4,
           "title": "Something Beautiful",
-          "artist": "ReOrder & Diego Cassina"
+          "artist": "ReOrder & Diego Cassina",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ae/31/dd/ae31ddc2-c3c4-6bbd-b1b3-b6637daac2ea/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/something-beautiful/6808129663?i=6808129676&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/something-beautiful/6808129663?i=6808129676"
         },
         {
           "rank": 5,
@@ -1454,7 +1460,10 @@
         {
           "rank": 4,
           "title": "South Of The Thames",
-          "artist": "Skalah & Novelist"
+          "artist": "Skalah & Novelist",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2b/21/b2/2b21b2c1-16cc-65d4-647a-57ddae78993b/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/south-of-the-thames/6793834214?i=6793834216&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/south-of-the-thames/6793834214?i=6793834216"
         },
         {
           "rank": 5,
@@ -1533,7 +1542,10 @@
         {
           "rank": 4,
           "title": "Perfect You",
-          "artist": "Visions of Light"
+          "artist": "Visions of Light",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/2f/3a/db/2f3adbef-da2c-7ca3-6724-737109ab0154/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/perfect-you/6803396985?i=6803397005&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/perfect-you/6803396985?i=6803397005"
         },
         {
           "rank": 5,
@@ -2074,5 +2086,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 180
+  "lookupCursor": 192
 }
