@@ -1747,7 +1747,10 @@
         {
           "rank": 8,
           "artist": "LYNY",
-          "title": "Disc Jockey"
+          "title": "Disc Jockey",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/34/47/f0/3447f083-5089-3419-2104-bf56b07c5899/612891279894.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/disc-jockey/6819393487?i=6819393488&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/disc-jockey/6819393487?i=6819393488"
         },
         {
           "rank": 9,
@@ -2122,5 +2125,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 216
+  "lookupCursor": 228
 }
