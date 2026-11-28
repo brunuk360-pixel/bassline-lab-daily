@@ -107,11 +107,11 @@ function catalogue(list){
  ["All genres",...new Set(list.map(r=>r.genre))].forEach(g=>{const o=create("option",null,g);o.value=g;select.append(o)});
  const sort=create("select","sl-d-select");sort.setAttribute("aria-label","Sort records");
  [["curated","Curated order"],["newest","Newest dated first"],["artist","Artist A–Z"],["title","Track A–Z"]].forEach(([v,t])=>{const o=create("option",null,t);o.value=v;sort.append(o)});
- const availability=create("select","sl-d-select");availability.setAttribute("aria-label","Filter by availability");for(const [v,t] of [["all","All releases"],["playable","Play here"],["covered","With artwork"]]){const o=create("option",null,t);o.value=v;availability.append(o)}
+ const availability=create("select","sl-d-select");availability.setAttribute("aria-label","Filter by availability");for(const [v,t] of [["all","All releases"],["playable","Play here"],["covered","With artwork"],["tracklist","With tracklist"]]){const o=create("option",null,t);o.value=v;availability.append(o)}
  const count=create("p","sl-d-muted");count.setAttribute("aria-live","polite");const results=create("div","sl-d-results");
  function draw(){
   const q=input.value.toLowerCase().trim();
-  let filtered=list.filter(r=>(select.value==="All genres"||r.genre===select.value)&&(!q||[r.title,r.artist,r.genre,r.tag,r.note].join(" ").toLowerCase().includes(q))&&(availability.value==="all"||(availability.value==="covered"?!!r.art:!!window.SUBLEVELPlayer?.available(r))));
+  let filtered=list.filter(r=>(select.value==="All genres"||r.genre===select.value)&&(!q||[r.title,r.artist,r.genre,r.tag,r.note].join(" ").toLowerCase().includes(q))&&(availability.value==="all"||(availability.value==="covered"?!!r.art:availability.value==="tracklist"?!!D.releaseFacts?.[r.id]?.tracks?.length:!!window.SUBLEVELPlayer?.available(r))));
   if(sort.value==="newest")filtered.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
   if(sort.value==="artist"||sort.value==="title")filtered.sort((a,b)=>a[sort.value].localeCompare(b[sort.value]));
   count.textContent=filtered.length+" of "+list.length+" releases";
