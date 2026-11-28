@@ -154,6 +154,15 @@ const server=http.createServer((req,res)=>{
  }
  await nav("Today");
  });
+ await check("YouTube and Apple provider switching stays inside SUBLEVEL",async()=>{
+ await page.evaluate(()=>{const c=window.__slCharts.charts.find(x=>x.id==="dj-ukg"),r=c.rows.find(r=>r.title==="Flowers (Sunship Remix)");window.SUBLEVELPlayer.play({id:"chart:"+c.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.embedUrl,embedUrl:r.embedUrl,alternateEmbedUrl:r.alternateEmbedUrl})});
+ await page.waitForSelector(".sl-player iframe");
+ assert.match(await page.$eval(".sl-player iframe",n=>n.src),/youtube-nocookie\.com\/embed\/z95GDkzjezY/);
+ const original=page.url();await page.evaluate(()=>[...document.querySelectorAll(".sl-p-provider")].find(b=>b.textContent==="Apple Music").click());
+ assert.match(await page.$eval(".sl-player iframe",n=>n.src),/embed\.music\.apple\.com\//);
+ assert.equal(page.url(),original);assert.equal(await page.$eval(".sl-p-provider[aria-pressed=true]",n=>n.textContent),"Apple Music");
+ await page.click('.sl-player button[aria-label="Stop and close player"]')
+ });
  await check("Persistent official player",async()=>{
  await nav("Today");await page.waitForSelector(".sl-d-entry");
  await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
