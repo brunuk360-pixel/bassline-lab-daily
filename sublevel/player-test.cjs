@@ -28,3 +28,6 @@ console.log("Player queue editing preserves the current selection and rejects am
 
 const choices=P.playerChoices({url:"https://example.org/release",embedUrl:"https://www.youtube.com/watch?v=z95GDkzjezY",alternateEmbedUrl:apple+"?i=6818548340"});a.equal(choices.length,2);a.equal(choices[0].provider,"youtube");a.equal(choices[1].provider,"apple");a.equal(P.playerChoices({url:"https://youtu.be/z95GDkzjezY",embedUrl:"https://www.youtube.com/watch?v=z95GDkzjezY"}).length,1);
 console.log("Official provider choices preserve order and remove duplicate players.");
+
+for(const url of ["https://www.youtube.com/watch?v=z95GDkzjezY&v=ZYCm2cUjU7Y","https://youtu.be/z95GDkzjezY?v=ZYCm2cUjU7Y","https://www.youtube.com/results?search_query=test"])a.equal(P.fromURL(url),null);
+console.log("Ambiguous YouTube IDs rejected.");
