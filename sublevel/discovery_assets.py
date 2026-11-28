@@ -105,7 +105,26 @@ APPLE_TARGETS={
  "physics-invisible-prvail":("Physics & PRVAIL","Invisible Line (PRVAIL Remix)","song"),
  "pursefurst-pimp":("PurseFurst","PIMP","album"),
  "onho-entropic":("Onho","Entropic Voltage","album"),
+ "cnc":("Computer Numerical Control","IONIO EP","album"),
+ "nookie":("Nookie","Atmospheric Interlude EP","album"),
+ "malps-luv":("Malps & Cam Foster","We Luv It EP","album"),
+ "axel-wrong":("Axel Karakasis","Wrong Intent","album"),
+ "velvet-dust":("Kristin Velvet","The Dust","album"),
+ "rendher-circles":("Rendher","Circles Thru My Mind","album"),
+ "nightshift-translation":("Nightshift","Translation","album"),
+ "ldf-spiral":("L.D.F. & Byron the Aquarius","Spiral EP","album"),
+ "postal-paranoia":("Postal","Paranoia / Big Up","album"),
+ "soulintent-corruptions":("Soul Intent","Corruptions Of Form","album"),
+ "kenlai-eclipse":("Kenlai","Eclipse","album"),
+ "hedust-ketacid":("HedustMA, NBS000","Ketacid","album"),
 }
+def exact_store_title(found,title,entity):
+    if normalize(found)==normalize(title):return True
+    if entity!="album":return False
+    # Remove store display suffixes on both sides; do not remove mix names.
+    strip=lambda s:re.sub(r"\s+(?:-\s+)?(?:EP|Single)$","",s,flags=re.I)
+    return normalize(strip(found))==normalize(strip(title))
+
 def apple_cover(spec):
     artist,title,entity=spec
     url="https://itunes.apple.com/search?"+urlencode({"term":artist+" "+title,"country":"GB","media":"music","entity":entity,"limit":12})
@@ -115,8 +134,7 @@ def apple_cover(spec):
         for item in obj.get("results",[]):
             name=item.get("trackName" if entity=="song" else "collectionName","")
             # Storefronts sometimes append the release format, not a different mix.
-            if entity=="album":name=re.sub(r"\s+-\s+(?:EP|Single)$","",name,flags=re.I)
-            if normalize(name)!=normalize(title) or normalize(item.get("artistName",""))!=normalize(artist):continue
+            if not exact_store_title(name,title,entity) or normalize(item.get("artistName",""))!=normalize(artist):continue
             art=item.get("artworkUrl100","")
             source=item.get("trackViewUrl") or item.get("collectionViewUrl","")
             if not (urlparse(art).scheme=="https" and (urlparse(art).hostname or "").endswith(".mzstatic.com")):continue
