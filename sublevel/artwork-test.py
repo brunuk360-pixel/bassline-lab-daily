@@ -46,4 +46,28 @@ class BandcampIdentityTests(unittest.TestCase):
             self.assertIsNone(self.check(self.props("a",value)))
     def test_legacy(self):
         self.assertEqual(self.check('<div data-tralbum="'+escape(json.dumps({"current":{"item_type":"a","id":987}}),quote=True)+'"></div>'),("album","987"))
+from discovery_assets import apply_reviewed_covers,cover_manifest,trusted_cover_url
+class CoverManifestTests(unittest.TestCase):
+    def setUp(self):
+        self.url="https://artist.bandcamp.com/album/record"
+        self.art="https://f4.bcbits.com/img/a123_16.jpg"
+        self.data={"items":[["record","Record","Artist","2026-11-27","Techno","New release",self.url]],"artwork":{},"artworkSources":{},"reviewedArtwork":{"record":{"title":"Record","artist":"Artist","releaseUrl":self.url,"art":self.art,"source":self.url}}}
+    def test_survives_failed_lookup(self):
+        apply_reviewed_covers(self.data)
+        self.assertEqual(self.data["artwork"]["record"],self.art)
+        self.assertEqual(cover_manifest(self.data),self.data["reviewedArtwork"])
+    def test_changed_identity_rejected(self):
+        for field,value in (("title","Other mix"),("artist","Other artist"),("releaseUrl","https://artist.bandcamp.com/album/other")):
+            self.setUp()
+            self.data["reviewedArtwork"]["record"][field]=value
+            apply_reviewed_covers(self.data)
+            self.assertEqual(self.data["artwork"],{})
+    def test_reviewed_priority(self):
+        self.data["artwork"]["record"]="https://f4.bcbits.com/img/a999_16.jpg"
+        apply_reviewed_covers(self.data)
+        self.assertEqual(self.data["artwork"]["record"],self.art)
+    def test_reject_spoofed_hosts(self):
+        for url in ("http://i.scdn.co/image/abc","https://evilcoverartarchive.org/a","https://i.scdn.co.evil.test/a","https://bad@i.scdn.co/image/abc"):
+            self.assertFalse(trusted_cover_url(url))
+        self.assertTrue(trusted_cover_url("https://i.scdn.co/image/abc"))
 if __name__=="__main__":unittest.main()
