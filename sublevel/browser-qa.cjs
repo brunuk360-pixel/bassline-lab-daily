@@ -43,6 +43,15 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-row",rows=>rows.length),10);
  assert.equal(await overflow(),false);
  });
+ await check("Every original genre room has a complete labelled chart",async()=>{
+ const rooms=await page.evaluate(()=>window.__slCharts.rooms.map(r=>r[0]));
+ assert.equal(rooms.length,20);
+ for(const room of rooms){
+   await page.select(".sl-chart-select",room);await settle();
+   assert.equal(await page.$eval(".sl-chart-directory .sl-chart-row",rows=>rows.length),10,room);
+   assert.ok(await page.$eval(".sl-chart-directory .sl-chart-status",n=>n.textContent.trim().length>0),room);
+ }
+ });
  await check("Combined Hip Hop and R&B chart playback",async()=>{
  await page.select(".sl-chart-select","Hip-Hop");await settle();
  const expected=await page.evaluate(()=>{const c=window.__slCharts.charts.find(x=>x.id==="hip-hop-rnb");return {count:c.rows.length,tracks:c.rows.map(r=>({id:"chart:"+c.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title),embedUrl:r.embedUrl})).filter(r=>window.SUBLEVELPlayer.available(r)).map(r=>r.title)}});
