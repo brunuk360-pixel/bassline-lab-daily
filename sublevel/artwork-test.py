@@ -133,6 +133,13 @@ class ChartEnrichmentTests(unittest.TestCase):
         self.assertEqual(chart_apple_jobs(feed,1),first)
         feed["lookupCursor"]=-1
         self.assertEqual(chart_apple_jobs(feed,1),first)
+    def test_editorial_priority_respects_bound_and_exact_identity(self):
+        feed=self.feed()
+        feed["charts"][1]["rows"].append({"rank":2,"title":"Third track","artist":"Third artist"})
+        feed["lookupPriority"]=["two"]
+        selected=chart_apple_jobs(feed,2)
+        self.assertEqual(set(selected),{("Artist","Track","song"),("Third artist","Third track","song")})
+        self.assertEqual(len(selected),2)
     def test_exact_identity_applied_without_overwriting(self):
         feed=self.feed()
         feed["charts"][0]["rows"][0]["embedUrl"]="https://open.spotify.com/track/5XDOInNwslPcQM8xv2rUkL"
