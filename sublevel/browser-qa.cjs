@@ -289,6 +289,17 @@ const server=http.createServer((req,res)=>{
  console.log("SUBLEVEL all genre tab audit: "+JSON.stringify(reports));
  await nav("Today");
  });
+ await check("Compact sourced BPM and key on native and chart tracks",async()=>{
+ await nav("Today");await nav("Genres");
+ assert.ok(await page.evaluate(()=>{const card=[...document.querySelectorAll("#app .genre")].find(n=>/drum.*bass/i.test(n.querySelector(".genre-name")?.textContent));if(!card)return false;card.click();return true}));
+ await page.waitForSelector(".roomhead");await settle();
+ const metrics=await page.evaluate(()=>[...document.querySelectorAll(".tracks:not(.sl-chart-native-list) .track")].filter(n=>n.getClientRects().length).map(n=>({title:n.querySelector(".tracktitle strong,.tracktitle b")?.textContent,text:n.querySelector(".tracktitle")?.textContent,source:n.querySelector(".sl-metrics")?.dataset.source})));
+ assert.equal(metrics.length,10);assert.ok(metrics.every(r=>/BPM/i.test(r.text)&&/(major|minor|Key —)/i.test(r.text)));
+ const after=metrics.find(r=>r.title==="Afterglow");assert.match(after.text,/174 BPM/);assert.match(after.text,/G major/);assert.ok(after.source?.includes("songbpm.com"));
+ assert.equal(await overflow(),false);
+ await page.evaluate(()=>[...document.querySelectorAll("#app .tabs button")].find(b=>b.textContent.trim()==="Top 10").click());await page.waitForSelector(".sl-chart-inline .sl-metrics");assert.equal(await overflow(),false);
+ await nav("Today");
+ });
  await check("Native genre Discover play buttons use persistent official player",async()=>{
  const minimums={"Drum & Bass":9,"UK Garage":4,"House":6,"Tech House":2,"Techno":1,"Dubstep":1,"Breakbeat / Big Beat":3,"Pop":3};const genres=Object.keys(minimums);const coverage=[];let played=0;
  for(const genre of genres){
