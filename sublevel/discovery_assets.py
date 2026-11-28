@@ -187,7 +187,7 @@ def spotify_thumbnail(source,title):
         art=obj.get("thumbnail_url","")
         p=urlparse(art)
         if p.scheme!="https" or p.hostname!="i.scdn.co" or not re.fullmatch(r"/image/[a-zA-Z0-9]+",p.path):return ""
-        with urlopen(Request(art,headers={"Accept":"image/*"},timeout=5)) as response:
+        with urlopen(Request(art,headers={"Accept":"image/*"}),timeout=5) as response:
             if not response.headers.get("Content-Type","").startswith("image/") or not response.read(16):return ""
         return art
     except Exception:return ""
