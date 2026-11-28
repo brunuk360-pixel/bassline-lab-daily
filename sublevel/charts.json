@@ -1446,6 +1446,70 @@
           "title": "Chat Too Much"
         }
       ]
+    },
+    {
+      "id": "dj-ukg",
+      "genre": "UK Garage / Bassline — DJ plays",
+      "source": "PlayedNext — published DJ-set play counts (not sales)",
+      "url": "https://playednext.com/classements/uk-garage/2026-s47",
+      "from": "2026-11-16",
+      "through": "2026-11-22",
+      "published": "2026-11-23",
+      "checked": "2026-11-28",
+      "status": "weekly",
+      "note": "Ranked by distinct DJs then sets, sample: 69 DJs and 84 sets. Rank 3 listed as unreleased; a listening link is not guaranteed.",
+      "rows": [
+        {
+          "rank": 1,
+          "artist": "Sammy Virji",
+          "title": "Repeaty"
+        },
+        {
+          "rank": 2,
+          "artist": "Sweet Female Attitude",
+          "title": "Flowers (Sunship Remix)"
+        },
+        {
+          "rank": 3,
+          "artist": "Osmosis Jones",
+          "title": "Rockin With The Best"
+        },
+        {
+          "rank": 4,
+          "artist": "Champion & Jolie P",
+          "title": "How U Like It"
+        },
+        {
+          "rank": 5,
+          "artist": "Sammy Virji & Skepta",
+          "title": "Cops & Robbers"
+        },
+        {
+          "rank": 6,
+          "artist": "Main Phase & TSVI",
+          "title": "Nectar"
+        },
+        {
+          "rank": 7,
+          "artist": "Fold & Cu.Rve",
+          "title": "Business"
+        },
+        {
+          "rank": 8,
+          "artist": "Zero & Klubbheads",
+          "title": "Big Mad Banger"
+        },
+        {
+          "rank": 9,
+          "artist": "Lemtom",
+          "title": "Back 2 Front"
+        },
+        {
+          "rank": 10,
+          "artist": "Brasstooth",
+          "title": "I Can't Quite"
+        }
+      ]
     }
   ],
   "sources": [
@@ -1611,6 +1675,11 @@
       "Dubstep — DJ plays",
       "https://playednext.com/classements/dubstep",
       "dj-dubstep"
+    ],
+    [
+      "UK Garage / Bassline — DJ plays",
+      "https://playednext.com/classements/uk-garage",
+      "dj-ukg"
     ]
   ],
   "rooms": [
@@ -1620,7 +1689,8 @@
     ],
     [
       "UK Garage",
-      "UK Garage / Bassline"
+      "UK Garage / Bassline — DJ plays",
+      "Weekly UK garage / bassline DJ-play chart; not a national sales ranking."
     ],
     [
       "House",
