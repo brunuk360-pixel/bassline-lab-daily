@@ -43,7 +43,7 @@ function playNext(id){
 }
 function resumePanel(){
  const r=byId(listening.session.current);if(!r)return null;
- const b=button("",resumeSession,"sl-d-resume-session");const copy=create("span");copy.append(create("span","sl-d-kicker","CONTINUE YOUR SESSION"),create("strong",null,r.title),create("small",null,r.artist+" · "+listening.session.ids.length+" queued records"));b.append(copy,create("span",null,"→"));return b
+ const b=button("",resumeSession,"sl-d-resume-session");const copy=create("span");copy.append(create("span","sl-d-kicker","CONTINUE YOUR SESSION"),create("strong",null,r.title),create("small",null,r.artist+" · "+listening.session.ids.length+" queued records"));const cover=smallCover(r);if(cover)b.append(cover);b.append(copy,create("span",null,"→"));return b
 }
 function playlistEditor(ids){
  const box=create("div","sl-d-playlist-editor");
@@ -63,7 +63,7 @@ function playlistPicker(id){
 function playlistLibrary(){
  const box=create("div","sl-d-playlist-library");box.append(playlistEditor([]));
  if(!listening.playlists.length){box.append(create("p","sl-d-muted","Create a playlist here, or save a listening queue as a playlist."));return box}
- for(const p of listening.playlists){const row=create("article","sl-d-playlist-row");const b=button(p.name+" →",()=>show("playlist",p.name),"sl-d-profile-title");row.append(b,create("p","sl-d-muted",p.ids.length+" records"));box.append(row)}return box
+ for(const p of listening.playlists){const row=create("article","sl-d-playlist-row");const b=button("",()=>show("playlist",p.name),"sl-d-playlist-open");const cover=smallCover(p.ids.map(byId).find(r=>r?.art));if(cover)b.append(cover);const copy=create("span");copy.append(create("strong",null,p.name),create("small",null,p.ids.length+" records"));b.append(copy,create("span","sl-d-row-arrow","→"));row.append(b);box.append(row)}return box
 }
 function queuePanel(){
  const box=create("details","sl-d-queue");box.open=true;box.append(create("summary",null,"Listening queue · "+queue.length+" records"));
@@ -72,7 +72,7 @@ function queuePanel(){
  box.append(actions);const editor=create("div","sl-d-queue-save");editor.hidden=true;editor.append(playlistEditor(queue));box.append(editor);
  const list=create("div","sl-d-queue-list");
  queue.forEach((id,i)=>{const r=byId(id);if(!r)return;const row=create("div","sl-d-queue-row");if(i===position)row.classList.add("sl-d-queue-current");
- const b=button("",()=>{position=i;render("listen",id)},"sl-d-queue-track");b.append(create("span","sl-d-kicker",i===position?"CURRENT":String(i+1).padStart(2,"0")),create("strong",null,r.title),create("small",null,r.artist));if(i===position)b.setAttribute("aria-current","true");row.append(b);
+ const b=button("",()=>{position=i;render("listen",id)},"sl-d-queue-track");const cover=smallCover(r);if(cover)b.append(cover);const copy=create("span","sl-d-queue-copy");copy.append(create("span","sl-d-kicker",i===position?"CURRENT":String(i+1).padStart(2,"0")),create("strong",null,r.title),create("small",null,r.artist));b.append(copy);if(i===position)b.setAttribute("aria-current","true");row.append(b);
  const controls=create("div","sl-d-queue-controls");
  for(const [symbol,delta,label] of [["↑",-1,"Move up"],["↓",1,"Move down"]]){const moveButton=button(symbol,()=>{setSession(L.reorder(sessionFromQueue(),id,delta,validIDs));render("listen",listening.session.current)},"sl-d-queue-icon");moveButton.disabled=i+delta<0||i+delta>=queue.length;moveButton.setAttribute("aria-label",label+" "+r.title);controls.append(moveButton)}
  const remove=button("×",()=>{setSession(L.remove(sessionFromQueue(),id,validIDs));if(listening.session.current)render("listen",listening.session.current);else render("journey")},"sl-d-queue-icon");remove.setAttribute("aria-label","Remove "+r.title);controls.append(remove);row.append(controls);list.append(row)});
@@ -87,6 +87,11 @@ function artwork(r){
  if(!r.art)return empty();
  const img=create("img","sl-d-art");img.src=r.art;img.alt=r.title+" release artwork";img.loading="lazy";img.decoding="async";img.referrerPolicy="no-referrer";
  img.addEventListener("error",()=>img.replaceWith(empty()),{once:true});return img
+}
+// Only identity-linked release artwork, never a generic portrait or invented cover.
+function smallCover(r){
+ if(!r?.art)return null;
+ const img=create("img","sl-d-small-cover");img.src=r.art;img.alt=r.title+" release artwork";img.loading="lazy";img.decoding="async";img.referrerPolicy="no-referrer";img.addEventListener("error",()=>img.remove(),{once:true});return img
 }
 function profileArtwork(p){
  const known=p[3].map(byId).filter(r=>r?.art);
@@ -282,7 +287,7 @@ function render(mode,arg){
  const now=new Date(),parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/London",month:"2-digit",day:"2-digit"}).formatToParts(now),md=parts.find(x=>x.type==="month").value+"-"+parts.find(x=>x.type==="day").value;
  const anniversaries=D.events.filter(e=>e[0].slice(5)===md);
  section("Today's release anniversaries");
- function event(e){const [date,name,id,url]=e;const r=byId(id);const a=create("article","sl-d-event");a.append(create("time",null,date),create("h3",null,name));if(r)a.append(create("p","sl-d-muted",r.artist));const href=url||r?.url;if(href)a.append(link("Source / listen ↗",href));return a}
+ function event(e){const [date,name,id,url]=e;const r=byId(id);const a=create("article","sl-d-event sl-d-history-event"),cover=smallCover(r);if(cover)a.append(cover);const copy=create("div","sl-d-history-copy");copy.append(create("time",null,date),create("h3",null,name));if(r)copy.append(create("p","sl-d-muted",r.artist),button("Listen / details →",()=>startListening(r.id,[r])));const href=url||r?.url;if(href)copy.append(link("Source ↗",href));a.append(copy);return a}
  if(anniversaries.length)anniversaries.forEach(e=>content.append(event(e)));else content.append(create("p","sl-d-muted","No verified anniversaries for this date in the current archive."));
  section("Explore the timeline");const controls=create("div","sl-d-actions");const select=create("select","sl-d-select");select.setAttribute("aria-label","Filter timeline by decade");["All decades","1990s","2000s","2010s","2020s"].forEach(s=>{const o=create("option",null,s);o.value=s;select.append(o)});controls.append(select);content.append(controls);const timeline=create("div","sl-d-timeline");content.append(timeline);
  function draw(){timeline.replaceChildren();const filtered=D.events.filter(e=>select.value==="All decades"||e[0].startsWith(select.value.slice(0,3))).sort((a,b)=>a[0].localeCompare(b[0]));filtered.forEach(e=>timeline.append(event(e)));if(!filtered.length)timeline.append(create("p","sl-d-muted","No dated entries in this decade yet."))}
