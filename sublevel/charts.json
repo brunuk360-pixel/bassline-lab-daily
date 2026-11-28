@@ -219,7 +219,10 @@
         {
           "rank": 1,
           "title": "Vibin' (Moodena Extended Remix)",
-          "artist": "N-You-Up"
+          "artist": "N-You-Up",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/90/a0/f4/90a0f416-8d9d-97e0-1003-da7ad4d808fc/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/vibin-moodena-extended-remix/6819206804?i=6819207062&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/vibin-moodena-extended-remix/6819206804?i=6819207062"
         },
         {
           "rank": 2,
@@ -1494,7 +1497,10 @@
         {
           "rank": 1,
           "title": "Feely",
-          "artist": "STONE"
+          "artist": "STONE",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/72/35/05/7235059b-e301-2d9e-11e5-eddb740681bc/199538357974.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/feely/1829925176?i=1829925190&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/feely/1829925176?i=1829925190"
         },
         {
           "rank": 2,
@@ -1567,7 +1573,10 @@
         {
           "rank": 1,
           "title": "Victory Lap",
-          "artist": "Fred again.. & Skepta & PlaqueBoyMax"
+          "artist": "Fred again.. & Skepta & PlaqueBoyMax",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/00/11/4a/00114ade-e738-19d9-0e70-57d58691ee87/196873133973.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/victory-lap/1848356932?i=1848357125&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/victory-lap/1848356932?i=1848357125"
         },
         {
           "rank": 2,
@@ -2050,5 +2059,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 156
+  "lookupCursor": 168
 }
