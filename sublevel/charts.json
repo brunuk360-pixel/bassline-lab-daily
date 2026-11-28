@@ -620,7 +620,10 @@
         {
           "rank": 7,
           "title": "Be The One You Are (Extended Mix)",
-          "artist": "Moon Rocket"
+          "artist": "Moon Rocket",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/50/ed/1d/50ed1dfd-1453-e3a2-6d54-4f9c3235e0a3/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/be-the-one-you-are-extended-mix/6821928252?i=6821928253&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/be-the-one-you-are-extended-mix/6821928252?i=6821928253"
         },
         {
           "rank": 8,
@@ -794,7 +797,10 @@
         {
           "rank": 7,
           "title": "COACHELLA",
-          "artist": "NO11 & GABZY"
+          "artist": "NO11 & GABZY",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2d/3b/3a/2d3b3ac0-4467-a381-1d24-faeee8c93d65/199316793734_cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/coachella/6817413280?i=6817413287&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/coachella/6817413280?i=6817413287"
         },
         {
           "rank": 8,
@@ -874,7 +880,10 @@
         {
           "rank": 7,
           "title": "CAN'T STOP",
-          "artist": "RED HOT CHILI PEPPERS"
+          "artist": "RED HOT CHILI PEPPERS",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/73/ec/27/73ec2771-a008-e55b-8ccd-faf6257d5cd0/093624932178.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/cant-stop/945578420?i=945578427&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/cant-stop/945578420?i=945578427"
         },
         {
           "rank": 8,
@@ -1329,7 +1338,10 @@
         {
           "rank": 7,
           "title": "Money Money",
-          "artist": "Horace Andy"
+          "artist": "Horace Andy",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music/53/23/4d/mzi.jvbrjjuv.tif/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/money-money/308548274?i=308548361&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/money-money/308548274?i=308548361"
         },
         {
           "rank": 8,
@@ -1417,7 +1429,10 @@
         {
           "rank": 7,
           "title": "For A Feeling (Doppenberg Remix)",
-          "artist": "Andrew Rayel & Lea König"
+          "artist": "Andrew Rayel & Lea König",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/43/44/6b/43446b4f-eb29-8d23-701d-adfb13fbf2d3/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/for-a-feeling-doppenberg-remix/6832618108?i=6832618109&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/for-a-feeling-doppenberg-remix/6832618108?i=6832618109"
         },
         {
           "rank": 8,
@@ -1578,7 +1593,10 @@
         {
           "rank": 7,
           "title": "Luna Llena",
-          "artist": "Arca"
+          "artist": "Arca",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3c/9e/3d/3c9e3d3a-23a9-7d8a-8f75-3cdde42945b1/191404121252.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/luna-llena/1585538713?i=1585538722&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/luna-llena/1585538713?i=1585538722"
         },
         {
           "rank": 8,
@@ -1721,7 +1739,10 @@
         {
           "rank": 7,
           "artist": "Simula",
-          "title": "Bare Riddim"
+          "title": "Bare Riddim",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ab/03/eb/ab03ebdf-7f25-10c1-fece-e46fac7d85d5/5063879077967.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/bare-riddim/6827246864?i=6827246865&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/bare-riddim/6827246864?i=6827246865"
         },
         {
           "rank": 8,
@@ -2101,5 +2122,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 204
+  "lookupCursor": 216
 }
