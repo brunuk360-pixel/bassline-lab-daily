@@ -17,10 +17,10 @@ function chartPanel(genre){
  if(chart){
  panel.append(make("p","sl-chart-status",status(chart)),make("p","sl-chart-meta",chart.source+" · "+(chart.from?chart.from+" to "+chart.through:"Checked "+chart.checked)));
  if(chart.note)panel.append(make("p","sl-chart-meta",chart.note));
- const list=make("ol","sl-chart-list");for(const r of chart.rows){
+ const list=make("ol","sl-chart-list");const tracks=chart.rows.map(r=>({id:"chart:"+chart.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title),embedUrl:r.embedUrl}));for(const r of chart.rows){
  const row=make("li","sl-chart-row");row.append(make("span","sl-chart-rank",String(r.rank).padStart(2,"0")));
  if(r.art){const img=make("img","sl-chart-cover");img.src=r.art;img.alt="";img.loading="lazy";img.addEventListener("error",()=>img.remove(),{once:true});row.append(img)}
- const copy=make("div","sl-chart-copy");copy.append(make("strong",null,r.title),make("small",null,r.artist));row.append(copy,link(r.url?"Listen / release ↗":"Find music ↗",r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title)));list.append(row)}
+ const copy=make("div","sl-chart-copy");copy.append(make("strong",null,r.title),make("small",null,r.artist));row.append(copy,link(r.url?"Listen / release ↗":"Find music ↗",r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title)));const track=tracks[r.rank-1];if(window.SUBLEVELPlayer?.available(track)){const play=make("button","sl-chart-link sl-chart-play","▶ Play here");play.type="button";play.addEventListener("click",()=>window.SUBLEVELPlayer.play(track,tracks));row.append(play)}list.append(row)}
  panel.append(list)
  }else panel.append(make("p","sl-chart-meta",source?"A full verified Top 10 is not available in this edition. Check the live source rather than relying on an incomplete ranking.":"No verified dedicated chart has been linked for this genre. Editorial recommendations below are not current rankings."));
  if(source)panel.append(link("View latest source chart ↗",source[1]));
