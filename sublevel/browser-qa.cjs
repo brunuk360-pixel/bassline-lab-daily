@@ -109,6 +109,10 @@ const server=http.createServer((req,res)=>{
  const count=await page.evaluate(()=>{const r=document.querySelector(".sl-d-results");return {all:r.querySelectorAll(".sl-d-record").length,empty:r.querySelectorAll(".sl-d-record.sl-d-no-art").length}});assert.ok(count.all>0);
  // Provider images are deliberately blocked, so inspect filter membership using original record titles.
  const shown=await page.evaluate(()=>Array.from(document.querySelectorAll(".sl-d-results .sl-d-record h3"),x=>x.textContent));const valid=await page.evaluate(()=>window.__slDiscovery.items.filter(r=>window.__slDiscovery.artwork[r[0]]).map(r=>r[1]));assert.ok(shown.every(t=>valid.includes(t)));
+ await page.select(select,"tracklist");await settle();
+ const factTitles=await page.evaluate(()=>Array.from(document.querySelectorAll(".sl-d-results .sl-d-record h3"),x=>x.textContent));
+ const factExpected=await page.evaluate(()=>Object.values(window.__slDiscovery.releaseFacts).map(x=>x.title));
+ assert.ok(factTitles.length>0&&factTitles.every(t=>factExpected.includes(t)),"Tracklist filter includes only documented releases");
  await page.select(select,"playable");await settle();assert.equal(await page.evaluate(()=>document.querySelectorAll(".sl-d-results .sl-p-source").length),0);
  const started=await page.evaluate(()=>{const row=window.__slDiscovery.items.find(r=>r[0]==="dusky-bindweed");if(!row)return false;const [id,title,artist,date,genre,tag,url]=row;const record={id,title,artist,url};if(!window.SUBLEVELPlayer.available(record))return false;window.SUBLEVELPlayer.play(record);return true});assert.ok(started);
  await page.waitForSelector(".sl-player iframe");assert.equal(await page.$eval(".sl-player iframe",f=>new URL(f.src).hostname),"embed.music.apple.com");await page.click('.sl-player button[aria-label="Stop and close player"]');await page.click(".sl-d-close");
