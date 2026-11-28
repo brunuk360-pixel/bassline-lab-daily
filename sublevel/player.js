@@ -9,6 +9,11 @@ function fromURL(value){
   const id=h==="youtu.be"?p.slice(1):p==="/watch"?u.searchParams.get("v"):"";
   if(/^[A-Za-z0-9_-]{11}$/.test(id||""))return {provider:"youtube",id,source:"https://www.youtube.com/watch?v="+id};
  }
+ if(h==="music.apple.com"){
+  const m=p.match(/^\/[a-z]{2}\/album\/[A-Za-z0-9%._~-]+\/([1-9][0-9]{0,19})$/);
+  const track=u.searchParams.get("i");
+  if(m&&(!track||/^[1-9][0-9]{0,19}$/.test(track)))return {provider:"apple",kind:track?"track":"album",id:track||m[1],source:u.origin+p+(track?"?i="+track:"")};
+ }
  if(h==="open.spotify.com"){const m=p.match(/^\/(track|album|playlist)\/([A-Za-z0-9]{22})$/);if(m)return {provider:"spotify",kind:m[1],id:m[2],source:u.origin+p}}
  return null
 }
@@ -17,6 +22,10 @@ function frame(e){
  if(e.provider==="soundcloud"){const sc=fromURL(e.source);if(sc?.provider==="soundcloud")return {src:"https://w.soundcloud.com/player/?url="+encodeURIComponent(sc.source)+"&auto_play=false&visual=false",height:166,name:"SoundCloud"}}
  if(e.provider==="youtube"&&/^[A-Za-z0-9_-]{11}$/.test(e.id||""))return {src:"https://www.youtube-nocookie.com/embed/"+e.id+"?playsinline=1",height:210,name:"YouTube"};
  if(e.provider==="spotify"&&/^(track|album|playlist)$/.test(e.kind||"")&&/^[A-Za-z0-9]{22}$/.test(e.id||""))return {src:"https://open.spotify.com/embed/"+e.kind+"/"+e.id,height:e.kind==="track"?152:352,name:"Spotify"};
+ if(e.provider==="apple"){
+  const a=fromURL(e.source);
+  if(a?.provider==="apple"&&a.kind===e.kind&&a.id===e.id)return {src:a.source.replace("https://music.apple.com/","https://embed.music.apple.com/"),height:a.kind==="track"?175:450,name:"Apple Music"};
+ }
  if(e.provider==="bandcamp"&&/^(album|track)$/.test(e.kind||"")&&/^\d{1,12}$/.test(e.id||""))return {src:"https://bandcamp.com/EmbeddedPlayer/"+e.kind+"="+e.id+"/size=large/bgcol=101b1c/linkcol=79c9b7/tracklist=false/artwork=small/transparent=true/",height:120,name:"Bandcamp"};
  return null
 }
@@ -61,7 +70,7 @@ function select(i){
  if(i<0||i>=items.length)return;build();index=i;const r=items[i],spec=frame(source(r));panel.hidden=false;doc.body.classList.add("sl-player-open");
  title.textContent=r.title;meta.textContent=r.artist+" · "+(i+1)+"/"+items.length+(spec?" · "+spec.name:" · External only");refreshControls();original.href=source(r)?.source||r.url;
  if(activeID!==r.id||!host.firstElementChild){host.replaceChildren();activeID=r.id;
- if(spec){const f=make("iframe","sl-p-embed");f.src=spec.src;f.title=spec.name+" player — "+r.title;f.height=String(spec.height);f.allow="autoplay; encrypted-media; fullscreen; picture-in-picture";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";host.append(f);notice.textContent="Press play in the "+spec.name+" player. Availability and playback length are controlled by the provider."}
+ if(spec){const f=make("iframe","sl-p-embed");f.src=spec.src;f.title=spec.name+" player — "+r.title;f.height=String(spec.height);f.allow="autoplay; encrypted-media; fullscreen; picture-in-picture";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";host.append(f);notice.textContent=spec.name==="Apple Music"?"Press play to preview. Full tracks require eligible Apple Music access. Availability depends on the provider.":"Press play in the "+spec.name+" player. Availability and playback length are controlled by the provider."}
  else notice.textContent="No verified embedded source for this selection. Use the original release link or choose the next record."}
  redrawQueue();refreshControls();persist()
 }
