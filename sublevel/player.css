@@ -27,3 +27,5 @@ dialog.sl-discovery-dialog{z-index:2147483000!important}
 .sl-p-queue-tools{display:flex;gap:2px;flex-shrink:0}
 .sl-p-list .sl-p-queue-edit{width:44px;min-width:44px;min-height:44px;padding:0;text-align:center;font-size:17px;border:1px solid #79c9b744}
 .sl-p-queue-current{background:#19312c}
+
+.sl-p-providers{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.sl-p-providers[hidden]{display:none!important}.sl-p-provider{font-size:11px;min-height:44px}.sl-p-provider[aria-pressed=true]{border-color:#79c9b7;color:#79c9b7;background:#19312c}.sl-p-compact .sl-p-providers{display:none}
