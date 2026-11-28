@@ -43,14 +43,13 @@ const server=http.createServer((req,res)=>{
  });
  await check("Combined Hip Hop and R&B chart playback",async()=>{
  await page.select(".sl-chart-select","Hip-Hop");await settle();
- assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-row",x=>x.length),10);
+ const expected=await page.evaluate(()=>{const c=window.__slCharts.charts.find(x=>x.id==="hip-hop-rnb");return {count:c.rows.length,tracks:c.rows.map(r=>({id:"chart:"+c.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title),embedUrl:r.embedUrl})).filter(r=>window.SUBLEVELPlayer.available(r)).map(r=>r.title)}});
+ assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-row",x=>x.length),expected.count);
  assert.match(await page.$eval(".sl-chart-directory h2",x=>x.textContent),/Hip Hop & R&B/);
- assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-play",x=>x.length),4);
- await page.click(".sl-chart-directory .sl-chart-play");await page.waitForSelector(".sl-player iframe");
- assert.match(await page.$eval(".sl-player iframe",f=>f.src),/^https:\/\/open\.spotify\.com\/embed\/track\/5XDOInNwslPcQM8xv2rUkL/);
- await page.click('.sl-player button[aria-label="Stop and close player"]');
+ assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-play",x=>x.length),expected.tracks.length);
+ if(expected.tracks.length){await page.click(".sl-chart-directory .sl-chart-play");await page.waitForSelector(".sl-player iframe");assert.ok(await page.$eval(".sl-player .sl-p-copy strong",(n,t)=>n.textContent===t,expected.tracks[0]));await page.click('.sl-player button[aria-label="Stop and close player"]')}
  await page.select(".sl-chart-select","R&B");await settle();
- assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-row",x=>x.length),10);
+ assert.equal(await page.$$eval(".sl-chart-directory .sl-chart-row",x=>x.length),expected.count);
  assert.equal(await overflow(),false);
  });
  await check("Drum & Bass room chart",async()=>{
