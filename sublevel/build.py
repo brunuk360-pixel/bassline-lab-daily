@@ -217,6 +217,16 @@ assert len(discovery["items"])>=10
 ids=[row[0] for row in discovery["items"]]
 assert len(ids)==len(set(ids)), "Duplicate discovery IDs"
 assert all(row[6].startswith("https://") for row in discovery["items"])
+from datetime import date
+import re
+for key,fact in discovery.get("releaseFacts",{}).items():
+    row=next((r for r in discovery["items"] if r[0]==key),None)
+    assert row and (fact["title"],fact["artist"],fact["source"])==(row[1],row[2],row[6]),"Release fact identity mismatch"
+    assert fact["source"].startswith("https://") and date.fromisoformat(fact["checked"])
+    assert 1<=len(fact["tracks"])<=80
+    assert all(len(t)==2 and t[0].strip() and re.fullmatch(r"\d+:[0-5]\d",t[1]) for t in fact["tracks"]),"Invalid source track duration"
+print("Source-reviewed release tracklists:",len(discovery.get("releaseFacts",{})))
+
 assert all(set(profile[3]).issubset(ids) for profile in discovery["profiles"])
 assert all(edge["from"] in ids and edge["to"] in ids and edge["type"] in ("Sample","Remix") and edge["source"].startswith("https://") for edge in discovery.get("connections",[])), "Invalid discovery relationship"
 print("Discovery relationships validated:",len(discovery.get("connections",[])))
