@@ -69,8 +69,20 @@ function show(b,id,name,tabs){
  tabs.after(panel);extra=panel;
 }
 app.addEventListener("click",e=>{const b=e.target.closest?.(".tabs button");if(b&&!b.dataset.slGenreExtraTab)clear()},true);
+const genrePalettes={"drumbass":["#112c2a","#c6ed75"],"ukgarage":["#38203e","#dda2ef"],"house":["#3b3022","#f0c68c"],"techhouse":["#302f23","#79c9b7"],"techno":["#252b3a","#9eb7fa"],"trance":["#30263e","#bca5ff"],"dubstep":["#392a22","#ffb277"],"breakbeatbigbeat":["#342c20","#e8cc81"],"hiphop":["#3a2a24","#edb28a"],"grime":["#25352b","#b9da91"],"rb":["#392538","#efa8cd"],"soul":["#3d2e25","#eac18c"],"funkdisco":["#402d35","#ffb0c9"],"rock":["#382b28","#efaa94"],"indiealternative":["#2c3430","#b7d2a9"],"metal":["#362526","#f5a5a0"],"pop":["#392c42","#e8bafa"],"afrobeats":["#3d3220","#f2cd76"],"reggaedub":["#253627","#e4d28b"],"triphopdowntempo":["#29313b","#a9c8de"]};
+function decorateGenre(name){
+ const head=app.querySelector(".roomhead"),copy=head?.querySelector(".roomcopy"),h=copy?.querySelector("h1");
+ if(!head||!copy||!h)return;
+ const p=genrePalettes[norm(name)];if(!p)return;
+ // Preserve the original scene photography, attribution and every native control.
+ head.classList.add("sl-genre-angled");head.dataset.slGenreTheme=norm(name);
+ head.style.setProperty("--sl-genre-panel",p[0]);head.style.setProperty("--sl-genre-accent",p[1]);
+ app.style.setProperty("--sl-genre-accent",p[1]);
+ if(!copy.querySelector(".sl-genre-banner-kicker"))h.before(make("div","sl-genre-banner-kicker","SUBLEVEL / "+name.toUpperCase()));
+}
 function mount(){
  const name=title(),tabs=app.querySelector(".roomhead")&&app.querySelector(".tabs");
+ if(name&&tabs)decorateGenre(name);else app.style.removeProperty("--sl-genre-accent");
  if(!name||!tabs){clear();room="";tabBar=null;return}
  if(name!==room||tabs!==tabBar){clear();room=name;tabBar=tabs}
  const all=[...tabs.querySelectorAll("button")];
