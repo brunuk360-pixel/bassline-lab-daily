@@ -10,3 +10,7 @@ html body #app .sl-u-actions .sl-u-link{display:inline-flex;align-items:center;j
 html body #app .sl-u-actions .sl-u-primary{background:#79c9b7;border-color:#79c9b7;color:#0a211b}
 html body #app .sl-u-actions .sl-u-link:focus-visible{outline:2px solid #eef0e7;outline-offset:2px}
 html body #app .sl-u-compact h2{font-size:22px}
+
+/* A photographic section, not a new generic card style. */
+html body #app .sl-u-entry{position:relative;isolation:isolate;overflow:hidden;background:#101819}
+html body #app .sl-u-entry::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#080e10 7%,#080e10eb 40%,#080e1066 100%),url("section-art/warehouse.jpg") center right/cover no-repeat}
