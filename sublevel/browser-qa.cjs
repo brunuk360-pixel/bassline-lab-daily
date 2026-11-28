@@ -113,6 +113,14 @@ const server=http.createServer((req,res)=>{
  const started=await page.evaluate(()=>{const row=window.__slDiscovery.items.find(r=>r[0]==="dusky-bindweed");if(!row)return false;const [id,title,artist,date,genre,tag,url]=row;const record={id,title,artist,url};if(!window.SUBLEVELPlayer.available(record))return false;window.SUBLEVELPlayer.play(record);return true});assert.ok(started);
  await page.waitForSelector(".sl-player iframe");assert.equal(await page.$eval(".sl-player iframe",f=>new URL(f.src).hostname),"embed.music.apple.com");await page.click('.sl-player button[aria-label="Stop and close player"]');await page.click(".sl-d-close");
  });
+ await check("Source-reviewed release tracklist in listening room",async()=>{
+ await nav("Today");await page.waitForSelector(".sl-d-entry");await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
+ const launched=await page.evaluate(()=>{const row=Array.from(document.querySelectorAll(".sl-d-record")).find(r=>r.querySelector("h3")?.textContent==="Bindweed (Limonata Mix)");const b=Array.from(row?.querySelectorAll("button")||[]).find(x=>x.textContent.includes("Listen / details"));if(!b)return false;b.click();return true});assert.ok(launched,"Expected curated Dusky release");
+ await page.waitForSelector(".sl-d-release-tracks");
+ const actual=await page.evaluate(()=>Array.from(document.querySelectorAll(".sl-d-release-tracks li"),r=>[r.querySelector("strong").textContent,r.querySelector("time").textContent]));const expected=await page.evaluate(()=>window.__slDiscovery.releaseFacts["dusky-bindweed"].tracks);assert.deepEqual(actual,expected);
+ assert.equal(await page.$eval(".sl-d-release-tracklist a",a=>a.href),"https://duskymusic.bandcamp.com/album/bindweed-limonata-mix");assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
+ await page.click(".sl-d-close");
+ });
  await check("Saved library tabs",async()=>{await nav("Saved");await page.waitForSelector(".sl-library-entry");await page.click(".sl-library-entry button");await page.waitForSelector(".sl-library-tabs");assert.equal(await page.$$eval(".sl-library-tab",x=>x.length),6);await page.evaluate(()=>[...document.querySelectorAll(".sl-library-tab")].find(b=>b.textContent==="Profile & data").click());assert.ok(await page.$(".sl-library-account"));await page.click(".sl-d-close")});
  await check("Unsigned link",async()=>{await nav("Today");await page.waitForSelector(".sl-u-entry");assert.equal(await page.$eval(".sl-u-primary",a=>a.href),"https://sublevel-unsigned-xvpf.onrender.com/")});
  for(const width of [320,360,430,1280])await check(width+"px homepage layout",async()=>{await page.setViewport({width,height:844,isMobile:width<700,hasTouch:width<700,deviceScaleFactor:1});await page.reload({waitUntil:"domcontentloaded"});await page.waitForSelector(".sl-home-index");assert.equal(await overflow(),false)});
