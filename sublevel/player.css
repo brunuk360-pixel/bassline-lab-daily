@@ -10,3 +10,10 @@ dialog.sl-discovery-dialog{z-index:2147483000!important}
 .sl-player button:focus-visible,.sl-player a:focus-visible,.sl-player summary:focus-visible{outline:2px solid #79c9b7;outline-offset:2px}
 @media(min-width:800px){.sl-player{bottom:84px;max-height:70dvh}}
 @media(max-height:550px){.sl-player{max-height:80dvh;bottom:0}}
+
+/* Compact mode keeps provider controls visible, including the entire video. */
+.sl-p-compact .sl-p-notice,.sl-p-compact .sl-p-queue,.sl-p-compact .sl-p-link{display:none}
+.sl-p-compact{padding-block:5px}
+.sl-p-queue>.sl-p-button{font-size:11px;width:100%;text-align:left;min-height:44px;margin-bottom:4px}
+.sl-p-head .sl-p-button{flex-shrink:0}
+@media(max-width:360px){.sl-p-head{gap:3px}.sl-p-head .sl-p-button{min-width:38px}.sl-player{padding-inline:8px}}
