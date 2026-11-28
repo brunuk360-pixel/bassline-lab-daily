@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from app import app,music_link
+from app import app,music_link,player_spec
 class CommunityTests(unittest.TestCase):
     def setUp(self):
         app.config.update(TESTING=True,SESSION_COOKIE_SECURE=False)
@@ -10,6 +10,13 @@ class CommunityTests(unittest.TestCase):
             self.assertEqual(music_link(x),x)
         for x in ["javascript:alert(1)","http://soundcloud.com/a/b","https://soundcloud.com.evil.test/a/b","https://evil.test/a/b","https://user@soundcloud.com/a/b","https://soundcloud.com:123/a/b","https://www.youtube.com/redirect?q=https://evil.test"]:
             self.assertIsNone(music_link(x))
+    def test_player_allowlist(self):
+        self.assertTrue(player_spec("https://soundcloud.com/example/track")["src"].startswith("https://w.soundcloud.com/player/"))
+        self.assertEqual(player_spec("https://youtu.be/abcdefghijk")["src"],"https://www.youtube-nocookie.com/embed/abcdefghijk?playsinline=1")
+        self.assertIsNone(player_spec("https://soundcloud.com.evil.test/a/b"))
+        self.assertIsNone(player_spec("https://artist.bandcamp.com/track/music","https://evil.test/EmbeddedPlayer/track=123/"))
+        self.assertIsNone(player_spec("https://artist.bandcamp.com/track/music","https://bandcamp.com/EmbeddedPlayer/album=123/"))
+        self.assertTrue(player_spec("https://artist.bandcamp.com/track/music","https://bandcamp.com/EmbeddedPlayer/track=123/")["src"].startswith("https://bandcamp.com/EmbeddedPlayer/track=123/"))
     def test_post_requires_csrf(self):
         for path in ["/join","/login","/logout","/profile","/submit","/track/1/feedback","/track/1/report","/moderation/unlock","/moderation/track/1","/account/delete"]:
             self.assertEqual(self.client.post(path).status_code,403,path)
