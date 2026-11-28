@@ -310,7 +310,19 @@ def chart_apple_jobs(feed,limit=12):
     cursor=feed.get("lookupCursor",0)
     if not isinstance(cursor,int) or cursor<0:cursor=0
     start=cursor%len(jobs)
-    return (jobs[start:]+jobs[:start])[:limit]
+    rotated=jobs[start:]+jobs[:start]
+    # A one-build editorial priority can concentrate on a specific chart.
+    # Keep the same exact-match criteria and bounded overall request count.
+    priority=feed.get("lookupPriority",[])
+    if isinstance(priority,list):
+        preferred=set()
+        for chart in charts:
+            if chart["id"] in priority:
+                for row in chart["rows"]:
+                    if not (row.get("art") and row.get("embedUrl")):
+                        preferred.add(chart_identity(row))
+        rotated.sort(key=lambda job: (normalize(job[0]),normalize(job[1])) not in preferred)
+    return rotated[:limit]
 
 def enrich_chart_apple(feed,limit=12):
     from embed_sources import apple_identity
