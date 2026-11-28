@@ -612,7 +612,10 @@
         {
           "rank": 6,
           "title": "Good Life (Extended Mix)",
-          "artist": "MAKID"
+          "artist": "MAKID",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a0/72/aa/a072aaea-3e45-d24c-2e57-fc248ea554ff/612891171914.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/good-life-extended-mix/6797904339?i=6797904340&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/good-life-extended-mix/6797904339?i=6797904340"
         },
         {
           "rank": 7,
@@ -783,7 +786,10 @@
         {
           "rank": 6,
           "title": "THAT GIRL",
-          "artist": "DARKOO & ASAKE"
+          "artist": "DARKOO & ASAKE",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/03/20/1f/03201f5c-7cdf-a771-76cf-a70ccd105f01/5064021617260_cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/that-girl/6794283635?i=6794283641&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/that-girl/6794283635?i=6794283641"
         },
         {
           "rank": 7,
@@ -860,7 +866,10 @@
         {
           "rank": 6,
           "title": "LIVIN' ON A PRAYER",
-          "artist": "BON JOVI"
+          "artist": "BON JOVI",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/3c/96/b3/3c96b3cb-59c0-9641-cfad-a33346ab87f9/24UMGIM83177.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/livin-on-a-prayer/1440677662?i=1440677665&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/livin-on-a-prayer/1440677662?i=1440677665"
         },
         {
           "rank": 7,
@@ -939,7 +948,10 @@
         {
           "rank": 6,
           "title": "GREAT EXPECTATION",
-          "artist": "SIENNA SPIRO"
+          "artist": "SIENNA SPIRO",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c6/1e/1b/c61e1b6d-e9dd-40ca-916a-223e1dc5a269/26UMGIM51349.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/great-expectation/6769553652?i=6769553656&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/great-expectation/6769553652?i=6769553656"
         },
         {
           "rank": 7,
@@ -1389,7 +1401,10 @@
         {
           "rank": 5,
           "title": "The Legacy",
-          "artist": "Sneijder & Saltwater"
+          "artist": "Sneijder & Saltwater",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/51/07/dc/5107dcbd-530a-7a0d-9157-7542b2684607/8718522608063.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/the-legacy/6820613763?i=6820613766&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/the-legacy/6820613763?i=6820613766"
         },
         {
           "rank": 6,
@@ -2086,5 +2101,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 192
+  "lookupCursor": 204
 }
