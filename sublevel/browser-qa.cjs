@@ -174,6 +174,10 @@ const server=http.createServer((req,res)=>{
   const keys=labels.map(b=>b.label.toLowerCase().replace(/[^a-z0-9]/g,""));
   assert.deepEqual(keys.filter(k=>expected.includes(k)),expected,genre+" same ordered core tabs");
   reports.push({genre,labels});
+  // Public editorial track identities only; no account/session or private data.
+  const nativeTracks=await page.evaluate(()=>[...document.querySelectorAll("#app .tracks:not(.sl-chart-native-list) .track")].filter(r=>r.getClientRects().length).map(r=>({title:r.querySelector(".tracktitle strong,.tracktitle b")?.textContent.trim()||"",artist:r.querySelector(".tracktitle small")?.textContent.trim()||"",href:r.querySelector("a.play")?.getAttribute("href")||"",embedded:!!r.querySelector("a.play[data-sl-native-play=true]")})));
+  console.log("SUBLEVEL_NATIVE_TRACKS "+JSON.stringify({genre,tracks:nativeTracks}));
+
   for(const label of ["newreleases","abletontips","bassculture"]){
    assert.ok(await page.evaluate(key=>{const b=[...document.querySelectorAll("#app .sl-unified-genre-tabs button")].find(n=>n.textContent.toLowerCase().replace(/[^a-z0-9]/g,"")===key);if(!b)return false;b.click();return true},label),genre+" "+label);
    await settle();
