@@ -80,4 +80,38 @@ class StoreTitleTests(unittest.TestCase):
         self.assertFalse(exact_store_title("Bindweed","Bindweed (Limonata Mix)","album"))
         self.assertFalse(exact_store_title("Track - Radio Edit","Track - Extended Mix","song"))
         self.assertFalse(exact_store_title("Track - Single","Track","song"))
+from discovery_assets import load_release_covers,get_art
+from embed_sources import apple_identity
+class ReleaseCoverFetchTests(unittest.TestCase):
+    def test_retained_cover_skips_network(self):
+        row=["record","Record","Artist","2026-11-27","Techno","New release","https://artist.bandcamp.com/album/record"]
+        art="https://f4.bcbits.com/img/a123_16.jpg"
+        data={"items":[row],"reviewedArtwork":{"record":{"title":row[1],"artist":row[2],"releaseUrl":row[6],"art":art,"source":row[6]}}}
+        with patch("discovery_assets.get_art") as fetch:
+            load_release_covers(data)
+            fetch.assert_not_called()
+        self.assertEqual(data["artwork"]["record"],art)
+    def test_changed_release_redirect_rejected(self):
+        from unittest.mock import MagicMock
+        response=MagicMock()
+        response.__enter__.return_value=response
+        response.geturl.return_value="https://artist.bandcamp.com/album/different"
+        with patch("discovery_assets.urlopen",return_value=response) as fetch:
+            self.assertEqual(get_art("https://artist.bandcamp.com/album/record"),"")
+            self.assertEqual(fetch.call_count,1)
+    def test_exact_artwork_requires_image_response(self):
+        from unittest.mock import MagicMock
+        response=MagicMock()
+        response.__enter__.return_value=response
+        response.geturl.return_value="https://artist.bandcamp.com/album/record"
+        response.read.return_value=b'<meta property="og:image" content="https://f4.bcbits.com/img/a123_16.jpg">'
+        invalid=Response(b"not image content","text/html")
+        with patch("discovery_assets.urlopen",side_effect=[response,invalid]):
+            self.assertEqual(get_art(response.geturl.return_value),"")
+    def test_apple_identity_matches_expected_kind(self):
+        base="https://music.apple.com/gb/album/test/123456"
+        self.assertEqual(apple_identity(base+"?uo=4","album")["id"],"123456")
+        self.assertEqual(apple_identity(base+"?i=654321","track")["id"],"654321")
+        for url,kind in [(base,"track"),(base+"?i=654321","album"),(base+"?i=654321&i=123","track"),(base+"?i=","album"),("https://music.apple.com.evil.test/gb/album/test/123","album")]:
+            self.assertIsNone(apple_identity(url,kind))
 if __name__=="__main__":unittest.main()
