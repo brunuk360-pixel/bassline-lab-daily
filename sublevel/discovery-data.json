@@ -1980,6 +1980,27 @@
       "artist": "Toya Delazy & Neekeetone",
       "source": "https://neekeetone.bandcamp.com/track/ngiakuthanda",
       "checked": "2026-11-28"
+    },
+    "anteac-lights": {
+      "title": "ANTEAC - DYNAMIC LIGHTS",
+      "artist": "ANTEAC",
+      "source": "https://xelimarecords.bandcamp.com/album/anteac-dynamic-lights",
+      "checked": "2026-11-28",
+      "label": "Xelima Records",
+      "tracks": [
+        [
+          "dynamic lights",
+          "4:57"
+        ],
+        [
+          "overcharged in time",
+          "5:05"
+        ],
+        [
+          "same track, another version",
+          "4:37"
+        ]
+      ]
     }
   }
 }
