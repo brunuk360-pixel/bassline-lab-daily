@@ -61,6 +61,18 @@ def resolve(row):
     except Exception:pass
     return None
 
+def apple_identity(source,expected_kind):
+    p=urlsplit(source)
+    m=re.fullmatch(r"/[a-z]{2}/album/[A-Za-z0-9%._~-]+/([1-9][0-9]{0,19})",p.path)
+    q=parse_qs(p.query,keep_blank_values=True)
+    tracks=q.get("i",[])
+    if p.scheme!="https" or p.netloc!="music.apple.com" or not m or p.fragment or len(tracks)>1:return None
+    track=tracks[0] if tracks else ""
+    if tracks and not re.fullmatch(r"[1-9][0-9]{0,19}",track):return None
+    kind="track" if track else "album"
+    if kind!=expected_kind:return None
+    return {"provider":"apple","kind":kind,"id":track or m.group(1),"source":"https://music.apple.com"+p.path+("?i="+track if track else "")}
+
 def resolve_embeds(data):
     rows=[r for r in data["items"] if ".bandcamp.com/" in r[6]]
     with ThreadPoolExecutor(max_workers=6) as pool:
@@ -100,16 +112,18 @@ def resolve_embeds(data):
         if provider=="spotify" and kind in ("track","album") and re.fullmatch(r"[A-Za-z0-9]{22}",ident) and source=="https://open.spotify.com/"+kind+"/"+ident:
             entries[row[0]]={"provider":provider,"kind":kind,"id":ident,"source":source}
         elif provider=="apple":
-            p=urlsplit(source)
-            m=re.fullmatch(r"/[a-z]{2}/album/[A-Za-z0-9%._~-]+/([1-9][0-9]{0,19})",p.path)
-            q=parse_qs(p.query)
-            track=q.get("i",[""])[0]
-            if p.scheme=="https" and p.netloc=="music.apple.com" and m and not p.fragment and (not track or re.fullmatch(r"[1-9][0-9]{0,19}",track)):
-                actual_kind="track" if track else "album"
-                actual_id=track or m.group(1)
-                if kind==actual_kind and ident==actual_id and row[0] not in entries:
-                    entries[row[0]]={"provider":"apple","kind":kind,"id":ident,"source":"https://music.apple.com"+p.path+("?i="+track if track else "")}
+            verified=apple_identity(source,kind)
+            if verified and ident==verified["id"] and row[0] not in entries:
+                entries[row[0]]=verified
         elif provider=="youtube" and re.fullmatch(r"[A-Za-z0-9_-]{11}",ident) and source=="https://www.youtube.com/watch?v="+ident:
             entries[row[0]]={"provider":provider,"id":ident,"source":source}
+    # Exact artist/title matches made in the current build can supply a
+    # fallback Apple player, never replacing existing preferred players.
+    for key,item in data.get("exactAppleSources",{}).items():
+        if key not in ids or key in entries:continue
+        verified=apple_identity(item["source"],item["kind"])
+        if verified:
+            entries[key]=verified
+            print("SUBLEVEL_EXACT_APPLE "+json.dumps({"id":key,**verified},separators=(",",":")),flush=True)
     print("Official embed identities resolved:",len(entries),"of",len(data["items"]),flush=True)
     return entries
