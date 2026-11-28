@@ -220,3 +220,16 @@ html body #app .sl-d-playable-entry{display:flex;justify-content:space-between;w
 .sl-d-playlist-open strong,.sl-d-playlist-open small{display:block}.sl-d-playlist-open small{color:#b5c5c0;font-size:12px}.sl-d-row-arrow{color:#79c9b7}
 .sl-d-history-event{display:flex;gap:12px;align-items:flex-start}.sl-d-history-copy{min-width:0;flex:1}.sl-d-history-copy .sl-d-button{margin:3px 6px 3px 0}
 @media(max-width:360px){.sl-d-small-cover{width:44px;height:44px;flex-basis:44px}.sl-d-queue-track .sl-d-small-cover{width:34px;height:34px;flex-basis:34px}}
+
+/* Explore uses compact illustrated editorial rows, not plain numbered buttons. */
+html body #app .sl-d-shortcuts .sl-d-shortcut{position:relative;display:grid;grid-template-columns:52px 21px minmax(0,1fr) 16px;align-items:center;gap:8px;min-height:76px;text-align:left;border:0;border-bottom:1px solid #b5cbc32a;background:transparent;padding:9px 0;overflow:hidden}
+html body #app .sl-d-shortcut-image{display:block;width:52px;height:52px;object-fit:cover;border-radius:2px}
+html body #app .sl-d-shortcut-image.sl-room-cover{object-fit:contain;background:#10191b}
+html body #app .sl-d-shortcut:not(:has(.sl-d-shortcut-image)){grid-template-columns:21px minmax(0,1fr) 16px}
+html body #app .sl-d-shortcut-copy{min-width:0;overflow-wrap:anywhere}
+html body #app .sl-d-shortcut-num{color:#79c9b7;font:11px ui-monospace,monospace}
+.sl-d-tile img.sl-room-cover{object-fit:contain;filter:none;background:#142321}
+.sl-d-tile img.sl-room-photo{object-fit:cover}
+.sl-d-tile{gap:7px;min-height:80px}
+html body #app .night-home .sl-d-entry{background:linear-gradient(90deg,#080e10ed 0%,#080e10bf 52%,#080e1040 100%),url("section-art/warehouse.jpg") center/cover no-repeat;min-height:104px}
+@media(max-width:360px){html body #app .sl-d-shortcuts .sl-d-shortcut{grid-template-columns:40px 18px minmax(0,1fr) 14px;gap:5px}html body #app .sl-d-shortcut-image{width:40px;height:40px}html body #app .sl-d-shortcut:not(:has(.sl-d-shortcut-image)){grid-template-columns:18px minmax(0,1fr) 14px}}
