@@ -317,3 +317,21 @@ html body #app .night-home .sl-d-entry{background:linear-gradient(90deg,#080e10e
 .sl-metrics .sl-metric{display:inline-block;padding:2px 6px;border:1px solid #ffffff18;border-radius:12px;color:#b9c3c7;background:#ffffff06;font-size:11px;font-weight:400;white-space:nowrap;line-height:1.25}
 .sl-metrics .sl-metric-bpm:not(.sl-metric-pending){color:#9bd8ca;background:#79c9b710;border-color:#79c9b733}
 .sl-metrics .sl-metric-pending{color:#929a9f;background:transparent}
+
+/* Daily Dig only: reuse the home photograph, full-bleed gradient and quiet typography. */
+.sl-discovery-dialog[data-room="daily"] .sl-d-dig-matched{background:#0b1315!important;min-height:clamp(112px,31vw,150px)!important;border:0!important;padding:15px 16px!important}
+.sl-discovery-dialog[data-room="daily"] .sl-d-dig-matched .sl-d-editorial-photo{inset:0!important;width:100%!important;height:100%!important;clip-path:none!important;object-fit:cover!important;object-position:center 45%!important;z-index:-2!important}
+.sl-discovery-dialog[data-room="daily"] .sl-d-dig-matched::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#080e10ed 0%,#080e10bf 45%,#080e1030 100%)}
+.sl-discovery-dialog[data-room="daily"] .sl-d-dig-matched .sl-d-editorial-copy{width:100%;padding:0;background:none!important}
+.sl-discovery-dialog[data-room="daily"] .sl-d-dig-matched .sl-d-kicker{color:#8bd4c1!important}
+.sl-discovery-dialog[data-room="daily"] .sl-d-dig-matched h1{color:#eef0e7!important;font-size:clamp(24px,6.5vw,34px)!important;letter-spacing:-.04em}
+.sl-release-weeks{display:grid;gap:8px;min-width:0;margin-block:12px}
+.sl-release-week{border:0;border-bottom:1px solid #b5cbc32a;min-width:0;padding:0;background:transparent}
+.sl-release-week>summary{display:flex;align-items:center;gap:8px;min-height:48px;box-sizing:border-box;padding:10px 0;list-style:none;cursor:pointer;color:#eef0e7}
+.sl-release-week>summary::-webkit-details-marker{display:none}
+.sl-release-week>summary strong{flex:1;font-size:13px;line-height:1.4}
+.sl-release-week>summary small{font-size:11px;color:#b5c5c0;white-space:nowrap}
+.sl-release-week>summary::after{content:"+";font-size:18px;color:#8bd4c1}
+.sl-release-week[open]>summary::after{content:"−"}
+.sl-release-week:not([open])>:not(summary){display:none!important}
+.sl-release-week>p{padding:8px 0;font-size:12px}
