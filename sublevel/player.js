@@ -143,10 +143,18 @@ root.SUBLEVELPlayer=Object.freeze({play,action,available,resume,stop,addNext,has
 const identityText=v=>(v||"").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]/gu,"");
 function nativeRecord(row){
  const title=row.querySelector(".tracktitle strong,.tracktitle b")?.textContent.trim();
- const artist=row.querySelector(".tracktitle small")?.textContent.trim();
+ const artistNode=row.querySelector(".tracktitle small");
+ const artist=artistNode?Array.from(artistNode.childNodes).filter(n=>n.nodeType===3).map(n=>n.textContent).join("").trim()||artistNode.textContent.trim():"";
  const a=row.querySelector("a.play[href]");
  const url=a?.href;
  if(!title||!artist||!urlOf(url))return null;
+ // The original search link identifies the exact editorial row even when
+ // metadata chips share the artist container. Never embed the search itself.
+ const reviewed=(data?.reviewedNativeEmbeds||[]).find(v=>v.title===title&&v.originalUrl===url);
+ if(reviewed&&identityText(artist).startsWith(identityText(reviewed.artist))){
+  const track={id:"native:"+reviewed.title+":"+reviewed.artist,title,artist:reviewed.artist,url,embedUrl:reviewed.source};
+  if(available(track))return track
+ }
  const exact=r=>identityText(r.title)===identityText(title)&&identityText(r.artist)===identityText(artist);
  const catalogue=records.filter(exact);
  if(catalogue.length===1&&available(catalogue[0]))return {...catalogue[0],url};
