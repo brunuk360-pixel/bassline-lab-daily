@@ -58,7 +58,7 @@ function wishCalendar(w){
 function wishlistPanel(){
  const panel=create("section","sl-wishlist");panel.append(create("h2",null,"Release Wishlist"),create("p","sl-d-muted","Save announced releases and check them on release day. Dates can change; confirm availability on the original release page."));
  const upcoming=[...new Map([...(D.upcomingReleases||[]),...records].filter(r=>wishDate(r.date)&&r.date>editionDate()&&wishClean(r)).map(r=>[r.url,r])).values()].sort((a,b)=>a.date.localeCompare(b.date));
- if(upcoming.length){const list=create("section","sl-wishlist-upcoming");list.append(create("h3",null,"Upcoming in SUBLEVEL"));for(const r of upcoming){const row=create("div","sl-wishlist-row");const copy=create("div");copy.append(create("strong",null,r.title),create("small",null,r.artist+" · "+r.date),create("small",null,r.genre||"Announced release"),link("Official pre-release ↗",r.url,"sl-d-dig-source"));const candidate=wishClean({...r,recordId:r.id}),saved=state.wishlist.some(w=>w.key===candidate?.key);const add=button(saved?"Saved":"＋ Wishlist",()=>{if(wishSave({...r,recordId:r.id}))render("journey","wishlist")});add.disabled=saved;row.append(copy,add);list.append(row)}panel.append(list)}
+ const list=create("section","sl-wishlist-upcoming");list.append(create("h3",null,"Upcoming in SUBLEVEL"),releaseWeeks(upcoming,r=>{const row=create("div","sl-wishlist-row");const copy=create("div");copy.append(create("strong",null,r.title),create("small",null,r.artist+" · "+r.date),create("small",null,r.genre||"Announced release"),link("Official pre-release ↗",r.url,"sl-d-dig-source"));const candidate=wishClean({...r,recordId:r.id}),saved=state.wishlist.some(w=>w.key===candidate?.key);const add=button(saved?"Saved":"＋ Wishlist",()=>{if(wishSave({...r,recordId:r.id}))render("journey","wishlist")});add.disabled=saved;row.append(copy,add);return row},true,true));panel.append(list);
  const form=create("form","sl-wishlist-form"),fields={};
  form.append(create("h3",null,"Add an upcoming release"));
  for(const [key,label,type] of [["artist","Artist","text"],["title","Track or release","text"],["date","Announced release date","date"],["url","Official release / pre-order link","url"]]){const wrap=create("label");const input=create("input","sl-d-search");input.type=type;input.required=true;input.maxLength=key==="url"?1500:160;input.name=key;if(key==="url")input.placeholder="https://…";wrap.append(create("span",null,label),input);fields[key]=input;form.append(wrap)}
@@ -265,7 +265,7 @@ function dailyShelf(list){
  });return shelf
 }
 
-function catalogue(list){
+function catalogue(list,weekly=false){
  const wrap=create("section","sl-d-catalogue");
  const controls=create("div","sl-d-filters");
  const input=create("input","sl-d-search");input.type="search";input.placeholder="Search tracks, artists, genres…";input.setAttribute("aria-label","Search discovery catalogue");
@@ -281,17 +281,17 @@ function catalogue(list){
   if(sort.value==="newest")filtered.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
   if(sort.value==="artist"||sort.value==="title")filtered.sort((a,b)=>a[sort.value].localeCompare(b[sort.value]));
   count.textContent=filtered.length+" of "+list.length+" releases";
-  results.replaceChildren(filtered.length?listRecords(filtered):create("p","sl-d-muted","No matches. Try another search or genre."));
+  results.replaceChildren(weekly?releaseWeeks(filtered,record,false,true):filtered.length?listRecords(filtered):create("p","sl-d-muted","No matches. Try another search or genre."));
  }
  input.addEventListener("input",draw);select.addEventListener("change",draw);sort.addEventListener("change",draw);
  availability.addEventListener("change",draw);controls.append(input,select,sort,availability);wrap.append(controls,count,results);draw();return wrap;
 }
 
-const roomPhotos={hub:"genres",daily:"warehouse",playable:"underground",artists:"underground",artist:"underground",samples:"warehouse",history:"afterhours",early:"genres",gems:"late-drive",journey:"afterhours",label:"genres",graph:"warehouse",playlist:"late-drive",listen:"underground"};
+const roomPhotos={hub:"genres",daily:"daily-dig",playable:"underground",artists:"underground",artist:"underground",samples:"warehouse",history:"afterhours",early:"genres",gems:"late-drive",journey:"afterhours",label:"genres",graph:"warehouse",playlist:"late-drive",listen:"underground"};
 function titleBlock(kicker,title,description){
- const top=create("header","sl-d-intro sl-d-editorial-head");
+ const top=create("header","sl-d-intro sl-d-editorial-head");if(current?.mode==="daily")top.classList.add("sl-d-dig-matched");
  const copy=create("div","sl-d-editorial-copy");copy.append(create("span","sl-d-kicker",kicker),create("h1",null,title));
- const img=create("img","sl-d-editorial-photo");img.src="section-art/"+(roomPhotos[current?.mode]||"genres")+".jpg";img.alt="";img.decoding="async";img.addEventListener("error",()=>img.remove(),{once:true});
+ const img=create("img","sl-d-editorial-photo");img.src="section-art/"+(roomPhotos[current?.mode]||"genres")+".jpg";img.alt="";img.decoding="async";img.addEventListener("error",()=>{if(current?.mode==="daily"&&!img.dataset.fallback){img.dataset.fallback="true";img.src="section-art/warehouse.jpg"}else img.remove()});
  top.append(img,copy);const wrap=create("div","sl-d-editorial-intro");wrap.append(top,create("p","sl-d-editorial-description",description));content.append(wrap)
 }
 function section(title){content.append(create("h2","sl-d-section",title))}
@@ -300,6 +300,27 @@ function editionDate(){
  const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
  const v=t=>parts.find(p=>p.type===t).value;return v("year")+"-"+v("month")+"-"+v("day");
 }
+// Rolling seven-day groups, newest first, in the UK editorial timezone.
+function releaseWeeks(list,renderRow,upcoming=false,includeOlder=false){
+ const today=editionDate(),base=Date.parse(today+"T00:00:00Z"),day=86400000;
+ const wrap=create("section","sl-release-weeks");
+ const format=v=>new Date(v).toLocaleDateString("en-GB",{day:"numeric",month:"short",timeZone:"UTC"});
+ const valid=list.filter(r=>wishDate(r.date));
+ for(let i=0;i<4;i++){
+  const start=upcoming?base+(1+i*7)*day:base-(6+i*7)*day,end=start+6*day;
+  const first=new Date(start).toISOString().slice(0,10),last=new Date(end).toISOString().slice(0,10);
+  const rows=valid.filter(r=>r.date>=first&&r.date<=last);
+  const group=create("details","sl-release-week");group.dataset.from=first;group.dataset.through=last;group.open=i===0;
+  const summary=create("summary");summary.append(create("strong",null,(i===0?(upcoming?"Next 7 days":"Latest 7 days"):"Week "+(i+1))+" · "+format(start)+" – "+format(end)),create("small",null,rows.length+" releases"));group.append(summary);
+  if(rows.length)rows.forEach(r=>group.append(renderRow(r,rows)));else group.append(create("p","sl-d-muted","No source-confirmed releases listed for these dates yet."));
+  wrap.append(group)
+ }
+ const edge=new Date(base+(upcoming?28:-27)*day).toISOString().slice(0,10);
+ const older=valid.filter(r=>upcoming?r.date>edge:r.date<edge);
+ if(includeOlder&&older.length){const group=create("details","sl-release-week sl-release-older");const summary=create("summary");summary.append(create("strong",null,upcoming?"Later announced releases":"Older release archive"),create("small",null,older.length+" releases"));group.append(summary);older.forEach(r=>group.append(renderRow(r,older)));wrap.append(group)}
+ return wrap
+}
+window.SUBLEVELReleaseWeeks=releaseWeeks;
 function recentReleases(){
  const today=editionDate(),cutoff=new Date(Date.parse(today+"T00:00:00Z")-7*86400000).toISOString().slice(0,10);
  return records.filter(r=>/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&r.date>=cutoff&&r.date<=today&&["New release","Reissue","Remix","Remix album"].includes(r.tag)).sort((a,b)=>b.date.localeCompare(a.date));
@@ -465,8 +486,8 @@ function render(mode,arg){
   const resume=resumePanel();if(resume){const more=create("details","sl-d-daily-more");more.append(create("summary",null,"Resume previous session"),resume);extras.append(more)}
   extras.append(button("Browse new release archive →",()=>show("dailyarchive"),"sl-d-button sl-d-daily-link"),button("Browse all playable releases →",()=>show("playable"),"sl-d-button sl-d-daily-link"));content.append(extras);
  }else if(mode==="dailyarchive"){
-  titleBlock("DISCOVERY / RELEASE ARCHIVE","New release archive","Browse the wider dated editorial catalogue.");
-  content.append(catalogue(records.filter(r=>["New release","Reissue","Remix","Remix album"].includes(r.tag)).sort((a,b)=>b.date.localeCompare(a.date))));
+  titleBlock("DISCOVERY / RELEASE ARCHIVE","New releases","Browse four rolling weeks of dated releases. Open earlier weeks or the archive when you need them.");
+  content.append(catalogue(records.filter(r=>["New release","Reissue","Remix","Remix album"].includes(r.tag)).sort((a,b)=>b.date.localeCompare(a.date)),true));
  }else if(mode==="artists"){
  titleBlock("ARTIST ARCHIVE","Artist DNA","Discover the stories and connections behind the records.");D.profiles.forEach(p=>{const a=create("article","sl-d-profile");const art=profileArtwork(p);if(art){a.classList.add("sl-d-profile-with-art");a.append(art)}const copy=create("div","sl-d-profile-copy");const b=button(p[0],()=>show("artist",p[0]),"sl-d-profile-title");copy.append(b,create("p","sl-d-muted",p[1]),create("p",null,p[2]),button("Explore artist →",()=>show("artist",p[0])));a.append(copy);content.append(a)});
  }else if(mode==="artist"){
