@@ -372,5 +372,7 @@ def fill_chart_covers(feed):
                 added+=1
     print("Official Spotify chart cover additions:",added,flush=True)
     enrich_chart_apple(feed)
+    from embed_sources import resolve_chart_bandcamp
+    resolve_chart_bandcamp(feed)
     rows=[row for chart in feed["charts"] for row in chart["rows"]]
-    print("Chart artwork available:",sum(bool(r.get("art")) for r in rows),"of",len(rows),"; chart player sources:",sum(bool(r.get("embedUrl")) for r in rows),"of",len(rows),flush=True)
+    print("Chart artwork available:",sum(bool(r.get("art")) for r in rows),"of",len(rows),"; chart player sources:",sum(bool(r.get("embedUrl") or r.get("embedSpec")) for r in rows),"of",len(rows),flush=True)
