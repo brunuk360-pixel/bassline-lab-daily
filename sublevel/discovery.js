@@ -39,6 +39,12 @@ function wishClean(raw){
 }
 function wishMerge(list){const m=new Map();for(const raw of Array.isArray(list)?list:[]){const w=wishClean(raw);if(w)m.set(w.key,w)}return [...m.values()].slice(0,250)}
 state.wishlist=wishMerge(state.wishlist);
+ // Refresh a saved pre-order only when the exact artist, title and official source match.
+ // A changed scheduled date clears the previous alert's read state.
+ let wishDatesChanged=false;
+ const reviewedUpcoming=new Map((D.upcomingReleases||[]).map(r=>wishClean({...r,recordId:r.id})).filter(Boolean).map(w=>[w.key,w]));
+ state.wishlist=state.wishlist.map(w=>{const fresh=reviewedUpcoming.get(w.key);if(!fresh||fresh.date===w.date)return w;wishDatesChanged=true;return {...w,date:fresh.date,recordId:fresh.recordId,dismissed:""}});
+ if(wishDatesChanged)persist();
 const wishDue=()=>state.wishlist.filter(w=>w.date<=editionDate()&&w.dismissed!==w.date);
 function wishSave(raw){const w=wishClean(raw);if(!w){announce("Enter a track, artist, valid date and HTTPS release link.");return false}const old=state.wishlist.find(x=>x.key===w.key);if(old?.date===w.date)w.dismissed=old.dismissed;if(!old&&state.wishlist.length>=250){announce("Wishlist is full. Remove an older entry first.");return false}state.wishlist=wishMerge([...state.wishlist.filter(x=>x.key!==w.key),w]);persist();return true}
 function wishCalendar(w){
@@ -59,7 +65,7 @@ function wishlistPanel(){
  const submit=create("button","sl-d-button sl-d-primary","Save to wishlist");submit.type="submit";form.append(submit);form.addEventListener("submit",e=>{e.preventDefault();if(wishSave(Object.fromEntries(Object.entries(fields).map(([k,v])=>[k,v.value])))){render("journey","wishlist");announce("Release saved. Add a calendar reminder for an alert outside SUBLEVEL.")}});panel.append(form);
  const saved=[...state.wishlist].sort((a,b)=>a.date.localeCompare(b.date));panel.append(create("h3",null,"Your wishlist ("+saved.length+")"));
  if(!saved.length)panel.append(create("p","sl-d-muted","No upcoming releases saved yet."));
- for(const w of saved){const row=create("article","sl-wishlist-item"),r=byId(w.recordId),copy=create("div","sl-wishlist-copy"),head=create("div","sl-wishlist-head");
+ for(const w of saved){const row=create("article","sl-wishlist-item"),r=byId(w.recordId)||records.find(x=>wishClean(x)?.key===w.key),copy=create("div","sl-wishlist-copy"),head=create("div","sl-wishlist-head");
  if(r?.art){const art=smallCover(r);if(art)head.append(art)}
  const today=editionDate(),due=w.date<=today;
  copy.append(create("span","sl-d-kicker",due?"RELEASE DATE REACHED":"UPCOMING"),create("strong",null,w.title),create("small",null,w.artist),create("small",null,new Date(w.date+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/London"})));head.append(copy);row.append(head);
