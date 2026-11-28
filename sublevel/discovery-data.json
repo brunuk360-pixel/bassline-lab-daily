@@ -599,6 +599,106 @@
       "New release",
       "https://randsrecords.bandcamp.com/album/conscious-life-feat-sapele",
       "R&S Records pairing of a darker break-led track with a lighter vocal recording. Life credits Sapele on vocals and Pawel Kobak on flute; compare the two sides for their contrasting use of texture."
+    ],
+    [
+      "dusky-bindweed",
+      "Bindweed (Limonata Mix)",
+      "Dusky",
+      "2026-11-27",
+      "House / electronica",
+      "New release",
+      "https://duskymusic.bandcamp.com/album/bindweed-limonata-mix",
+      "A club rework of a track from Signals. Compare the album arrangement with this alternate mix."
+    ],
+    [
+      "onho-entropic",
+      "Entropic Voltage",
+      "Onho",
+      "2026-11-27",
+      "Hypnotic techno",
+      "New release",
+      "https://thegodsplanet.bandcamp.com/album/entropic-voltage",
+      "The label categorises the release alongside deep, ambient and dub techno. Explore its approach to repetition and space."
+    ],
+    [
+      "pursefurst-pimp",
+      "PIMP",
+      "PurseFurst",
+      "2026-11-27",
+      "Tech house",
+      "New release",
+      "https://desolatmusicgroup.bandcamp.com/album/pimp",
+      "Two cuts on Desolat: PIMP and CHECKUP. Compare the longer title track with the shorter second cut."
+    ],
+    [
+      "kenlai-eclipse",
+      "Eclipse",
+      "Kenlai",
+      "2026-11-27",
+      "Downtempo / indie dance",
+      "New release",
+      "https://subnautique.bandcamp.com/album/eclipse",
+      "The release notes describe a meeting of house, downtempo and melodic electronic music."
+    ],
+    [
+      "anteac-lights",
+      "ANTEAC - DYNAMIC LIGHTS",
+      "ANTEAC",
+      "2026-11-27",
+      "Breakbeat / electro",
+      "New release",
+      "https://xelimarecords.bandcamp.com/album/anteac-dynamic-lights",
+      "Xelima's release spans electro, breakbeat and minimal techno tags. Listen for rhythmic contrasts."
+    ],
+    [
+      "edan-uncommon",
+      "UNCOMMON",
+      "EDAN EVERYWHERE",
+      "2026-11-27",
+      "Deep house / tech house",
+      "New release",
+      "https://naturalrhythm.bandcamp.com/album/uncommon-2",
+      "Natural Rhythm's release listing connects experimental electronics with deep and tech house. Source listed the scheduled release date; confirm streaming availability on the release page."
+    ],
+    [
+      "siwotha-fall",
+      "NACH DEM FALL",
+      "Siwotha You & Luna Sage",
+      "2026-11-27",
+      "Industrial / hard techno",
+      "New release",
+      "https://sonaxxrecords.bandcamp.com/album/siwotha-you-luna-sage-nach-dem-fall",
+      "Sonaxx categorises this collaboration as hard techno and schranz. A contrasting high-intensity selection."
+    ],
+    [
+      "hedust-ketacid",
+      "Ketacid",
+      "HedustMA, NBS000",
+      "2026-11-27",
+      "Acid techno / psytrance",
+      "New release",
+      "https://ovnimoonrecords.bandcamp.com/album/ketacid",
+      "The label tags the project across psychedelic techno and acid bass. Use the original listing to explore the crossover."
+    ],
+    [
+      "mqrot-sampler",
+      "Future Is Coming (2025 - 2026 Sampler)",
+      "Various Artists",
+      "2026-11-27",
+      "EBM / electro / industrial",
+      "New release",
+      "https://mqrotrecords.bandcamp.com/album/future-is-coming-2025-2026-sampler",
+      "A multi-artist sampler bringing together electronic body music, industrial and electro. Treat this as a compilation, not a single recording."
+    ],
+    [
+      "damisfitz",
+      "DaMisfitz",
+      "BlabberMouf, Merlin Alexander",
+      "2026-11-27",
+      "Hip hop",
+      "New release",
+      "https://besser-samstag.bandcamp.com/album/damisfitz",
+      "The label lists this collaboration for 27 November. Check the artist page for the full release and available tracks."
     ]
   ],
   "profiles": [
@@ -708,7 +808,7 @@
       "https://www.hospitalrecords.com/products/nulogic-what-ive-always-waited-for"
     ]
   ],
-  "edition": "2026-11-27",
+  "edition": "2026-11-28",
   "events": [
     [
       "1996-03-18",
@@ -1043,14 +1143,20 @@
     ]
   ],
   "editorialFeature": {
-    "title": "One Friday, four directions in drum & bass",
-    "date": "2026-11-27",
-    "intro": "From Birmingham to R&S, this release-day guide contrasts independent techstep, neurofunk, jungle and liquid drum & bass. Notes are based on release credits and label descriptions; they are listening prompts, not measured audio analyses.",
+    "title": "Friday releases: beyond the bassline",
+    "date": "2026-11-28",
+    "intro": "A Saturday catch-up on Friday's underground releases, from house and hypnotic techno to electro, industrial and hip hop. Listening notes are based on published release listings, not audio measurements.",
     "ids": [
-      "soulintent-corruptions",
-      "mv-dangerous",
-      "postal-paranoia",
-      "seba-paradox-conscious"
+      "dusky-bindweed",
+      "onho-entropic",
+      "pursefurst-pimp",
+      "kenlai-eclipse",
+      "anteac-lights",
+      "edan-uncommon",
+      "siwotha-fall",
+      "hedust-ketacid",
+      "mqrot-sampler",
+      "damisfitz"
     ]
   },
   "reviewedEmbeds": {
