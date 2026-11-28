@@ -1,0 +1,11 @@
+"use strict";
+const a=require("node:assert/strict"),P=require("./player.js");
+a.match(P.frame(P.fromURL("https://soundcloud.com/artist/track")).src,/^https:\/\/w\.soundcloud\.com\/player\//);
+a.equal(P.frame(P.fromURL("https://youtu.be/ZYCm2cUjU7Y")).src,"https://www.youtube-nocookie.com/embed/ZYCm2cUjU7Y?playsinline=1");
+a.match(P.frame(P.fromURL("https://open.spotify.com/track/2ZWmmrWUgDBcPSLihBMvhg")).src,/^https:\/\/open.spotify.com\/embed\/track\//);
+a.match(P.frame({provider:"bandcamp",kind:"album",id:"12345"}).src,/^https:\/\/bandcamp.com\/EmbeddedPlayer\/album=12345\//);
+for(const url of ["javascript:alert(1)","https://soundcloud.com.evil.test/a/b","https://open.spotify.com/search/test","https://youtube.com/watch?v=bad","https://user@soundcloud.com/a/b","http://soundcloud.com/a/b","https://soundcloud.com:123/a/b"])a.equal(P.fromURL(url),null);
+a.equal(P.frame({provider:"bandcamp",kind:"track",id:"1/evil"}),null);
+const r={id:"a",title:"Test",artist:"Artist",url:"https://example.org/track"};
+a.equal(P.clean([r,r,{...r,id:"b",url:"javascript:alert(1)"}]).length,1);
+console.log("Player tests passed: exact provider URLs, hostile URLs rejected, duplicate-free queue.");
