@@ -19,3 +19,11 @@ dialog.sl-discovery-dialog{z-index:2147483000!important}
 @media(max-width:360px){.sl-p-head{gap:3px}.sl-p-head .sl-p-button{min-width:38px}.sl-player{padding-inline:8px}}
 
 .sl-p-options{display:flex;flex-wrap:wrap;gap:5px;margin:5px 0}.sl-p-options .sl-p-button{font-size:11px}.sl-p-compact .sl-p-queue,.sl-p-compact .sl-p-notice{display:none}.sl-p-compact .sl-p-link{min-height:30px}.sl-p-dossier{margin:8px 0}.sl-p-compact .sl-p-head{gap:3px}.sl-p-copy{overflow:hidden}.sl-p-copy strong{line-height:1.25}.sl-player .sl-p-head .sl-p-button{flex-shrink:0}
+
+/* Touch-friendly queue editing preserves the provider iframe. */
+.sl-p-list{max-height:min(32dvh,230px);overflow:auto}
+.sl-p-queue-row{display:flex;align-items:center;border-bottom:1px solid #79c9b733;gap:4px}
+.sl-p-list .sl-p-queue-select{flex:1;min-width:0;width:auto;border:0;overflow-wrap:anywhere;background:transparent}
+.sl-p-queue-tools{display:flex;gap:2px;flex-shrink:0}
+.sl-p-list .sl-p-queue-edit{width:44px;min-width:44px;min-height:44px;padding:0;text-align:center;font-size:17px;border:1px solid #79c9b744}
+.sl-p-queue-current{background:#19312c}
