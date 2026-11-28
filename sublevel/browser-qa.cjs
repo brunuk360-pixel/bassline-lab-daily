@@ -237,9 +237,15 @@ const server=http.createServer((req,res)=>{
   const info=await page.evaluate(()=>{const rows=[...document.querySelectorAll("#app .tracks:not(.sl-chart-native-list) .track")].filter(r=>r.getClientRects().length);const marked=rows.filter(r=>r.querySelector("a.play[data-sl-native-play=true]"));return {total:rows.length,embedded:marked.length,first:marked[0]?.querySelector(".tracktitle strong,.tracktitle b")?.textContent.trim(),valid:marked.every(r=>r.querySelector("a.play").href.startsWith("https://"))}});
   assert.ok(info.total>0&&info.valid,genre+" native rows");assert.ok(info.embedded>=minimums[genre],genre+" minimum verified playback coverage: "+JSON.stringify(info));coverage.push({genre,...info});
   if(info.embedded){
-   const url=page.url();await clickStable("#app .tracks:not(.sl-chart-native-list) a.play[data-sl-native-play=true]");await page.waitForSelector(".sl-player iframe");
+   const url=page.url();const selector="#app .tracks:not(.sl-chart-native-list) a.play[data-sl-native-play=true]";
+   await page.waitForSelector(selector,{visible:true});
+   const hit=await page.$eval(selector,n=>{n.scrollIntoView({block:"center",inline:"center",behavior:"instant"});const r=n.getBoundingClientRect(),target=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return {title:n.getAttribute("aria-label"),hit:target===n||n.contains(target),target:target?.className?.toString()}});
+   console.log("SUBLEVEL_NATIVE_CLICK "+JSON.stringify({genre,...hit}));assert.ok(hit.hit,genre+" native play control not obscured: "+JSON.stringify(hit));
+   await clickStable(selector);
+   try{await page.waitForSelector(".sl-player:not([hidden]) iframe")}catch(e){throw Error(genre+" native play failed: "+e.message)}
+
    assert.equal(page.url(),url);assert.equal(await page.$eval(".sl-p-copy strong",n=>n.textContent),info.first);assert.ok(await page.$eval(".sl-player iframe",n=>["www.youtube-nocookie.com","open.spotify.com","w.soundcloud.com","bandcamp.com","embed.music.apple.com"].includes(new URL(n.src).hostname)));
-   await clickStable('.sl-player button[aria-label="Stop and close player"]');played++
+   await clickStable('.sl-player button[aria-label="Stop and close player"]');played++;await page.waitForSelector('.sl-player[hidden]');await settle()
   }
  }
  console.log("SUBLEVEL native Discover playback coverage: "+JSON.stringify(coverage));
