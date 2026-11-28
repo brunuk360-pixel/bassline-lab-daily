@@ -2273,6 +2273,30 @@
       "source": "https://www.youtube.com/watch?v=wmin5WkOuPw",
       "evidence": "Artist official video catalogue https://theprodigy.com/videos/?catid=1; archived identity https://ghostarchive.org/varchive/wmin5WkOuPw; https://www.youtube.com/watch?v=wmin5WkOuPw",
       "checked": "2026-11-28"
+    },
+    {
+      "title": "Sincere",
+      "artist": "MJ Cole",
+      "originalUrl": "https://music.youtube.com/search?q=MJ%20Cole%20Sincere",
+      "source": "https://www.youtube.com/watch?v=cy-djtiU5RE",
+      "evidence": "MJ Cole official artist channel; 1998 Island Def Jam music video; https://www.youtube.com/watch?v=cy-djtiU5RE",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Re-Rewind",
+      "artist": "Artful Dodger",
+      "originalUrl": "https://music.youtube.com/search?q=Artful%20Dodger%20Re-Rewind",
+      "source": "https://www.youtube.com/watch?v=M0wv_cQv8As",
+      "evidence": "Verified Demon Music Group official HD music video, Artful Dodger feat. Craig David, original 1999 single; https://www.youtube.com/watch?v=M0wv_cQv8As",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Good Life",
+      "artist": "Inner City",
+      "originalUrl": "https://music.youtube.com/search?q=Inner%20City%20Good%20Life",
+      "source": "https://www.youtube.com/watch?v=KJxJxr9RlKM",
+      "evidence": "Inner City official music video, confirmed artist channel via https://guiljam.nl/en/track/inner-city/good-life/; https://www.youtube.com/watch?v=KJxJxr9RlKM",
+      "checked": "2026-11-28"
     }
   ]
 }
