@@ -29,3 +29,5 @@ dialog.sl-discovery-dialog{z-index:2147483000!important}
 .sl-p-queue-current{background:#19312c}
 
 .sl-p-providers{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.sl-p-providers[hidden]{display:none!important}.sl-p-provider{font-size:11px;min-height:44px}.sl-p-provider[aria-pressed=true]{border-color:#79c9b7;color:#79c9b7;background:#19312c}.sl-p-compact .sl-p-providers{display:none}
+
+.sl-p-links{display:flex;gap:6px 15px;align-items:center;flex-wrap:wrap}.sl-p-links .sl-p-link[hidden]{display:none!important}.sl-p-compact .sl-p-links{display:none}
