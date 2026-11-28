@@ -13,6 +13,7 @@ PHOTOS=[
 ]
 # Scene photography is separate from release artwork and homepage photos.
 GENRE_PHOTOS=[
+ ("daily-dig","1761098281103-51bf33e39d7f","Dmytro Yarish","https://unsplash.com/photos/hands-sifting-through-vinyl-records-in-a-store-ogeQkALj3Hg",None,1200),
  ("scene-rock","1693813990038-e8fb2e49e78b","Adam Gritco","https://unsplash.com/photos/A33Dif_TpII",None,900),
  ("scene-hiphop","1770155497036-aadb6cae3de4","David Vilches","https://unsplash.com/photos/iSWb2dnkEW4",None,900),
  ("scene-indie","1760160741895-eade1f12d01e","Brooke Balentine","https://unsplash.com/photos/Wx66pPYvdjk",None,900),
