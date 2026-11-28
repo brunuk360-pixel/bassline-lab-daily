@@ -2298,5 +2298,107 @@
       "evidence": "Inner City official music video, confirmed artist channel via https://guiljam.nl/en/track/inner-city/good-life/; https://www.youtube.com/watch?v=KJxJxr9RlKM",
       "checked": "2026-11-28"
     }
-  ]
+  ],
+  "dailyEditorial": {
+    "dusky-bindweed": {
+      "title": "Bindweed (Limonata Mix)",
+      "artist": "Dusky",
+      "artistContext": "London duo Nick Harriman and Alfie Granger-Howell have released house, techno and melodic club music across several labels, including Anjunadeep.",
+      "artistSource": "https://anjunadeep.com/gb/artists/57385-dusky",
+      "releaseContext": "The Limonata version revisits music from Signals. The release includes original arrangements and extended versions, allowing a comparison of the same musical material in different formats.",
+      "releaseSource": "https://duskymusic.bandcamp.com/album/bindweed-limonata-mix",
+      "listenFor": "Compare the 3:33 mix with the 4:54 extended mix: where does the longer arrangement give a DJ room to transition?",
+      "checked": "2026-11-28"
+    },
+    "onho-entropic": {
+      "title": "Entropic Voltage",
+      "artist": "Onho",
+      "artistContext": "Onho also works with Ness under the name Purpurea, whose debut E.F.S. appeared on The Gods Planet.",
+      "artistSource": "https://thegodsplanet.bandcamp.com/album/e-f-s",
+      "releaseContext": "Four pieces of deep techno make up this EP. The title track runs for 6:46; Audio Sol is credited with mastering.",
+      "releaseSource": "https://thegodsplanet.bandcamp.com/album/entropic-voltage",
+      "listenFor": "Compare the title track with Nonlinear Pulse, focusing on how repeated motifs build tension.",
+      "checked": "2026-11-28"
+    },
+    "pursefurst-pimp": {
+      "title": "PIMP",
+      "artist": "PurseFurst",
+      "artistContext": "PurseFurst is a Miami-based DJ and producer; coverage of this Desolat EP highlights its hip-hop influence.",
+      "artistSource": "https://evl.one/pimp-by-pursefurst",
+      "releaseContext": "Desolat presents two tracks: PIMP (5:52) and CHECKUP (4:14). This is the Bandcamp edition; other stores may list an earlier release date.",
+      "releaseSource": "https://desolatmusicgroup.bandcamp.com/album/pimp",
+      "listenFor": "Compare how the two arrangements use space between percussion and vocal elements.",
+      "checked": "2026-11-28"
+    },
+    "kenlai-eclipse": {
+      "title": "Eclipse",
+      "artist": "Kenlai",
+      "artistContext": "Kenlai is the project of Mexican DJ and producer Iván Cruz Gutiérrez. The release page identifies him as born in Mexico City and based in Nayarit.",
+      "artistSource": "https://subnautique.bandcamp.com/album/eclipse",
+      "releaseContext": "Subnautique presents Eclipse as a two-track project bringing a chapter to a close, with house and downtempo elements.",
+      "releaseSource": "https://subnautique.bandcamp.com/album/eclipse",
+      "listenFor": "Listen for the relationship between melody and rhythmic movement across both tracks.",
+      "checked": "2026-11-28"
+    },
+    "anteac-lights": {
+      "title": "ANTEAC - DYNAMIC LIGHTS",
+      "artist": "ANTEAC",
+      "artistContext": "Anteac is an underground DJ and producer based in Barcelona, according to the artist’s Beatport profile.",
+      "artistSource": "https://www.beatport.com/artist/anteac/1025829",
+      "releaseContext": "Xelima Records lists three cuts, including dynamic lights (4:57) and another version (4:37). Its release tags connect breakbeat, electro and minimal techno.",
+      "releaseSource": "https://xelimarecords.bandcamp.com/album/anteac-dynamic-lights",
+      "listenFor": "Compare the drum placement and use of repetition across the versions.",
+      "checked": "2026-11-28"
+    },
+    "zinc-motive-extended": {
+      "title": "Motive (Extended Mix)",
+      "artist": "DJ Zinc",
+      "artistContext": "London producer DJ Zinc has worked across jungle, drum & bass, breaks and garage. His cross-tempo record 138 Trek helped lead to the Bingo Beats label.",
+      "artistSource": "https://www.redbullmusicacademy.com/lectures/zinc-hardware-bingo/",
+      "releaseContext": "Zinc identifies the Bandcamp release as the extended version of Motive, with the radio edit available on streaming platforms.",
+      "releaseSource": "https://djzinc.bandcamp.com/track/motive",
+      "listenFor": "Compare the extended introduction and outro with the radio edit, where available.",
+      "checked": "2026-11-28"
+    },
+    "siwotha-fall": {
+      "title": "NACH DEM FALL",
+      "artist": "Siwotha You & Luna Sage",
+      "artistContext": "Sonaxx describes this as a collaboration between French artist Siwotha You and German vocalist Luna Sage.",
+      "artistSource": "https://sonaxxrecords.bandcamp.com/album/siwotha-you-luna-sage-nach-dem-fall",
+      "releaseContext": "The label credits Luna Sage on the 5:42 title track; the second cut is Every last Promise (4:20).",
+      "releaseSource": "https://sonaxxrecords.bandcamp.com/album/siwotha-you-luna-sage-nach-dem-fall",
+      "listenFor": "Explore how the vocal is positioned against the intense schranz rhythm, and compare with the second cut.",
+      "checked": "2026-11-28"
+    },
+    "hedust-ketacid": {
+      "title": "Ketacid",
+      "artist": "HedustMA, NBS000",
+      "artistContext": "HedustMA and NBS000 are the two credited collaborators on this Ovnimoon Records release. Further independent biographical details have not yet been verified.",
+      "artistSource": "https://ovnimoonrecords.bandcamp.com/album/ketacid",
+      "releaseContext": "The label places Ketacid at the intersection of acid techno and psychedelic electronic music.",
+      "releaseSource": "https://ovnimoonrecords.bandcamp.com/album/ketacid",
+      "listenFor": "Listen for changes in the acid-style bass and rhythmic texture; this is a listening prompt, not a measured analysis.",
+      "checked": "2026-11-28"
+    },
+    "mqrot-sampler": {
+      "title": "Future Is Coming (2025 - 2026 Sampler)",
+      "artist": "Various Artists",
+      "artistContext": "This is a multi-artist compilation curated by MQROT Records, rather than a release by one individual performer.",
+      "artistSource": "https://mqrotrecords.bandcamp.com/album/future-is-coming-2025-2026-sampler",
+      "releaseContext": "The label describes the collection as a selection of tracks from 2025–2026, drawing together EBM, electro and industrial music.",
+      "releaseSource": "https://mqrotrecords.bandcamp.com/album/future-is-coming-2025-2026-sampler",
+      "listenFor": "Choose two contrasting tracks from the official tracklist and compare their rhythmic character.",
+      "checked": "2026-11-28"
+    },
+    "physics-invisible-prvail": {
+      "title": "Invisible Line (PRVAIL Remix)",
+      "artist": "Physics",
+      "artistContext": "Physics founded Midnight Sun Recordings and has been active in Finland’s drum & bass scene. PRVAIL is credited as the remixer.",
+      "artistSource": "https://drumandbassuk.com/artist/physics",
+      "releaseContext": "The label describes this as a new interpretation of the February 2026 original, contrasting atmospheric material with modern techstep influences.",
+      "releaseSource": "https://msrdnb.bandcamp.com/track/physics-invisible-line-prvail-remix",
+      "listenFor": "Compare the original and remix for changes in bass movement, percussion and atmosphere.",
+      "checked": "2026-11-28"
+    }
+  }
 }
