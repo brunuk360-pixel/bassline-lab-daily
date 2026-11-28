@@ -31,10 +31,10 @@ const make=(tag,cls,txt)=>{const n=doc.createElement(tag);if(cls)n.className=cls
 function button(txt,fn,cls="sl-p-button"){const b=make("button",cls,txt);b.type="button";b.addEventListener("click",fn);return b}
 function source(r){return embeds[r.id]||fromURL(r.embedUrl)||fromURL(r.url)}
 function available(r){return !!frame(source(r))}
-let items=[],index=-1,panel,host,title,meta,previous,next,original,queueList,queueDetails,notice,compactButton,playableButton,activeID=null,playableOnly=false;
+let items=[],index=-1,panel,host,title,meta,previous,next,original,queueList,queueDetails,notice,compactButton,playableButton,activeID=null,playableOnly=false,compact=false;
 const key="sublevel.player.queue.v1";
-function persist(){try{localStorage.setItem(key,JSON.stringify({items,index,skipExternal,compact}))}catch{}}
-try{const saved=JSON.parse(localStorage.getItem(key)||"null");items=clean(saved?.items).map(r=>byId(r.id)||r);index=items.length?Math.max(0,Math.min(items.length-1,Number.isInteger(saved?.index)?saved.index:0)):-1;skipExternal=saved?.skipExternal===true;compact=saved?.compact===true}catch{}
+function persist(){try{localStorage.setItem(key,JSON.stringify({items,index,playableOnly,compact}))}catch{}}
+try{const saved=JSON.parse(localStorage.getItem(key)||"null");items=clean(saved?.items).map(r=>byId(r.id)||r);index=items.length?Math.max(0,Math.min(items.length-1,Number.isInteger(saved?.index)?saved.index:0)):-1;playableOnly=saved?.playableOnly===true||saved?.skipExternal===true;compact=saved?.compact===true}catch{}
 function build(){
  if(panel)return;
  panel=make("section","sl-player");panel.hidden=true;panel.setAttribute("aria-label","SUBLEVEL music player");
@@ -43,20 +43,20 @@ function build(){
  previous=button("‹",()=>step(-1));previous.setAttribute("aria-label","Previous selection");
  next=button("›",()=>step(1));next.setAttribute("aria-label","Next selection");
  const close=button("×",stop);close.setAttribute("aria-label","Stop and close player");
- compactButton=button("−",()=>{const compact=panel.classList.toggle("sl-p-compact");compactButton.textContent=compact?"+":"−";compactButton.setAttribute("aria-expanded",String(!compact));compactButton.setAttribute("aria-label",compact?"Expand player details":"Compact player details")});compactButton.setAttribute("aria-expanded","true");compactButton.setAttribute("aria-label","Compact player details");head.append(copy,previous,next,compactButton,close);
+ compactButton=button("−",()=>{compact=!compact;applyCompact();persist()});head.append(copy,previous,next,compactButton,close);
  host=make("div","sl-p-frame");notice=make("p","sl-p-notice");notice.setAttribute("role","status");
  original=make("a","sl-p-link","Open original release ↗");original.target="_blank";original.rel="noopener noreferrer";
- queueDetails=make("details","sl-p-queue");playableButton=button("Skip unavailable selections: off",()=>{playableOnly=!playableOnly;playableButton.textContent="Skip unavailable selections: "+(playableOnly?"on":"off");playableButton.setAttribute("aria-pressed",String(playableOnly));refreshControls()});playableButton.setAttribute("aria-pressed","false");queueDetails.append(make("summary",null,"Listening queue"),playableButton,queueList=make("div","sl-p-list"));
- options=make("div","sl-p-options");skipControl=button("Skip external-only: off",()=>{skipExternal=!skipExternal;refreshControls();persist()});const shuffle=button("Shuffle upcoming",()=>{for(let i=items.length-1;i>index+1;i--){const j=index+1+Math.floor(Math.random()*(i-index));[items[i],items[j]]=[items[j],items[i]]}redrawQueue();refreshControls();persist()});options.append(shuffle,skipControl);queueDetails.insertBefore(options,queueList);
+ queueDetails=make("details","sl-p-queue");playableButton=button("Skip external-only: off",()=>{playableOnly=!playableOnly;refreshControls();persist()});const options=make("div","sl-p-options");const shuffle=button("Shuffle upcoming",()=>{for(let i=items.length-1;i>index+1;i--){const j=index+1+Math.floor(Math.random()*(i-index));[items[i],items[j]]=[items[j],items[i]]}redrawQueue();refreshControls();persist()});options.append(shuffle,playableButton);queueDetails.append(make("summary",null,"Listening queue"),options,queueList=make("div","sl-p-list"));
+
  panel.append(head,host,notice,original,queueDetails);doc.body.append(panel);applyCompact();
  if(typeof ResizeObserver==="function")new ResizeObserver(()=>doc.documentElement.style.setProperty("--sl-player-space",panel.hidden?"0px":Math.ceil(panel.getBoundingClientRect().height)+"px")).observe(panel)
 }
-function applyCompact(){panel.classList.toggle("sl-p-compact",compact);compactControl.textContent=compact?"+":"−";compactControl.setAttribute("aria-expanded",String(!compact));if(compact)queueDetails.open=false}
-function destination(d){for(let i=index+d;i>=0&&i<items.length;i+=d){if(!skipExternal||available(items[i]))return i}return -1}
-function refreshControls(){previous.disabled=destination(-1)<0;next.disabled=destination(1)<0;skipControl.textContent="Skip external-only: "+(skipExternal?"on":"off");skipControl.setAttribute("aria-pressed",String(skipExternal))}
+function applyCompact(){panel.classList.toggle("sl-p-compact",compact);compactButton.textContent=compact?"+":"−";compactButton.setAttribute("aria-expanded",String(!compact));compactButton.setAttribute("aria-label",compact?"Expand player details":"Compact player details");if(compact)queueDetails.open=false}
+
+
 function redrawQueue(){queueList.replaceChildren();items.forEach((r,i)=>{const b=button((i+1)+". "+r.title+" — "+r.artist+(available(r)?"":" · external only"),()=>select(i));if(i===index)b.setAttribute("aria-current","true");queueList.append(b)});queueDetails.firstElementChild.textContent="Listening queue · "+items.length+" selections"}
 function adjacent(d){for(let i=index+d;i>=0&&i<items.length;i+=d)if(!playableOnly||available(items[i]))return i;return -1}
-function refreshControls(){previous.disabled=adjacent(-1)<0;next.disabled=adjacent(1)<0}
+function refreshControls(){previous.disabled=adjacent(-1)<0;next.disabled=adjacent(1)<0;playableButton.textContent="Skip external-only: "+(playableOnly?"on":"off");playableButton.setAttribute("aria-pressed",String(playableOnly))}
 function select(i){
  if(i<0||i>=items.length)return;build();index=i;const r=items[i],spec=frame(source(r));panel.hidden=false;doc.body.classList.add("sl-player-open");
  title.textContent=r.title;meta.textContent=r.artist+" · "+(i+1)+"/"+items.length+(spec?" · "+spec.name:" · External only");refreshControls();original.href=source(r)?.source||r.url;
@@ -67,7 +67,7 @@ function select(i){
 }
 function play(r,list=[r]){if(!r)return;items=clean(list);if(!items.some(x=>x.id===r.id))items=clean([r,...items]);select(items.findIndex(x=>x.id===r.id))}
 function step(d){const i=adjacent(d);if(i>=0)select(i)}
-function stop(){if(!panel)return;host.replaceChildren();activeID=null,skipExternal=false,compact=false,skipControl,compactControl,options;panel.hidden=true;doc.body.classList.remove("sl-player-open");doc.documentElement.style.setProperty("--sl-player-space","0px")}
+function stop(){if(!panel)return;host.replaceChildren();activeID=null;panel.hidden=true;doc.body.classList.remove("sl-player-open");doc.documentElement.style.setProperty("--sl-player-space","0px")}
 function resume(){if(index>=0)select(index)}
 function action(r,list){if(available(r))return button("▶ Play here",()=>play(r,list),"sl-d-button sl-p-launch");const a=make("a","sl-d-button sl-p-source","Open release ↗");a.href=r.url;a.target="_blank";a.rel="noopener noreferrer";return a}
 function addNext(r){if(!r)return;const current=items[index];if(current?.id===r.id)return;items=clean(items.filter(x=>x.id!==r.id));index=current?items.findIndex(x=>x.id===current.id):-1;items.splice(index+1,0,r);if(index<0)index=0;items=clean(items);if(panel&&!panel.hidden){refreshControls();redrawQueue()}persist()}
