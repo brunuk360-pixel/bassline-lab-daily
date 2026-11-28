@@ -101,7 +101,7 @@ app.addEventListener("click",event=>{
 },true);
 // Record of the Day rotation: only source-ranked hits with actual art and
 // an official in-site player. Never overwrite the original daily selection.
-let recordBag=[],recordSeen=new Set(),recordLast=null;
+let recordSeen=new Set(),recordLast=null;
 function recordHitPool(){
  const seen=new Set(),pool=[];
  for(const chart of feed.charts){
@@ -135,7 +135,8 @@ function recordRotation(){
   output.replaceChildren(card,actions,meta);original.classList.add("sl-rod-hidden");output.hidden=false;restore.hidden=false
  }
  shuffle.addEventListener("click",()=>{
-  const live=recordHitPool();
+  const originalText=norm(original.textContent);
+  const live=recordHitPool().filter(h=>!(originalText.includes(norm(h.track.title))&&originalText.includes(norm(h.track.artist))));
   let remaining=live.filter(h=>!recordSeen.has(h.key));
   if(!remaining.length){recordSeen.clear();remaining=live}
   if(remaining.length>1)remaining=remaining.filter(h=>h.key!==recordLast);
