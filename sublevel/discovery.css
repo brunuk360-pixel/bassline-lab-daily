@@ -193,3 +193,19 @@ html body #app .sl-d-playable-entry{display:flex;justify-content:space-between;w
 .sl-d-release-tracks li strong{min-width:0;font-size:14px;line-height:1.4;overflow-wrap:anywhere}
 .sl-d-release-tracks li time,.sl-d-track-number{font:12px ui-monospace,monospace;color:#a0decf;font-variant-numeric:tabular-nums}
 .sl-d-release-tracklist .sl-d-art-credit{display:inline-block;font-size:12px;padding:10px 0;color:#a0decf}
+
+/* Shared editorial identity: compact photo-led section strips and screen navigation. */
+.sl-d-bar{padding-top:max(4px,env(safe-area-inset-top));gap:0 8px;grid-template-columns:minmax(60px,1fr) minmax(0,2fr) minmax(44px,1fr)}
+.sl-d-bar strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sl-d-screen-nav{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #b5cbc32a;gap:5px}
+.sl-d-bar .sl-d-nav-button{min-height:44px;text-align:center;font-size:12px;white-space:nowrap;padding:4px;color:#b5c5c0}
+.sl-d-bar .sl-d-nav-button[aria-current=page]{color:#79c9b7;box-shadow:inset 0 -2px #79c9b7}
+.sl-d-editorial-intro{margin:0 0 16px}
+.sl-d-editorial-head{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;min-height:100px;padding:14px 12px;margin:0;background:#ecece3;color:#13201e;border:0}
+.sl-d-editorial-photo{position:absolute;right:0;top:0;width:46%;height:100%;object-fit:cover;clip-path:polygon(27% 0,100% 0,100% 100%,0 100%);z-index:-1}
+.sl-d-editorial-copy{width:75%;min-width:0;padding-right:10%;background:linear-gradient(90deg,#ecece3 65%,#ecece300);padding-block:4px}
+.sl-d-editorial-head .sl-d-kicker{color:#236c62;letter-spacing:.1em}
+.sl-d-content .sl-d-editorial-head h1{font-size:clamp(25px,6vw,42px);color:#13201e;line-height:1.04;margin:6px 0 0;overflow-wrap:anywhere}
+.sl-d-content .sl-d-editorial-description{font-size:13px;color:#b5c5c0;margin:10px 0 14px}
+@media(min-width:700px){.sl-d-editorial-head{min-height:142px;padding:20px 24px}.sl-d-editorial-copy{width:68%}}
+@media(max-width:360px){.sl-d-bar{padding-inline:9px}.sl-d-bar .sl-d-nav-button{font-size:11px}.sl-d-editorial-head{min-height:96px}}
