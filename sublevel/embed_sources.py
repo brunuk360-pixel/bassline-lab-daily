@@ -8,28 +8,45 @@ from concurrent.futures import ThreadPoolExecutor
 
 class Page(HTMLParser):
     def __init__(self):
-        super().__init__();self.embeds=[];self.tralbum=[]
+        super().__init__();self.embeds=[];self.tralbum=[];self.properties=[]
     def handle_starttag(self,tag,attrs):
         a=dict(attrs)
         if tag=="meta" and a.get("property","") in ("og:video","og:video:url","og:video:secure_url"):
             self.embeds.append(a.get("content",""))
         if tag=="iframe":self.embeds.append(a.get("src",""))
+        if tag=="meta" and a.get("name")=="bc-page-properties":
+            self.properties.append(a.get("content",""))
         if a.get("data-tralbum"):self.tralbum.append(a["data-tralbum"])
 
 def identity(page,url):
     kind=urlsplit(url).path.split("/")[1]
+    if kind not in ("album","track"):return None
+    expected="a" if kind=="album" else "t"
+    candidates=set()
+    def add(item_type,ident):
+        if item_type==expected and re.fullmatch(r"[1-9]\d{0,11}",str(ident)):
+            candidates.add(str(ident))
+    # Public Bandcamp page properties explicitly identify the current release.
+    # Do not use tracklist or recommendation IDs; those are other recordings.
+    for raw in page.properties:
+        try:
+            obj=json.loads(raw)
+            if isinstance(obj,dict):
+                if obj.get("item_type") in ("a","t") and obj["item_type"]!=expected:return None
+                add(obj.get("item_type"),obj.get("item_id"))
+        except (ValueError,TypeError):pass
     for value in page.embeds:
         p=urlsplit(value)
         if p.scheme=="https" and p.hostname=="bandcamp.com" and p.path.startswith("/EmbeddedPlayer/"):
             m=re.search(r"(?:^|/)"+kind+r"=(\d{1,12})(?:/|$)",p.path)
-            if m:return kind,m.group(1)
+            if m:add(expected,m.group(1))
     for raw in page.tralbum:
         try:
             cur=json.loads(raw).get("current") or {}
-            if cur.get("item_type")==("a" if kind=="album" else "t") and re.fullmatch(r"\d{1,12}",str(cur.get("id",""))):
-                return kind,str(cur["id"])
+            add(cur.get("item_type"),cur.get("id"))
         except (ValueError,TypeError,AttributeError):pass
-    return None
+    # Fail closed when independent metadata disagrees.
+    return (kind,next(iter(candidates))) if len(candidates)==1 else None
 
 def resolve(row):
     url=row[6];p=urlsplit(url)
