@@ -72,8 +72,9 @@ const server=http.createServer((req,res)=>{
  await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
  });
  await check("Mobile browser Back and Forward across discovery and native navigation",async()=>{
+ const tapNamed=async(selector,fragment)=>{const found=await page.evaluate((selector,fragment)=>{const node=[...document.querySelectorAll(selector)].find(n=>n.textContent.trim().includes(fragment)&&n.getClientRects().length);if(!node)return false;node.setAttribute("data-qa-history-target","true");return true},selector,fragment);assert.ok(found,"Visible navigation control: "+fragment);await clickStable('[data-qa-history-target="true"]');await page.evaluate(()=>document.querySelectorAll('[data-qa-history-target]').forEach(n=>n.removeAttribute("data-qa-history-target")))};
  await nav("Today");await clickStable(".sl-d-entry");await page.waitForSelector('.sl-discovery-dialog[open][data-room="daily"]');
- await page.evaluate(()=>{const b=[...document.querySelectorAll(".sl-d-content button")].find(n=>n.textContent.includes("Start listening"));if(!b)throw Error("Missing daily listening entry");b.click()});
+ await tapNamed(".sl-d-content button","Start listening");
  await page.waitForSelector('.sl-discovery-dialog[open][data-room="listen"]');
  await page.evaluate(()=>history.back());await page.waitForSelector('.sl-discovery-dialog[open][data-room="daily"]');
  await page.evaluate(()=>history.back());await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open&&!document.querySelector("#app").inert);
@@ -82,15 +83,15 @@ const server=http.createServer((req,res)=>{
  // Closing the discovery screen must unwind its own history, not leave a stale overlay.
  await clickStable(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open&&!document.querySelector("#app").inert);await settle();
  await nav("Explore");await page.waitForSelector(".sl-d-shortcut");
- await page.evaluate(()=>[...document.querySelectorAll(".sl-d-shortcut")].find(b=>b.textContent.includes("Artist DNA")).click());
+ await tapNamed(".sl-d-shortcut","Artist DNA");
  await page.waitForSelector('.sl-discovery-dialog[open][data-room="artists"]');
  await clickStable(".sl-d-profile-title");await page.waitForSelector('.sl-discovery-dialog[open][data-room="artist"]');
  await page.evaluate(()=>history.back());await page.waitForSelector('.sl-discovery-dialog[open][data-room="artists"]');
  await page.evaluate(()=>history.back());await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);await settle();
  await nav("Today");await nav("Genres");await page.waitForSelector("#app .genre");
- await page.evaluate(()=>{const g=[...document.querySelectorAll("#app .genre")].find(n=>/drum\s*&\s*bass/i.test(n.querySelector(".genre-name")?.textContent));if(!g)throw Error("Missing D&B genre");g.click()});
+ await tapNamed("#app .genre","Drum & Bass");
  await page.waitForSelector("#app .roomhead");await settle();
- await page.evaluate(()=>{const b=[...document.querySelectorAll("#app .tabs button")].find(n=>n.textContent.trim()==="Top 10");if(!b)throw Error("Missing chart tab");b.click()});
+ await tapNamed("#app .tabs button","Top 10");
  await page.waitForSelector(".sl-chart-inline");await settle();
  await page.evaluate(()=>history.back());await page.waitForFunction(()=>!!document.querySelector("#app .roomhead")&&!document.querySelector(".sl-chart-inline"));await settle();
  await page.evaluate(()=>history.back());await page.waitForFunction(()=>!!document.querySelector("#app .genre")&&!document.querySelector("#app .roomhead"));await settle();
