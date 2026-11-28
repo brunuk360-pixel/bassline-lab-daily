@@ -79,8 +79,15 @@ const server=http.createServer((req,res)=>{
  await page.evaluate(()=>history.back());await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open&&!document.querySelector("#app").inert);
  assert.ok(await page.$(".night-home"));
  await page.evaluate(()=>history.forward());await page.waitForSelector('.sl-discovery-dialog[open][data-room="daily"]');
+ // Closing the discovery screen must unwind its own history, not leave a stale overlay.
  await clickStable(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open&&!document.querySelector("#app").inert);await settle();
- await nav("Genres");await page.waitForSelector("#app .genre");
+ await nav("Explore");await page.waitForSelector(".sl-d-shortcut");
+ await page.evaluate(()=>[...document.querySelectorAll(".sl-d-shortcut")].find(b=>b.textContent.includes("Artist DNA")).click());
+ await page.waitForSelector('.sl-discovery-dialog[open][data-room="artists"]');
+ await clickStable(".sl-d-profile-title");await page.waitForSelector('.sl-discovery-dialog[open][data-room="artist"]');
+ await page.evaluate(()=>history.back());await page.waitForSelector('.sl-discovery-dialog[open][data-room="artists"]');
+ await page.evaluate(()=>history.back());await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);await settle();
+ await nav("Today");await nav("Genres");await page.waitForSelector("#app .genre");
  await page.evaluate(()=>{const g=[...document.querySelectorAll("#app .genre")].find(n=>/drum\s*&\s*bass/i.test(n.querySelector(".genre-name")?.textContent));if(!g)throw Error("Missing D&B genre");g.click()});
  await page.waitForSelector("#app .roomhead");await settle();
  await page.evaluate(()=>{const b=[...document.querySelectorAll("#app .tabs button")].find(n=>n.textContent.trim()==="Top 10");if(!b)throw Error("Missing chart tab");b.click()});
