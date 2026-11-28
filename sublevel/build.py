@@ -287,7 +287,9 @@ chart_ids=set()
 for chart in chart_feed["charts"]:
     assert chart["id"] not in chart_ids
     chart_ids.add(chart["id"])
-    assert chart["status"] in ("verified","snapshot")
+    assert chart["status"] in ("verified","snapshot","weekly")
+    if chart["status"]=="weekly":
+        assert date.fromisoformat(chart["through"])<=date.fromisoformat(chart["published"])<=date.fromisoformat(chart["checked"])
     assert chart["url"].startswith("https://")
     assert date.fromisoformat(chart["checked"])
     if chart.get("through"):
