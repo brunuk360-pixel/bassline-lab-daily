@@ -333,6 +333,17 @@ chart_script=('<script>window.__slCharts='+chart_json+';</script><script>'+chart
 data,n=re.subn(br"</body\s*>",lambda m:chart_script+m.group(0),data,count=1,flags=re.I)
 assert n==1
 print("Chart feed validated:",len(chart_feed["charts"]),"complete snapshots;",len(chart_feed["sources"]),"source entries.")
+# Keep the original native genre content and supply missing editorial tabs.
+genre_tabs_js=(root/"genre-tabs.js").read_text(encoding="utf-8")
+genre_tabs_css=(root/"genre-tabs.css").read_text(encoding="utf-8")
+if shutil.which("node"):
+    subprocess.run(["node","--check",str(root/"genre-tabs.js")],check=True)
+data,n=re.subn(br"</head\s*>",lambda m:('<style id="sublevel-genre-tabs">'+genre_tabs_css+'</style>').encode("utf-8")+m.group(0),data,count=1,flags=re.I)
+assert n==1
+data,n=re.subn(br"</body\s*>",lambda m:('<script>'+genre_tabs_js+'</script>').encode("utf-8")+m.group(0),data,count=1,flags=re.I)
+assert n==1
+print("Unified genre tabs included.")
+
 
 mobile_css=(root/"mobile-qa.css").read_text(encoding="utf-8")
 data,n=re.subn(br"</head\s*>",lambda m:('<style id="sublevel-mobile-qa">'+mobile_css+'</style>').encode("utf-8")+m.group(0),data,count=1,flags=re.I)
