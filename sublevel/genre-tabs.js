@@ -54,12 +54,11 @@ function show(b,id,name,tabs){
  }else if(id==="bassculture"){
   panel.append(make("h3",null,"Inside the scene"),make("p",null,info[1]),make("p","sl-genre-muted","An editorial listening prompt for this genre."));
  }else if(id==="newreleases"){
-  const now=new Date().toISOString().slice(0,10),cutoff=new Date(Date.now()-7*86400000).toISOString().slice(0,10);
-  const re=new RegExp(info[2],"i"),matches=D.items.filter(r=>/^\d{4}-\d{2}-\d{2}$/.test(r[3])&&r[3]>=cutoff&&r[3]<=now&&re.test(r[4])).sort((a,b)=>b[3].localeCompare(a[3]));
-  panel.append(make("p","sl-genre-muted","Verified dated catalogue releases from the last seven days."));
+  const re=new RegExp(info[2],"i"),matches=D.items.filter(r=>["New release","Reissue","Remix","Remix album"].includes(r[5])&&re.test(r[4])).sort((a,b)=>b[3].localeCompare(a[3]));
+  panel.append(make("p","sl-genre-muted","Four weeks of source-dated releases. Open a week to browse its records."));
   const records=matches.map(([id,title,artist,date,genre,tag,url])=>({id,title,artist,date,genre,url,art:D.artwork?.[id]||""}));
-  if(!records.length)panel.append(make("p",null,"No verified new releases in this edition. Check Discover 10 or Top 10 while this section is refreshed."));
-  for(const r of records){const row=make("article","sl-genre-release");if(r.art){const img=make("img");img.src=r.art;img.alt=r.title+" release artwork";img.loading="lazy";img.addEventListener("error",()=>img.remove(),{once:true});row.append(img)}const text=make("div");text.append(make("strong",null,r.title),make("small",null,r.artist+" · "+r.date));row.append(text);if(window.SUBLEVELPlayer)row.append(window.SUBLEVELPlayer.action(r,records));panel.append(row)}
+  const rowFor=(r,list)=>{const row=make("article","sl-genre-release");if(r.art){const img=make("img");img.src=r.art;img.alt=r.title+" release artwork";img.loading="lazy";img.addEventListener("error",()=>img.remove(),{once:true});row.append(img)}const text=make("div");text.append(make("strong",null,r.title),make("small",null,r.artist+" · "+r.date));window.SUBLEVELMetrics?.append(text,r.title,r.artist,{album:/\/album\//.test(r.url)});row.append(text);if(window.SUBLEVELPlayer)row.append(window.SUBLEVELPlayer.action(r,list));return row};
+  if(window.SUBLEVELReleaseWeeks)panel.append(window.SUBLEVELReleaseWeeks(records,rowFor,false,true));else records.forEach(r=>panel.append(rowFor(r,records)));
  }
  if(id!=="newreleases"){
   const re=new RegExp(info[2],"i"),picks=D.items.filter(r=>re.test(r[4])&&D.artwork?.[r[0]]).slice(0,2).map(([id,title,artist,date,genre,tag,url])=>({id,title,artist,url,art:D.artwork[id]}));
