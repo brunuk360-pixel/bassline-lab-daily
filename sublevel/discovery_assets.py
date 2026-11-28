@@ -101,6 +101,10 @@ APPLE_TARGETS={
  "edlan":("Edlan & TENEM","Know It All / Stand Alone","album"),
  "cloned-reality":("Cloned Clouds","Reality Check","album"),
  "buttermere-touch":("Buttermere","Touch Typing","album"),
+ "dusky-bindweed":("Dusky","Bindweed (Limonata Mix)","album"),
+ "physics-invisible-prvail":("Physics & PRVAIL","Invisible Line (PRVAIL Remix)","song"),
+ "pursefurst-pimp":("PurseFurst","PIMP","album"),
+ "onho-entropic":("Onho","Entropic Voltage","album"),
 }
 def apple_cover(spec):
     artist,title,entity=spec
@@ -110,6 +114,8 @@ def apple_cover(spec):
             obj=json.load(res)
         for item in obj.get("results",[]):
             name=item.get("trackName" if entity=="song" else "collectionName","")
+            # Storefronts sometimes append the release format, not a different mix.
+            if entity=="album":name=re.sub(r"\s+-\s+(?:EP|Single)$","",name,flags=re.I)
             if normalize(name)!=normalize(title) or normalize(item.get("artistName",""))!=normalize(artist):continue
             art=item.get("artworkUrl100","")
             source=item.get("trackViewUrl") or item.get("collectionViewUrl","")
