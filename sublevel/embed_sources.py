@@ -124,6 +124,6 @@ def resolve_embeds(data):
         verified=apple_identity(item["source"],item["kind"])
         if verified:
             entries[key]=verified
-            print("SUBLEVEL_EXACT_APPLE "+json.dumps({"id":key,**verified},separators=(",",":")),flush=True)
+            print("SUBLEVEL_EXACT_APPLE "+json.dumps({"recordId":key,**verified},separators=(",",":")),flush=True)
     print("Official embed identities resolved:",len(entries),"of",len(data["items"]),flush=True)
     return entries
