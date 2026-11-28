@@ -71,6 +71,25 @@ const server=http.createServer((req,res)=>{
  assert.ok(await page.$(".sl-d-release-hero h1"));assert.equal(await page.evaluate(()=>document.querySelectorAll(".sl-d-release-meta dt").length),3);assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
  await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
  });
+ await check("Mobile browser Back and Forward across discovery and native navigation",async()=>{
+ await nav("Today");await clickStable(".sl-d-entry");await page.waitForSelector('.sl-discovery-dialog[open][data-room="daily"]');
+ await page.evaluate(()=>{const b=[...document.querySelectorAll(".sl-d-content button")].find(n=>n.textContent.includes("Start listening"));if(!b)throw Error("Missing daily listening entry");b.click()});
+ await page.waitForSelector('.sl-discovery-dialog[open][data-room="listen"]');
+ await page.evaluate(()=>history.back());await page.waitForSelector('.sl-discovery-dialog[open][data-room="daily"]');
+ await page.evaluate(()=>history.back());await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open&&!document.querySelector("#app").inert);
+ assert.ok(await page.$(".night-home"));
+ await page.evaluate(()=>history.forward());await page.waitForSelector('.sl-discovery-dialog[open][data-room="daily"]');
+ await clickStable(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open&&!document.querySelector("#app").inert);await settle();
+ await nav("Genres");await page.waitForSelector("#app .genre");
+ await page.evaluate(()=>{const g=[...document.querySelectorAll("#app .genre")].find(n=>/drum\s*&\s*bass/i.test(n.querySelector(".genre-name")?.textContent));if(!g)throw Error("Missing D&B genre");g.click()});
+ await page.waitForSelector("#app .roomhead");await settle();
+ await page.evaluate(()=>{const b=[...document.querySelectorAll("#app .tabs button")].find(n=>n.textContent.trim()==="Top 10");if(!b)throw Error("Missing chart tab");b.click()});
+ await page.waitForSelector(".sl-chart-inline");await settle();
+ await page.evaluate(()=>history.back());await page.waitForFunction(()=>!!document.querySelector("#app .roomhead")&&!document.querySelector(".sl-chart-inline"));await settle();
+ await page.evaluate(()=>history.back());await page.waitForFunction(()=>!!document.querySelector("#app .genre")&&!document.querySelector("#app .roomhead"));await settle();
+ await page.evaluate(()=>history.back());await page.waitForSelector("#app .night-home");await settle();
+ assert.equal(await overflow(),false);
+ });
  await check("Discovery room theme and on-screen navigation",async()=>{
  await nav("Today");await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open] .sl-d-editorial-head");
  const go=async label=>{assert.ok(await page.evaluate(label=>{const b=[...document.querySelectorAll(".sl-d-screen-nav button")].find(n=>n.textContent.includes(label));if(!b)return false;b.click();return true},label));await settle()};
@@ -78,7 +97,7 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.$eval(".sl-d-editorial-head",n=>getComputedStyle(n).backgroundColor),"rgb(236, 236, 227)");
  await go("Explore");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"hub");
  await go("Library");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"journey");
- await page.click(".sl-d-back");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"hub");
+ await page.click(".sl-d-back");await page.waitForSelector(".sl-d-hub");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"hub");
  await page.setViewport({width:320,height:700,isMobile:true,hasTouch:true,deviceScaleFactor:1});await settle();
  assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.scrollWidth>n.clientWidth+2),false);
  const controls=await page.$$eval(".sl-d-screen-nav button",nodes=>nodes.map(n=>n.getBoundingClientRect().height));assert.ok(controls.every(h=>h>=44));
