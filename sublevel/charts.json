@@ -396,7 +396,10 @@
         {
           "rank": 9,
           "title": "Walls",
-          "artist": "City Soul Project, Roland Nights"
+          "artist": "City Soul Project, Roland Nights",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a5/e6/c1/a5e6c17e-8435-75c7-175f-e5f037338b6c/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/walls/6825286343?i=6825286635&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/walls/6825286343?i=6825286635"
         },
         {
           "rank": 10,
@@ -762,7 +765,10 @@
         {
           "rank": 9,
           "title": "ALREADY FALLING",
-          "artist": "DAVIDO"
+          "artist": "DAVIDO",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a8/fb/21/a8fb21ed-2106-199e-75dc-f01099c29394/196874507544.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/already-falling/6784220944?i=6784221150&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/already-falling/6784220944?i=6784221150"
         },
         {
           "rank": 10,
@@ -839,7 +845,10 @@
         {
           "rank": 9,
           "title": "BOHEMIAN RHAPSODY",
-          "artist": "QUEEN"
+          "artist": "QUEEN",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/62/2e/97/622e97c4-d620-2ae1-2a47-a32e16a01492/602567988847.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/bohemian-rhapsody/6781027361?i=6781027645&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/bohemian-rhapsody/6781027361?i=6781027645"
         },
         {
           "rank": 10,
@@ -916,7 +925,10 @@
         {
           "rank": 9,
           "title": "REIN ME IN",
-          "artist": "SAM FENDER & OLIVIA DEAN"
+          "artist": "SAM FENDER & OLIVIA DEAN",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ec/81/1d/ec811d0e-64d9-224c-25df-9d26456874f9/25UMGIM75096.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/rein-me-in/1820918843?i=1820918844&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/rein-me-in/1820918843?i=1820918844"
         },
         {
           "rank": 10,
@@ -984,7 +996,10 @@
         {
           "rank": 9,
           "title": "DO I WANNA KNOW",
-          "artist": "ARCTIC MONKEYS"
+          "artist": "ARCTIC MONKEYS",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/69/9c/b5/699cb5d6-115c-ff73-9d26-e57ea4350d72/887828031795.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/do-i-wanna-know/663097964?i=663097965&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/do-i-wanna-know/663097964?i=663097965"
         },
         {
           "rank": 10,
@@ -1996,5 +2011,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 120
+  "lookupCursor": 132
 }
