@@ -22,11 +22,64 @@ function button(txt,fn,cls="sl-d-button"){const b=create("button",cls,txt);b.typ
 function link(txt,url,cls="sl-d-button"){const a=create("a",cls,txt);a.href=url;a.target="_blank";a.rel="noopener noreferrer";return a}
 const search=q=>"https://open.spotify.com/search/"+encodeURIComponent(q);
 const storeKey="sublevel.discovery.journey.v1";
-let state={saved:[],history:[],artists:[],labels:[]},persistent=true;
+let state={saved:[],history:[],artists:[],labels:[],wishlist:[]},persistent=true;
 try{const raw=JSON.parse(localStorage.getItem(storeKey)||"null");if(raw)for(const k of Object.keys(state))if(Array.isArray(raw[k]))state[k]=raw[k]}catch{persistent=false}
 function persist(){try{localStorage.setItem(storeKey,JSON.stringify(state))}catch{persistent=false}}
 let dialog,content,heading,back,lastFocus,stack=[],current,queue=[],position=0,notice,pendingNav=null;
 function announce(txt){if(notice)notice.textContent=txt}
+/* Release wishlist: scheduled dates, not claims of confirmed streaming availability. */
+function wishDate(value){if(typeof value!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;const d=new Date(value+"T00:00:00Z");return Number.isFinite(d.getTime())&&d.toISOString().slice(0,10)===value}
+function wishClean(raw){
+ if(!raw||typeof raw!=="object"||!wishDate(raw.date))return null;
+ const title=typeof raw.title==="string"?raw.title.trim().slice(0,160):"",artist=typeof raw.artist==="string"?raw.artist.trim().slice(0,160):"";
+ let url;try{url=new URL(raw.url);if(url.protocol!=="https:"||url.username||url.password)return null}catch{return null}
+ if(!title||!artist)return null;
+ const key=[artist.toLowerCase(),title.toLowerCase(),url.href].join("|");
+ return {key,title,artist,date:raw.date,url:url.href,recordId:typeof raw.recordId==="string"?raw.recordId.slice(0,160):"",dismissed:raw.dismissed===raw.date?raw.date:""}
+}
+function wishMerge(list){const m=new Map();for(const raw of Array.isArray(list)?list:[]){const w=wishClean(raw);if(w)m.set(w.key,w)}return [...m.values()].slice(0,250)}
+state.wishlist=wishMerge(state.wishlist);
+const wishDue=()=>state.wishlist.filter(w=>w.date<=editionDate()&&w.dismissed!==w.date);
+function wishSave(raw){const w=wishClean(raw);if(!w){announce("Enter a track, artist, valid date and HTTPS release link.");return false}const old=state.wishlist.find(x=>x.key===w.key);if(old?.date===w.date)w.dismissed=old.dismissed;if(!old&&state.wishlist.length>=250){announce("Wishlist is full. Remove an older entry first.");return false}state.wishlist=wishMerge([...state.wishlist.filter(x=>x.key!==w.key),w]);persist();return true}
+function wishCalendar(w){
+ const esc=s=>String(s).replace(/\\/g,"\\\\").replace(/\r?\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;");
+ const stamp=new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
+ const day=w.date.replace(/-/g,"");
+ const uid=Array.from(new TextEncoder().encode(w.key)).reduce((n,b)=>Math.imul(n^b,16777619)>>>0,2166136261).toString(16);
+ const lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//SUBLEVEL//Release Wishlist//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT","UID:"+uid+"-"+day+"@sublevel","DTSTAMP:"+stamp,"DTSTART:"+day+"T090000","DTEND:"+day+"T091500","SUMMARY:"+esc(w.artist+" — "+w.title+" (scheduled release)"),"DESCRIPTION:"+esc("Check the official release page; release dates can change. "+w.url),"BEGIN:VALARM","ACTION:DISPLAY","TRIGGER:PT0M","DESCRIPTION:"+esc("Check "+w.title+" release"),"END:VALARM","END:VEVENT","END:VCALENDAR"];
+ const blob=new Blob([lines.join("\r\n")+"\r\n"],{type:"text/calendar;charset=utf-8"}),url=URL.createObjectURL(blob),a=create("a");a.href=url;a.download="sublevel-release-reminder.ics";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)
+}
+function wishlistPanel(){
+ const panel=create("section","sl-wishlist");panel.append(create("h2",null,"Release Wishlist"),create("p","sl-d-muted","Save announced releases and check them on release day. Dates can change; confirm availability on the original release page."));
+ const upcoming=records.filter(r=>wishDate(r.date)&&r.date>editionDate()).sort((a,b)=>a.date.localeCompare(b.date));
+ if(upcoming.length){const list=create("section","sl-wishlist-upcoming");list.append(create("h3",null,"Upcoming in SUBLEVEL"));for(const r of upcoming){const row=create("div","sl-wishlist-row");const copy=create("div");copy.append(create("strong",null,r.title),create("small",null,r.artist+" · "+r.date));const candidate=wishClean({...r,recordId:r.id}),saved=state.wishlist.some(w=>w.key===candidate?.key);const add=button(saved?"Saved":"＋ Wishlist",()=>{if(wishSave({...r,recordId:r.id}))render("journey","wishlist")});add.disabled=saved;row.append(copy,add);list.append(row)}panel.append(list)}
+ const form=create("form","sl-wishlist-form"),fields={};
+ form.append(create("h3",null,"Add an upcoming release"));
+ for(const [key,label,type] of [["artist","Artist","text"],["title","Track or release","text"],["date","Announced release date","date"],["url","Official release / pre-order link","url"]]){const wrap=create("label");const input=create("input","sl-d-search");input.type=type;input.required=true;input.maxLength=key==="url"?1500:160;input.name=key;if(key==="url")input.placeholder="https://…";wrap.append(create("span",null,label),input);fields[key]=input;form.append(wrap)}
+ const submit=create("button","sl-d-button sl-d-primary","Save to wishlist");submit.type="submit";form.append(submit);form.addEventListener("submit",e=>{e.preventDefault();if(wishSave(Object.fromEntries(Object.entries(fields).map(([k,v])=>[k,v.value])))){render("journey","wishlist");announce("Release saved. Add a calendar reminder for an alert outside SUBLEVEL.")}});panel.append(form);
+ const saved=[...state.wishlist].sort((a,b)=>a.date.localeCompare(b.date));panel.append(create("h3",null,"Your wishlist ("+saved.length+")"));
+ if(!saved.length)panel.append(create("p","sl-d-muted","No upcoming releases saved yet."));
+ for(const w of saved){const row=create("article","sl-wishlist-item"),r=byId(w.recordId),copy=create("div","sl-wishlist-copy"),head=create("div","sl-wishlist-head");
+ if(r?.art){const art=smallCover(r);if(art)head.append(art)}
+ const today=editionDate(),due=w.date<=today;
+ copy.append(create("span","sl-d-kicker",due?"RELEASE DATE REACHED":"UPCOMING"),create("strong",null,w.title),create("small",null,w.artist),create("small",null,new Date(w.date+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/London"})));head.append(copy);row.append(head);
+ const actions=create("div","sl-d-actions");actions.append(link(due?"Check release ↗":"Pre-release page ↗",w.url),button("Calendar reminder",()=>wishCalendar(w)),button("Remove",()=>{state.wishlist=state.wishlist.filter(x=>x.key!==w.key);persist();render("journey","wishlist")}));
+ if(due&&w.dismissed!==w.date)actions.append(button("Mark alert read",()=>{w.dismissed=w.date;persist();render("journey","wishlist")}));
+ if(due&&r&&r.date<=today&&!state.saved.includes(r.id))actions.append(button("Save to music",()=>{state.saved=[r.id,...state.saved];persist();render("journey","wishlist")}));
+ row.append(actions);panel.append(row)}
+ panel.append(create("p","sl-d-muted","Release alerts appear when you open SUBLEVEL. Import the calendar reminder into your phone's calendar for an alert at 9 am on the scheduled date; browser-closed push alerts are not enabled."));
+ return panel
+}
+function wishAlert(){
+ const due=wishDue(),target=app.querySelector(".night-home,.sl-library-entry");
+ const existing=app.querySelector(".sl-wishlist-alert");
+ if(!target||!due.length){existing?.remove();return}
+ const signature=due.map(w=>w.key+"@"+w.date).join(";");
+ if(existing?.dataset.wishSignature===signature)return;
+ existing?.remove();const alert=create("div","sl-wishlist-alert");alert.dataset.wishSignature=signature;alert.setAttribute("role","status");
+ alert.append(create("span",null,due.length+" wishlist release"+(due.length===1?" has":"s have")+" reached the scheduled date."),button("View wishlist →",()=>{open("journey");show("journey","wishlist")}));target.prepend(alert)
+}
+
  // Browser history is shared by discovery rooms and the native page shell.
  // No URL changes, no browser traps; the first entry remains the normal exit.
  const historyKey="sublevelNavigationV1",historySession=Date.now().toString(36)+Math.random().toString(36).slice(2);
@@ -439,7 +492,7 @@ function render(mode,arg){
  }else if(mode==="gems"){
  titleBlock("DEEP CUTS / INDEPENDENT MUSIC","Hidden Gems","A handpicked shelf of less obvious selections across bass music, jungle and beyond.");content.append(catalogue(records.filter(r=>r.tag==="Deep cut")));
  }else if(mode==="journey"){
- const tabs=[["overview","Overview"],["collection","Saved music"],["playlists","Playlists"],["following","Following"],["history","History"],["settings","Profile & data"]];
+ const tabs=[["overview","Overview"],["collection","Saved music"],["wishlist","Release Wishlist"],["playlists","Playlists"],["following","Following"],["history","History"],["settings","Profile & data"]];
  const tab=tabs.some(t=>t[0]===arg)?arg:"overview";
  titleBlock("SUBLEVEL / PERSONAL LIBRARY","My Music Journey","Your music, discoveries and producer community in one place.");
  const nav=create("nav","sl-library-tabs");nav.setAttribute("aria-label","Library sections");
@@ -451,9 +504,10 @@ function render(mode,arg){
  if(tab==="overview"){
  content.append(collectionStats());const resume=resumePanel();if(resume)content.append(resume);
  const shortcuts=create("div","sl-library-shortcuts");
- for(const [id,name,count] of [["collection","Saved music",saved.length],["playlists","Playlists",listening.playlists.length],["following","Following",state.artists.length+state.labels.length],["history","Recently explored",history.length]]){const b=button("",()=>show("journey",id),"sl-library-shortcut");b.append(create("span",null,name),create("strong",null,String(count)),create("span",null,"→"));shortcuts.append(b)}content.append(shortcuts);
+ for(const [id,name,count] of [["collection","Saved music",saved.length],["wishlist","Release Wishlist",state.wishlist.length],["playlists","Playlists",listening.playlists.length],["following","Following",state.artists.length+state.labels.length],["history","Recently explored",history.length]]){const b=button("",()=>show("journey",id),"sl-library-shortcut");b.append(create("span",null,name),create("strong",null,String(count)),create("span",null,"→"));shortcuts.append(b)}content.append(shortcuts);
  section("Recommended for you");content.append(personalized(),profileCard());
  }else if(tab==="collection"){collection()}
+ else if(tab==="wishlist"){content.append(wishlistPanel())}
  else if(tab==="playlists"){section("Your playlists");content.append(playlistLibrary());const resume=resumePanel();if(resume)content.append(resume)}
  else if(tab==="following"){section("Followed artists");const followed=D.profiles.filter(p=>state.artists.includes(p[0]));if(!followed.length)content.append(create("p","sl-d-muted","Follow artists in Artist DNA."),button("Discover artists",()=>show("artists")));for(const p of followed){const row=create("article","sl-d-profile");row.append(create("h3",null,p[0]),create("p","sl-d-muted",p[1]),button("Artist DNA →",()=>show("artist",p[0])),saveButton(p[0],"artists","Follow artist"));content.append(row)}
  section("Record labels");for(const [name,url,ids] of labelsData){const row=create("article","sl-d-profile");row.append(create("h3",null,name));const actions=create("div","sl-d-actions");actions.append(saveButton(name,"labels","Follow label"),button("Browse catalogue →",()=>show("label",name)),link("Official catalogue ↗",url));row.append(actions);content.append(row)}
@@ -467,6 +521,7 @@ file.addEventListener("change",async()=>{try{
  if(!incoming||typeof incoming!=="object"||!Array.isArray(incoming.saved))throw Error("Not a SUBLEVEL collection");
  const valid={saved:records.map(r=>r.id),history:records.map(r=>r.id),artists:D.profiles.map(p=>p[0]),labels:labelsData.map(l=>l[0])};
  for(const k of Object.keys(valid)){if(Array.isArray(incoming[k])){const merged=[...new Set([...state[k],...incoming[k].filter(v=>typeof v==="string"&&valid[k].includes(v))])];state[k]=k==="history"?merged.slice(0,Math.max(100,state[k].length)):merged}}
+ if(Array.isArray(incoming.wishlist))state.wishlist=wishMerge([...incoming.wishlist,...state.wishlist]);
  if(incoming.listening){listening=L.merge(listening,incoming.listening,validIDs);persistListening()}
  persist();render("journey","settings");announce("Collection merged successfully");
  }catch{announce("Could not import this collection. Choose a valid SUBLEVEL JSON export.")}});
@@ -536,7 +591,8 @@ function mount(){const home=app.querySelector(".night-home"),explore=app.querySe
  panel.append(shortcuts,button("Browse complete catalogue →",()=>open(),"sl-d-button sl-d-primary"));explore.before(panel);
 }
  const active=document.querySelector(".bottom button.active");const savedActive=active?.dataset.navLabel==="Saved"||active?.textContent.trim().startsWith("Saved");if(!savedActive)app.querySelector(".sl-d-journey-entry")?.remove();
- if(savedActive&&!app.querySelector(".sl-d-journey-entry")){const panel=create("section","sl-d-journey-entry sl-library-entry");panel.append(create("span","sl-d-kicker","SUBLEVEL / PERSONAL LIBRARY"),create("h2",null,"Your music collection"),create("p","sl-d-muted","Manage discovery saves, playlists and followed artists. Existing magazine saves remain below."),button("Open My Music Journey →",()=>open("journey"),"sl-d-button sl-d-primary"));app.prepend(panel)}
+ if(savedActive&&!app.querySelector(".sl-d-journey-entry")){const panel=create("section","sl-d-journey-entry sl-library-entry");panel.append(create("span","sl-d-kicker","SUBLEVEL / PERSONAL LIBRARY"),create("h2",null,"Your music collection"),create("p","sl-d-muted","Manage discovery saves, playlists and followed artists. Existing magazine saves remain below."),button("Open My Music Journey →",()=>open("journey"),"sl-d-button sl-d-primary"));panel.append(button("Release Wishlist →",()=>{open("journey");show("journey","wishlist")},"sl-d-button sl-wishlist-entry"));app.prepend(panel)}
+ wishAlert();
  app.querySelectorAll(".editorial-detail").forEach(d=>{
   const h=d.querySelector(".sl-dossier-hero");if(!h||d.querySelector(".sl-library-track-save"))return;
   const norm=t=>(t||"").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu,"");
@@ -548,5 +604,5 @@ function mount(){const home=app.querySelector(".night-home"),explore=app.querySe
  });
  app.querySelectorAll(".editorial-detail").forEach(d=>{if(d.querySelector(".sl-d-track-link"))return;const h=d.querySelector(".sl-dossier-hero");if(!h)return;const t=h.querySelector(".sl-dossier-artist")?.textContent||"";const p=D.profiles.find(x=>t.toLowerCase().includes(x[0].toLowerCase()));if(p){const b=button("Artist DNA →",()=>{open("artists");show("artist",p[0])},"sl-d-button sl-d-track-link");h.after(b)}})
 }
-let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{pending=false;mount()})}};new MutationObserver(schedule).observe(app,{childList:true,subtree:true});const nav=document.querySelector(".bottom");if(nav)new MutationObserver(schedule).observe(nav,{attributes:true,subtree:true,attributeFilter:["class"]});schedule();
+let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{pending=false;mount()})}};new MutationObserver(schedule).observe(app,{childList:true,subtree:true});const nav=document.querySelector(".bottom");if(nav)new MutationObserver(schedule).observe(nav,{attributes:true,subtree:true,attributeFilter:["class"]});schedule();document.addEventListener("visibilitychange",()=>{if(!document.hidden)wishAlert()});window.addEventListener("focus",wishAlert);setInterval(()=>{if(!document.hidden)wishAlert()},60000);
 })()
