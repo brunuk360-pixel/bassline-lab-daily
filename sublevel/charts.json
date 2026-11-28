@@ -154,7 +154,10 @@
         {
           "rank": 2,
           "title": "Feelings (Extended Mix)",
-          "artist": "Junior Jack, Mark Knight, James Hurr"
+          "artist": "Junior Jack, Mark Knight, James Hurr",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3a/83/f0/3a83f0dd-c61e-5f7f-3d57-f78793a0b4aa/5052075037141.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/feelings-extended-mix/6820161489?i=6820161494&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/feelings-extended-mix/6820161489?i=6820161494"
         },
         {
           "rank": 3,
@@ -227,7 +230,10 @@
         {
           "rank": 2,
           "title": "Stand!ng By (Fred Everything Remix)",
-          "artist": "Karizma"
+          "artist": "Karizma",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e3/3a/3a/e33a3aad-e245-7364-ec61-5981727e77cc/885288715842.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/stand-ng-by-fred-everything-remix/6818635131?i=6818635458&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/stand-ng-by-fred-everything-remix/6818635131?i=6818635458"
         },
         {
           "rank": 3,
@@ -299,7 +305,10 @@
         {
           "rank": 3,
           "title": "In Control (Extended Mix)",
-          "artist": "Nick Harvey"
+          "artist": "Nick Harvey",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/0f/ce/82/0fce821f-1c6f-090d-3a1a-68a13b9d9dfc/5052075611310.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/in-control-extended-mix/6800300969?i=6800300971&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/in-control-extended-mix/6800300969?i=6800300971"
         },
         {
           "rank": 4,
@@ -509,7 +518,10 @@
         {
           "rank": 3,
           "title": "Music Lights (Vinny's Nu Disco Mix)",
-          "artist": "HP Vince"
+          "artist": "HP Vince",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9f/c4/76/9fc476a8-9318-1e92-5ed3-8913a41d98e8/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/music-lights-vinnys-nu-disco-mix/6807230591?i=6807230592&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/music-lights-vinnys-nu-disco-mix/6807230591?i=6807230592"
         },
         {
           "rank": 4,
@@ -579,7 +591,10 @@
         {
           "rank": 3,
           "title": "Domino (Ares Carter Extended Remix)",
-          "artist": "Oxia"
+          "artist": "Oxia",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/8c/97/ad/8c97adda-5fa2-b2de-e906-36c0b035b55c/8718522634161.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/domino-ares-carter-extended-remix/6808597122?i=6808597124&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/domino-ares-carter-extended-remix/6808597122?i=6808597124"
         },
         {
           "rank": 4,
@@ -2059,5 +2074,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 168
+  "lookupCursor": 180
 }
