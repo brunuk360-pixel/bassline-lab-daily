@@ -32,7 +32,7 @@ const server=http.createServer((req,res)=>{
  const overflow=()=>page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
  await check("390px homepage layout",async()=>{await page.waitForSelector(".sl-home-index");assert.equal(await overflow(),false)});
  await check("Daily Dig and listening queue",async()=>{
- await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
+ await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
  const edition=await page.evaluate(()=>{const D=window.__slDiscovery,today=new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());const f=D.editorialFeature;if(f?.date!==today||f.ids.length!==10)return null;return {expected:f.ids.map(id=>D.items.find(r=>r[0]===id)?.[1]),actual:[...document.querySelectorAll(".sl-discovery-dialog .sl-d-list")][0]&&[...document.querySelectorAll(".sl-discovery-dialog .sl-d-list:first-of-type .sl-d-record h3")].slice(0,10).map(x=>x.textContent),firstList:[...document.querySelector(".sl-discovery-dialog .sl-d-list")?.querySelectorAll(".sl-d-record h3")||[]].map(x=>x.textContent)}});
  if(edition)assert.deepEqual(edition.firstList,edition.expected,"today's editorial release order");
  const listen=await page.evaluate(()=>{const b=[...document.querySelectorAll(".sl-discovery-dialog button")].find(x=>x.textContent.includes("Start listening"));if(!b)return false;b.click();return true});assert.ok(listen);
@@ -41,7 +41,7 @@ const server=http.createServer((req,res)=>{
  await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
  });
  await check("Discovery room theme and on-screen navigation",async()=>{
- await nav("Today");await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open] .sl-d-editorial-head");
+ await nav("Today");await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open] .sl-d-editorial-head");
  const go=async label=>{assert.ok(await page.evaluate(label=>{const b=[...document.querySelectorAll(".sl-d-screen-nav button")].find(n=>n.textContent.includes(label));if(!b)return false;b.click();return true},label));await settle()};
  await page.waitForFunction(()=>document.querySelector(".sl-d-editorial-photo")?.naturalWidth>0);
  assert.equal(await page.$eval(".sl-d-editorial-head",n=>getComputedStyle(n).backgroundColor),"rgb(236, 236, 227)");
@@ -52,7 +52,7 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.scrollWidth>n.clientWidth+2),false);
  const controls=await page.$$eval(".sl-d-screen-nav button",nodes=>nodes.map(n=>n.getBoundingClientRect().height));assert.ok(controls.every(h=>h>=44));
  await go("Genres");await page.waitForSelector(".sl-chart-directory");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.open),false);
- await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await nav("Today");await page.click(".sl-d-entry");await go("Home");await page.waitForSelector("#app .night-home");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.open),false);
+ await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await nav("Today");await clickStable(".sl-d-entry");await go("Home");await page.waitForSelector("#app .night-home");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.open),false);
  });
  await check("Artwork-linked archive and listening queue",async()=>{
  await nav("Today");await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
@@ -154,6 +154,32 @@ const server=http.createServer((req,res)=>{
  }
  await nav("Today");
  });
+ await check("All twenty genre rooms have the same five core tabs",async()=>{
+ const rooms=await page.evaluate(()=>window.__slCharts.rooms.map(r=>r[0]));
+ const expected=["discover10","top10","newreleases","abletontips","bassculture"];
+ const reports=[];
+ for(const genre of rooms){
+  await nav("Genres");await page.waitForSelector("#app .genre");
+  assert.ok(await page.evaluate(name=>{const norm=s=>(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");const card=[...document.querySelectorAll("#app .genre")].find(n=>norm(n.querySelector(".genre-name")?.textContent)===norm(name));if(!card)return false;card.click();return true},genre),genre+" card");
+  await page.waitForSelector("#app .sl-unified-genre-tabs");await settle();
+  const labels=await page.evaluate(()=>[...document.querySelectorAll("#app .sl-unified-genre-tabs button")].map(b=>({label:b.textContent.trim(),added:b.dataset.slGenreExtraTab||""})));
+  const keys=labels.map(b=>b.label.toLowerCase().replace(/[^a-z0-9]/g,""));
+  assert.deepEqual(keys.filter(k=>expected.includes(k)),expected,genre+" same ordered core tabs");
+  reports.push({genre,labels});
+  for(const label of ["newreleases","abletontips","bassculture"]){
+   assert.ok(await page.evaluate(key=>{const b=[...document.querySelectorAll("#app .sl-unified-genre-tabs button")].find(n=>n.textContent.toLowerCase().replace(/[^a-z0-9]/g,"")===key);if(!b)return false;b.click();return true},label),genre+" "+label);
+   await settle();
+   const state=await page.evaluate(key=>{const b=[...document.querySelectorAll("#app .sl-unified-genre-tabs button")].find(n=>n.textContent.toLowerCase().replace(/[^a-z0-9]/g,"")===key);const extra=document.querySelector(".sl-genre-extra");return {active:!!b&&b.matches(".active,.on,.selected,.current,[aria-selected=true],[aria-pressed=true]"),added:!!b?.dataset.slGenreExtraTab,section:extra?.dataset.section,text:extra?.innerText.length||0}},label);
+   assert.ok(state.active,genre+" selected "+label);
+   if(state.added)assert.ok(state.section===label&&state.text>60,genre+" supplemental content "+label);
+   assert.equal(await overflow(),false,genre+" "+label+" mobile overflow");
+  }
+  await page.evaluate(()=>[...document.querySelectorAll("#app .sl-unified-genre-tabs button")].find(b=>b.textContent.toLowerCase().replace(/[^a-z0-9]/g,"")==="discover10").click());await settle();
+  assert.equal(await page.$(".sl-genre-extra"),null,genre+" restores native discovery");
+ }
+ console.log("SUBLEVEL all genre tab audit: "+JSON.stringify(reports));
+ await nav("Today");
+ });
  await check("YouTube and Apple provider switching stays inside SUBLEVEL",async()=>{
  await page.evaluate(()=>{const c=window.__slCharts.charts.find(x=>x.id==="dj-ukg"),r=c.rows.find(r=>r.title==="Flowers (Sunship Remix)");window.SUBLEVELPlayer.play({id:"chart:"+c.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.embedUrl,embedUrl:r.embedUrl,alternateEmbedUrl:r.alternateEmbedUrl})});
  await page.waitForSelector(".sl-player iframe");
@@ -165,7 +191,7 @@ const server=http.createServer((req,res)=>{
  });
  await check("Persistent official player",async()=>{
  await nav("Today");await page.waitForSelector(".sl-d-entry");
- await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
+ await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
  const started=await page.evaluate(()=>{const r=window.__slDiscovery.items.find(x=>x[0]==="allnight");if(!r)return false;const items=window.__slDiscovery.items.filter(x=>["allnight","baddadan"].includes(x[0])).map(([id,title,artist,date,genre,tag,url])=>({id,title,artist,url}));window.SUBLEVELPlayer.play(items.find(x=>x.id==="allnight"),items);return true});assert.ok(started);
  await page.waitForSelector(".sl-player iframe");const src=await page.$eval(".sl-player iframe",f=>f.src);assert.match(src,/^https:\/\/open\.spotify\.com\/embed\/track\//);
  await page.evaluate(()=>{window.__qaPlayerFrame=document.querySelector(".sl-player iframe")});
@@ -200,7 +226,7 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.$(".sl-player iframe"),null);
  });
  await check("Apple Music official preview and catalogue availability filter",async()=>{
- await nav("Today");await page.waitForSelector(".sl-d-entry");await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
+ await nav("Today");await page.waitForSelector(".sl-d-entry");await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
  const select='select[aria-label="Filter by availability"]';await page.waitForSelector(select);await page.select(select,"covered");await settle();
  const count=await page.evaluate(()=>{const r=document.querySelector(".sl-d-results");return {all:r.querySelectorAll(".sl-d-record").length,empty:r.querySelectorAll(".sl-d-record.sl-d-no-art").length}});assert.ok(count.all>0);
  // Provider images are deliberately blocked, so inspect filter membership using original record titles.
@@ -214,7 +240,7 @@ const server=http.createServer((req,res)=>{
  await page.waitForSelector(".sl-player iframe");assert.equal(await page.$eval(".sl-player iframe",f=>new URL(f.src).hostname),"embed.music.apple.com");await page.click('.sl-player button[aria-label="Stop and close player"]');await page.click(".sl-d-close");
  });
  await check("Source-reviewed release tracklist in listening room",async()=>{
- await nav("Today");await page.waitForSelector(".sl-d-entry");await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
+ await nav("Today");await page.waitForSelector(".sl-d-entry");await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
  const launched=await page.evaluate(()=>{const row=Array.from(document.querySelectorAll(".sl-d-record")).find(r=>r.querySelector("h3")?.textContent==="Bindweed (Limonata Mix)");const b=Array.from(row?.querySelectorAll("button")||[]).find(x=>x.textContent.includes("Listen / details"));if(!b)return false;b.click();return true});assert.ok(launched,"Expected curated Dusky release");
  await page.waitForSelector(".sl-d-release-tracks");
  const actual=await page.evaluate(()=>Array.from(document.querySelectorAll(".sl-d-release-tracks li"),r=>[r.querySelector("strong").textContent,r.querySelector("time").textContent]));const expected=await page.evaluate(()=>window.__slDiscovery.releaseFacts["dusky-bindweed"].tracks);assert.deepEqual(actual,expected);
