@@ -276,6 +276,57 @@ def fill_embed_covers(data,embeds):
     for key,item in cover_manifest(data).items():
         print("SUBLEVEL_COVER "+json.dumps({"id":key,**item},ensure_ascii=True,separators=(",",":")),flush=True)
 
+def chart_identity(row):
+    return (normalize(row["artist"]),normalize(row["title"]))
+
+def chart_apple_jobs(feed,limit=12):
+    """A bounded, rotating selection of unresolved chart recordings.
+    Exact credited artist and track title only; no mix-stripping or guesses."""
+    from datetime import date
+    charts=feed["charts"]
+    if not charts or limit<=0:return []
+    offset=date.fromisoformat(feed["checked"]).toordinal()%len(charts)
+    ordered=charts[offset:]+charts[:offset]
+    jobs=[];seen=set()
+    # Prefer each source's highest-ranked unresolved track before rank 2.
+    for rank in range(10):
+        for chart in ordered:
+            if rank>=len(chart["rows"]):continue
+            row=chart["rows"][rank]
+            key=chart_identity(row)
+            if key in seen or (row.get("art") and row.get("embedUrl")):continue
+            if not row["artist"].strip() or normalize(row["artist"]) in ("unknownartist","variousartists"):continue
+            seen.add(key);jobs.append((row["artist"],row["title"],"song"))
+            if len(jobs)>=limit:return jobs
+    return jobs
+
+def enrich_chart_apple(feed,limit=12):
+    from embed_sources import apple_identity
+    targets=chart_apple_jobs(feed,limit)
+    matches={}
+    for offset in range(0,len(targets),3):
+        batch=targets[offset:offset+3]
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            for (artist,title,_),(art,source) in zip(batch,pool.map(apple_cover,batch)):
+                verified=apple_identity(source,"track") if source else None
+                if art and trusted_cover_url(art) and verified:
+                    matches[(normalize(artist),normalize(title))]=(art,source,verified["source"])
+        if offset+3<len(targets):time.sleep(3.1)
+    covers=players=0
+    for chart in feed["charts"]:
+        for row in chart["rows"]:
+            found=matches.get(chart_identity(row))
+            if not found:continue
+            art,source,player=found
+            changed=False
+            if not row.get("art"):
+                row["art"]=art;row["artSource"]=source;covers+=1;changed=True
+            if not row.get("embedUrl"):
+                row["embedUrl"]=player;players+=1;changed=True
+            if changed:
+                print("SUBLEVEL_CHART_MATCH "+json.dumps({"chartId":chart["id"],"title":row["title"],"artist":row["artist"],"url":row.get("url",""),"art":row.get("art",""),"artSource":row.get("artSource",""),"embedUrl":row.get("embedUrl","")},ensure_ascii=True,separators=(",",":")),flush=True)
+    print("Exact Apple chart matches:",len(matches),"; new chart covers:",covers,"; new chart player sources:",players,flush=True)
+
 def fill_chart_covers(feed):
     jobs=[]
     for chart in feed["charts"]:
@@ -291,3 +342,6 @@ def fill_chart_covers(feed):
                 row["artSource"]=source
                 added+=1
     print("Official Spotify chart cover additions:",added,flush=True)
+    enrich_chart_apple(feed)
+    rows=[row for chart in feed["charts"] for row in chart["rows"]]
+    print("Chart artwork available:",sum(bool(r.get("art")) for r in rows),"of",len(rows),"; chart player sources:",sum(bool(r.get("embedUrl")) for r in rows),"of",len(rows),flush=True)
