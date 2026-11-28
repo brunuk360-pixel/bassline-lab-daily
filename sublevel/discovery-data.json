@@ -1377,6 +1377,26 @@
       "source": "https://open.spotify.com/album/42jOtzX5KZm8wHNhFT0URx",
       "checked": "2026-11-28",
       "evidence": "https://drumandbassuk.com/artist/hoax/genesis-54757"
+    },
+    "between": {
+      "title": "Between the Lines",
+      "artist": "Camo & Krooked",
+      "provider": "spotify",
+      "kind": "album",
+      "id": "7qYZmKtvK5DobpUZf54YLa",
+      "source": "https://open.spotify.com/album/7qYZmKtvK5DobpUZf54YLa",
+      "checked": "2026-11-28",
+      "evidence": "https://drumandbassuk.com/artist/camo-krooked/between-the-lines-31080"
+    },
+    "source": {
+      "title": "Dangerous Curves",
+      "artist": "Source Direct",
+      "provider": "spotify",
+      "kind": "album",
+      "id": "4L32TId0gPtwdghxqtkyMY",
+      "source": "https://open.spotify.com/album/4L32TId0gPtwdghxqtkyMY",
+      "checked": "2026-11-28",
+      "evidence": "https://drumandbassuk.com/artist/source-direct/dangerous-curves-11536"
     }
   },
   "reviewedArtwork": {
