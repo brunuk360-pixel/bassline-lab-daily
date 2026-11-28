@@ -1103,7 +1103,10 @@
         {
           "rank": 1,
           "title": "No Letting Go",
-          "artist": "Wayne Wonder"
+          "artist": "Wayne Wonder",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d2/0e/15/d20e1582-5991-2c3d-6df7-367cd7fd3d1e/054645255561.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/no-letting-go/921538395?i=921538446&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/no-letting-go/921538395?i=921538446"
         },
         {
           "rank": 2,
@@ -1167,7 +1170,10 @@
         {
           "rank": 1,
           "title": "Airwave (Radio Vocal Edit)",
-          "artist": "Rank 1"
+          "artist": "Rank 1",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/d0/b3/a7/d0b3a75a-551c-5250-f842-5caafc115dcf/8715576184536_cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/airwave-radio-vocal-edit/1453181255?i=1453181258&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/airwave-radio-vocal-edit/1453181255?i=1453181258"
         },
         {
           "rank": 2,
