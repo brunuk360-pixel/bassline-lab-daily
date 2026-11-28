@@ -92,7 +92,7 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.$$eval(".sl-d-results .sl-p-source",x=>x.length),0,"only confirmed embed sources");
  assert.equal(await page.$(".sl-player iframe"),null,"no provider before choosing track");
  await page.click(".sl-d-results .sl-p-launch");await page.waitForSelector(".sl-player iframe");
- const src=await page.$eval(".sl-player iframe",f=>f.src);assert.ok(["open.spotify.com","www.youtube-nocookie.com","w.soundcloud.com","bandcamp.com"].includes(new URL(src).hostname));
+ const src=await page.$eval(".sl-player iframe",f=>f.src);assert.ok(["open.spotify.com","www.youtube-nocookie.com","w.soundcloud.com","bandcamp.com","embed.music.apple.com"].includes(new URL(src).hostname));
  await page.click('.sl-player button[aria-label="Stop and close player"]');await page.click(".sl-d-close");
  assert.equal(await page.$(".sl-player iframe"),null);
  });
