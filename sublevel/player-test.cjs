@@ -25,3 +25,6 @@ edit=P.editQueue(queue,0,"b","up");a.deepEqual(edit.items.map(r=>r.id),["a","b",
 a.equal(P.fromURL(apple+"?i=6818548340&i=6818548341"),null);
 a.equal(P.fromURL(apple+"?i="),null);
 console.log("Player queue editing preserves the current selection and rejects ambiguous Apple identities.");
+
+const choices=P.playerChoices({url:"https://example.org/release",embedUrl:"https://www.youtube.com/watch?v=z95GDkzjezY",alternateEmbedUrl:apple+"?i=6818548340"});a.equal(choices.length,2);a.equal(choices[0].provider,"youtube");a.equal(choices[1].provider,"apple");a.equal(P.playerChoices({url:"https://youtu.be/z95GDkzjezY",embedUrl:"https://www.youtube.com/watch?v=z95GDkzjezY"}).length,1);
+console.log("Official provider choices preserve order and remove duplicate players.");
