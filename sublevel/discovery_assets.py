@@ -280,15 +280,14 @@ def chart_identity(row):
     return (normalize(row["artist"]),normalize(row["title"]))
 
 def chart_apple_jobs(feed,limit=12):
-    """A bounded, rotating selection of unresolved chart recordings.
-    Exact credited artist and track title only; no mix-stripping or guesses."""
+    """Rotate a bounded set of unique unresolved recordings without repeating
+    the same top-ranked candidates on every build."""
     from datetime import date
     charts=feed["charts"]
     if not charts or limit<=0:return []
     offset=date.fromisoformat(feed["checked"]).toordinal()%len(charts)
     ordered=charts[offset:]+charts[:offset]
     jobs=[];seen=set()
-    # Prefer each source's highest-ranked unresolved track before rank 2.
     for rank in range(10):
         for chart in ordered:
             if rank>=len(chart["rows"]):continue
@@ -297,13 +296,21 @@ def chart_apple_jobs(feed,limit=12):
             if key in seen or (row.get("art") and row.get("embedUrl")):continue
             if not row["artist"].strip() or normalize(row["artist"]) in ("unknownartist","variousartists"):continue
             seen.add(key);jobs.append((row["artist"],row["title"],"song"))
-            if len(jobs)>=limit:return jobs
-    return jobs
+    if not jobs:return []
+    cursor=feed.get("lookupCursor",0)
+    if not isinstance(cursor,int) or cursor<0:cursor=0
+    start=cursor%len(jobs)
+    return (jobs[start:]+jobs[:start])[:limit]
 
 def enrich_chart_apple(feed,limit=12):
     from embed_sources import apple_identity
     targets=chart_apple_jobs(feed,limit)
     matches={}
+    cursor=feed.get("lookupCursor",0)
+    if not isinstance(cursor,int) or cursor<0:cursor=0
+    if targets:
+        feed["lookupCursor"]=cursor+len(targets)
+        print("SUBLEVEL_CHART_CURSOR "+str(feed["lookupCursor"]),flush=True)
     for offset in range(0,len(targets),3):
         batch=targets[offset:offset+3]
         with ThreadPoolExecutor(max_workers=3) as pool:
