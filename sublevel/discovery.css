@@ -233,3 +233,13 @@ html body #app .sl-d-shortcut-num{color:#79c9b7;font:11px ui-monospace,monospace
 .sl-d-tile{gap:7px;min-height:80px}
 html body #app .night-home .sl-d-entry{background:linear-gradient(90deg,#080e10ed 0%,#080e10bf 52%,#080e1040 100%),url("section-art/warehouse.jpg") center/cover no-repeat;min-height:104px}
 @media(max-width:360px){html body #app .sl-d-shortcuts .sl-d-shortcut{grid-template-columns:40px 18px minmax(0,1fr) 14px;gap:5px}html body #app .sl-d-shortcut-image{width:40px;height:40px}html body #app .sl-d-shortcut:not(:has(.sl-d-shortcut-image)){grid-template-columns:18px minmax(0,1fr) 14px}}
+
+/* Record label directory: use actual catalogue covers with clear release captions. */
+.sl-d-label-directory{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+.sl-d-label-card{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;padding:10px 0;border:0;border-bottom:1px solid #b5cbc32a;background:transparent;color:#f3f5ef;font:inherit;text-align:left;cursor:pointer}
+.sl-d-label-copy{flex:1;min-width:0;overflow-wrap:anywhere}
+.sl-d-label-copy strong,.sl-d-label-copy small{display:block}
+.sl-d-label-copy strong{font-size:15px;font-weight:700}
+.sl-d-label-copy small{font-size:11px;color:#b5c5c0;line-height:1.4}
+.sl-d-label-card:focus-visible{outline:2px solid #79c9b7;outline-offset:2px}
+@media(min-width:700px){.sl-d-label-directory{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px}}
