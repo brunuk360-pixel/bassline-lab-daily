@@ -1415,6 +1415,177 @@
       "art": "https://i.scdn.co/image/ab67616d0000485138946724fd783502801ed8ed",
       "source": "https://drumandbassuk.com/artist/seba/conscious-life-feat-sapele-67796",
       "checked": "2026-11-28"
+    },
+    "edlan": {
+      "title": "Know It All / Stand Alone",
+      "artist": "Edlan & TENEM",
+      "releaseUrl": "https://galacy.bandcamp.com/album/know-it-all-stand-alone",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8c/af/64/8caf64b9-9a68-28da-c985-d1a5492d064a/8721554721686.png/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/know-it-all-stand-alone-single/6827650043?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "allnight": {
+      "title": "All Night",
+      "artist": "Camo & Krooked",
+      "releaseUrl": "https://camoandkrooked.bandcamp.com/album/zeitgeist",
+      "art": "https://coverartarchive.org/release-group/1166586b-e0d5-4b31-b7ea-34bca16b074b/front-500",
+      "source": "https://musicbrainz.org/release-group/1166586b-e0d5-4b31-b7ea-34bca16b074b",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "movearound": {
+      "title": "Move Around",
+      "artist": "Camo & Krooked feat. Ian Shaw",
+      "releaseUrl": "https://camoandkrooked.bandcamp.com/album/move-around",
+      "art": "https://coverartarchive.org/release-group/1166586b-e0d5-4b31-b7ea-34bca16b074b/front-500",
+      "source": "https://musicbrainz.org/release-group/1166586b-e0d5-4b31-b7ea-34bca16b074b",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "gold": {
+      "title": "Gold Dust (Shy FX Re-Edit)",
+      "artist": "DJ Fresh",
+      "releaseUrl": "https://open.spotify.com/album/1gGkB4BlOOG4jRQSksPASw",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/67/5b/49/675b499b-cee6-3150-02e1-9e5aea1b2220/5053760064565.png/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/gold-dust-shy-fx-re-edit/1527286328?i=1527286329&uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "memory": {
+      "title": "Memory Lane",
+      "artist": "Netsky",
+      "releaseUrl": "https://hospitalrecords.bandcamp.com/album/staff-picks-2006-2016",
+      "art": "https://coverartarchive.org/release-group/2e7daf58-c1b2-49dd-8d90-102e79821597/front-500",
+      "source": "https://musicbrainz.org/release-group/2e7daf58-c1b2-49dd-8d90-102e79821597",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "together": {
+      "title": "Together",
+      "artist": "Logistics",
+      "releaseUrl": "https://hospitalrecords.bandcamp.com/track/together-4",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music/b8/2e/fa/mzi.slyfzlou.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/together/397750231?i=397750237&uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "ultra": {
+      "title": "Ultraviolet",
+      "artist": "Fred V & Grafix",
+      "releaseUrl": "https://hospitalrecords.bandcamp.com/track/ultraviolet",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/83/75/b5/8375b51d-c64f-ddef-e026-98ad368409f5/cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/ultraviolet/1685244714?i=1685244733&uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "source": {
+      "title": "Dangerous Curves",
+      "artist": "Source Direct",
+      "releaseUrl": "https://temporecords.bandcamp.com/album/dangerous-curves",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ce/d8/4e/ced84e02-5ffc-b845-27a3-12bb95b90fa1/8718723157995.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/dangerous-curves-single/1544146536?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "posij": {
+      "title": "Chrysalis",
+      "artist": "Posij",
+      "releaseUrl": "https://posij.bandcamp.com/album/chrysalis",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/09/d6/2f/09d62f76-efd3-65c9-6d38-35a869f741dd/5057272317737.png/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/chrysalis-ep/1489067247?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "between": {
+      "title": "Between the Lines",
+      "artist": "Camo & Krooked",
+      "releaseUrl": "https://www.hospitalrecords.com/products/camo-krooked-between-the-lines",
+      "art": "https://coverartarchive.org/release-group/17d1d216-f685-4f80-a597-c772fe66491e/front-500",
+      "source": "https://musicbrainz.org/release-group/17d1d216-f685-4f80-a597-c772fe66491e",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "apex": {
+      "title": "Just One Second (Apex Remix)",
+      "artist": "London Elektricity & Apex",
+      "releaseUrl": "https://hospitalrecords.bandcamp.com/track/just-one-second-apex-remix-3",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/88/fa/a1/88faa10d-82ea-643d-8b2c-65e520da488e/mzi.sbhcoxzw.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/just-one-second-apex-remix/317366251?i=317366504&uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "original": {
+      "title": "Firestarter",
+      "artist": "The Prodigy",
+      "releaseUrl": "https://www.officialcharts.com/songs/prodigy-firestarter/",
+      "art": "https://coverartarchive.org/release-group/7eb4a100-9812-39ea-91e9-b364527e7c5e/front-500",
+      "source": "https://musicbrainz.org/release-group/7eb4a100-9812-39ea-91e9-b364527e7c5e",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "buttermere-touch": {
+      "title": "Touch Typing",
+      "artist": "Buttermere",
+      "releaseUrl": "https://purismlabel.bandcamp.com/album/touch-typing",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1a/19/1d/1a191d44-18c0-1cc4-89c1-c001d30bccbe/cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/touch-typing-ep/6826221672?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "burial-debut": {
+      "title": "Burial",
+      "artist": "Burial",
+      "releaseUrl": "https://burial.bandcamp.com/album/burial-s-t",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c1/b4/8c/c1b48c54-b81b-ec99-ac54-9ac7caac7b93/5024545413021.png/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/burial/1056906855?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "fp-crush": {
+      "title": "Crush",
+      "artist": "Floating Points",
+      "releaseUrl": "https://floatingpoints.bandcamp.com/album/crush",
+      "art": "https://coverartarchive.org/release-group/3b13fa4c-36b8-46b5-bfa1-b9345491565b/front-500",
+      "source": "https://musicbrainz.org/release-group/3b13fa4c-36b8-46b5-bfa1-b9345491565b",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "sos": {
+      "title": "S.O.S.",
+      "artist": "The Breeders",
+      "releaseUrl": "https://open.spotify.com/search/The%20Breeders%20S.O.S.",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c7/f2/9c/c7f29c36-434e-3e40-b517-dce503eb2d5c/652637301458.png/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/s-o-s/1251495447?i=1251496236&uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "close-edit": {
+      "title": "Close (to the Edit)",
+      "artist": "Art of Noise",
+      "releaseUrl": "https://open.spotify.com/search/Art%20of%20Noise%20Close%20to%20the%20Edit",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c3/3b/55/c33b5581-7da4-0a5c-e3ff-076af410df44/00602567502029.rgb.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/close-to-the-edit/1365524904?i=1365526184&uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "dusky-bindweed": {
+      "title": "Bindweed (Limonata Mix)",
+      "artist": "Dusky",
+      "releaseUrl": "https://duskymusic.bandcamp.com/album/bindweed-limonata-mix",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c8/b4/7e/c8b47e54-1296-7e31-d71d-791ce1324f49/5039061288497.png/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/bindweed-limonata-mix/6818548338?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "pursefurst-pimp": {
+      "title": "PIMP",
+      "artist": "PurseFurst",
+      "releaseUrl": "https://desolatmusicgroup.bandcamp.com/album/pimp",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/31/65/e2/3165e248-9f2e-6d42-26b1-a257a199499e/cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/pimp-ep/6820636776?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
     }
   }
 }
