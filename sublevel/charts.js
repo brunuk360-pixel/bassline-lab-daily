@@ -6,7 +6,7 @@ const norm=s=>(s||"").toLowerCase().replace(/[^a-z0-9]+/g,"");
 const alias={"drumbass":"dnb","drumandbass":"dnb","dnb":"dnb","ukgarage":"ukgaragebassline","dance":"ukdance","nudisco":"nudiscoindiedance","progressivehouse":"melodicprogressivehouse","ambient":"ambientexperimental","hardcore":"harddancehardcoreneorave"};
 const today=()=>new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
 const link=(text,url)=>{const a=make("a","sl-chart-link",text);a.href=url;a.target="_blank";a.rel="noopener noreferrer";return a};
-function status(c,now=today()){if(c.status!=="verified")return "Archived snapshot — not confirmed current";if(c.through)return now>=c.from&&now<=c.through?"Current published chart period":"Past chart period";return c.checked===now?"Verified on "+c.checked:"Last verified "+c.checked+" · refresh needed"}
+function status(c,now=today()){if(c.status==="weekly")return c.checked===now?"Latest checked weekly DJ report · published "+c.published:"Weekly DJ report · last checked "+c.checked;if(c.status!=="verified")return "Archived snapshot — not confirmed current";if(c.through)return now>=c.from&&now<=c.through?"Current published chart period":"Past chart period";return c.checked===now?"Verified on "+c.checked:"Last verified "+c.checked+" · refresh needed"}
 function roomFor(genre){return (feed.rooms||[]).find(r=>norm(r[0])===norm(genre))}
 function sourceFor(genre){const room=roomFor(genre);if(room)return room[1]?feed.sources.find(s=>norm(s[0])===norm(room[1])):undefined;const key=norm(genre);return feed.sources.find(s=>norm(s[0])===key)||feed.sources.find(s=>norm(s[0])===(alias[key]||key)||s[2]===(alias[key]||key))}
 function chartPanel(genre){
@@ -26,7 +26,7 @@ function chartPanel(genre){
  if(source)panel.append(link("View latest source chart ↗",source[1]));
  return panel
 }
-function directory(){const panel=make("details","sl-chart-directory");panel.append(make("summary","sl-chart-summary","Current charts · choose genre"));panel.append(make("p","sl-chart-meta","Published retailer or national rankings, separate from editorial picks. "+feed.charts.filter(c=>status(c).startsWith("Verified on")||status(c)==="Current published chart period").length+" current dated lists; other sources and archives remain clearly identified."));
+function directory(){const panel=make("details","sl-chart-directory");panel.append(make("summary","sl-chart-summary","Current charts · choose genre"));panel.append(make("p","sl-chart-meta","Published retailer, national and DJ-play rankings, separate from editorial picks. "+feed.charts.filter(c=>status(c).startsWith("Verified on")||status(c)==="Current published chart period").length+" current dated lists; other sources and archives remain clearly identified."));
  const select=make("select","sl-chart-select");select.setAttribute("aria-label","Chart genre");
  const rooms=(feed.rooms||[]).map(r=>r[0]);const names=[...rooms,...feed.sources.map(s=>s[0]).filter(n=>!rooms.some(r=>norm(r)===norm(n)))];for(const name of names){const o=make("option",null,name);o.value=name;select.append(o)}select.value=rooms[0]||"UK Dance";
  const area=make("div","sl-chart-area");const draw=()=>area.replaceChildren(chartPanel(select.value));select.addEventListener("change",draw);panel.append(select,area);draw();return panel}
