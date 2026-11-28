@@ -212,7 +212,10 @@
         {
           "rank": 3,
           "title": "The Message",
-          "artist": "Fouk"
+          "artist": "Fouk",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1a/99/18/1a9918d9-6ff1-d025-b8d0-e079d6eca114/0823670077031.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/the-message/6812344752?i=6812344754&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/the-message/6812344752?i=6812344754"
         },
         {
           "rank": 4,
@@ -278,7 +281,10 @@
         {
           "rank": 4,
           "title": "Belinda",
-          "artist": "Sam Shure"
+          "artist": "Sam Shure",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a2/aa/97/a2aa97fc-3eec-a2f9-8c05-2f77ee31224e/820233662550.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/belinda/6778488024?i=6778488033&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/belinda/6778488024?i=6778488033"
         },
         {
           "rank": 5,
@@ -528,7 +534,10 @@
         {
           "rank": 4,
           "title": "In A Dream (Kevin McKay Extended Remix)",
-          "artist": "Mallin"
+          "artist": "Mallin",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b8/9f/79/b89f7903-c1c2-4afe-211c-ed49b8af556c/1935.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/in-a-dream-kevin-mckay-extended-remix/6819601996?i=6819602002&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/in-a-dream-kevin-mckay-extended-remix/6819601996?i=6819602002"
         },
         {
           "rank": 5,
@@ -670,7 +679,10 @@
         {
           "rank": 4,
           "title": "CHIPPIE",
-          "artist": "AYA NAKAMURA & SKEPTA"
+          "artist": "AYA NAKAMURA & SKEPTA",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/8b/55/81/8b558128-12e6-18bb-117a-13e46c59a0c5/1200214235055.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/chippie/6774090882?i=6774091969&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/chippie/6774090882?i=6774091969"
         },
         {
           "rank": 5,
@@ -738,7 +750,10 @@
         {
           "rank": 4,
           "title": "NUMB",
-          "artist": "LINKIN PARK"
+          "artist": "LINKIN PARK",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/dd/7d/72/dd7d7259-d27f-5b3e-ce64-9e304d2cb40f/dj.rxzrauer.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/numb/528435845?i=528437514&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/numb/528435845?i=528437514"
         },
         {
           "rank": 5,
@@ -806,7 +821,10 @@
         {
           "rank": 4,
           "title": "MY BODY ISN'T READY",
-          "artist": "SOMBR"
+          "artist": "SOMBR",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/1d/f6/2f1df6d3-09e2-e0a2-2e2b-fd5bb05be1ab/054391214515.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/my-body-isnt-ready/6781074078?i=6781074080&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/my-body-isnt-ready/6781074078?i=6781074080"
         },
         {
           "rank": 5,
@@ -1012,7 +1030,10 @@
         {
           "rank": 4,
           "title": "Feel It (Extended Mix)",
-          "artist": "Roland Clark, Amy Alexander"
+          "artist": "Roland Clark, Amy Alexander",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/55/f5/58/55f5580f-87f5-35a8-12b4-06bd2bc8a1a9/5052075611600.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/feel-it-extended-mix/6816175023?i=6816175025&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/feel-it-extended-mix/6816175023?i=6816175025"
         },
         {
           "rank": 5,
@@ -1850,5 +1871,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 48
+  "lookupCursor": 60
 }
