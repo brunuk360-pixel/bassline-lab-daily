@@ -92,6 +92,27 @@ const server=http.createServer((req,res)=>{
  await clickTab("Top 10");await page.waitForSelector(".sl-chart-inline .sl-chart-native-row");assert.equal(await page.evaluate(()=>document.querySelectorAll(".sl-chart-inline").length),1);assert.equal(await overflow(),false);
  await nav("Today");assert.equal(await page.evaluate(()=>document.getElementById("app").hasAttribute("data-sl-chart-mode")),false,"No chart state leaks to home");
  });
+ await check("House, Techno and Garage native chart rooms",async()=>{
+ for(const genre of ["House","Techno","UK Garage"]){
+  await nav("Today");await nav("Genres");
+  const opened=await page.evaluate(name=>{
+   const norm=s=>(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+   const cards=Array.from(document.querySelectorAll("#app .genre"));
+   const card=cards.find(n=>norm(n.querySelector(".genre-name")?.textContent)===norm(name));
+   if(!card)return false;card.click();return true
+  },genre);
+  assert.ok(opened,"Genre card exists: "+genre);
+  await page.waitForSelector("#app .roomhead");await settle();
+  const tab=async name=>{assert.ok(await page.evaluate(t=>{const b=Array.from(document.querySelectorAll("#app .tabs button")).find(n=>n.textContent.toLowerCase().replace(/[^a-z0-9]/g,"")===t);if(!b)return false;b.click();return true},name));await settle()};
+  await tab("discover10");
+  const baseline=await page.evaluate(()=>{const t=Array.from(document.querySelectorAll(".tracks .track")).find(x=>x.getClientRects().length),s=getComputedStyle(t.querySelector(".trackline"));return [s.gap,s.paddingTop,s.paddingLeft,getComputedStyle(t.querySelector(".cover")).width]});
+  await tab("top10");await page.waitForSelector(".sl-chart-native-row");
+  const result=await page.evaluate(()=>{const name=document.querySelector(".roomcopy h1")?.textContent.trim()||document.querySelector(".roomhead h1")?.textContent.trim();const f=window.__slCharts,norm=s=>(s||"").toLowerCase().replace(/[^a-z0-9]/g,""),room=f.rooms.find(r=>norm(r[0])===norm(name)),source=f.sources.find(s=>norm(s[0])===norm(room?.[1])),chart=f.charts.find(c=>c.id===source?.[2]);const rows=Array.from(document.querySelectorAll(".sl-chart-native-row")),s=getComputedStyle(rows[0].querySelector(".trackline"));return {actual:rows.map(r=>r.querySelector(".sl-chart-native-title").textContent),expected:chart?.rows.map(r=>r.title),style:[s.gap,s.paddingTop,s.paddingLeft,getComputedStyle(rows[0].querySelector(".cover")).width],visible:rows.filter(r=>r.getClientRects().length).length,controls:rows.every(r=>r.querySelectorAll(".trackline > .play,.trackline > .iconbtn").length===3)}});
+  assert.equal(result.visible,10,genre);assert.deepEqual(result.actual,result.expected,genre+" chart order");assert.deepEqual(result.style,baseline,genre+" native styles");assert.ok(result.controls,genre);assert.equal(await overflow(),false,genre);
+  await tab("discover10");assert.equal(await page.$(".sl-chart-inline"),null);
+ }
+ await nav("Today");
+ });
  await check("Persistent official player",async()=>{
  await nav("Today");await page.waitForSelector(".sl-d-entry");
  await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
