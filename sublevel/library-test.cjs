@@ -18,7 +18,7 @@ const context={create,button,link,content,state,listening,persistent:true,byId:i
  D:{profiles:[["Test artist","Test biography",null,["test"]]]},labelsData:[["Test label","https://example.org",["test"]]],
  titleBlock:(...args)=>content.append(create("h1",null,args[1])),section:text=>content.append(create("h2",null,text)),
  collectionStats:()=>create("div",null,"stats"),resumePanel:()=>null,personalized:()=>create("div",null,"recommendations"),
- playlistLibrary:()=>create("div",null,"playlist library"),shelf:()=>create("div",null,"record shelf"),catalogue:()=>create("div",null,"catalogue"),saveButton:()=>create("button",null,"save"),show:()=>{},render:(mode,arg)=>{selected=[mode,arg]},startListening:(id,list)=>{launched=[id,list]},confirm:()=>true,persist:()=>{}};
+ playlistLibrary:()=>create("div",null,"playlist library"),shelf:()=>create("div",null,"record shelf"),catalogue:()=>create("div",null,"catalogue"),saveButton:()=>create("button",null,"save"),show:(mode,arg)=>{selected=[mode,arg]},render:(mode,arg)=>{selected=[mode,arg]},startListening:(id,list)=>{launched=[id,list]},confirm:()=>true,persist:()=>{}};
 const run=vm.runInNewContext("(function(arg){"+src.slice(start+'}else if(mode==="journey"){'.length,end)+"})",context);
 const all=(node)=>[node,...node.children.flatMap(all)];
 for(const tab of ["overview","collection","playlists","following","history","settings"]){
