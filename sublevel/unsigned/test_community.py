@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from app import app,music_link,player_spec
+from app import app,music_link,player_spec,recovery_digest
 class CommunityTests(unittest.TestCase):
     def setUp(self):
         app.config.update(TESTING=True,SESSION_COOKIE_SECURE=False)
@@ -18,7 +18,7 @@ class CommunityTests(unittest.TestCase):
         self.assertIsNone(player_spec("https://artist.bandcamp.com/track/music","https://bandcamp.com/EmbeddedPlayer/album=123/"))
         self.assertTrue(player_spec("https://artist.bandcamp.com/track/music","https://bandcamp.com/EmbeddedPlayer/track=123/")["src"].startswith("https://bandcamp.com/EmbeddedPlayer/track=123/"))
     def test_post_requires_csrf(self):
-        for path in ["/join","/login","/logout","/profile","/submit","/track/1/feedback","/track/1/report","/moderation/unlock","/moderation/track/1","/account/delete","/account/password","/account/export","/track/1/withdraw","/track/1/withdraw-feedback"]:
+        for path in ["/join","/login","/logout","/profile","/submit","/track/1/feedback","/track/1/report","/moderation/unlock","/moderation/track/1","/account/delete","/account/password","/account/export","/account/recovery-code","/recover","/track/1/withdraw","/track/1/withdraw-feedback"]:
             self.assertEqual(self.client.post(path).status_code,403,path)
     def test_login_form_security_headers(self):
         response=self.client.get("/login")
@@ -42,6 +42,18 @@ class CommunityTests(unittest.TestCase):
         self.assertIn(b"not a complete privacy notice",response.data)
     def test_guest_cannot_withdraw(self):
         with self.client.session_transaction() as sess:sess["csrf"]="test-csrf"
-        for path in ("/track/1/withdraw","/track/1/withdraw-feedback","/account/password","/account/export"):
+        for path in ("/track/1/withdraw","/track/1/withdraw-feedback","/account/password","/account/export","/account/recovery-code"):
             self.assertEqual(self.client.post(path,data={"csrf":"test-csrf"}).status_code,401)
+    def test_recovery_digest_and_form(self):
+        import secrets
+        code=secrets.token_urlsafe(32)
+        self.assertEqual(len(recovery_digest(code)),64)
+        self.assertNotEqual(code,recovery_digest(code))
+        self.assertIsNone(recovery_digest("short"))
+        self.assertIsNone(recovery_digest("a"*42+"!"))
+        response=self.client.get("/recover")
+        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.headers["Cache-Control"],"no-store")
+        self.assertIn(b'name="csrf"',response.data)
+        self.assertIn(b"no email reset",response.data)
 if __name__=="__main__":unittest.main()
