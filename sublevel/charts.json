@@ -1065,6 +1065,326 @@
           "artist": "Soneec, Soultizer"
         }
       ]
+    },
+    {
+      "id": "dj-reggae",
+      "genre": "Reggae / Dub / Dancehall",
+      "source": "PlayedNext — published DJ-set play counts (not sales)",
+      "url": "https://playednext.com/classements/reggae/2026-s47",
+      "from": "2026-11-16",
+      "through": "2026-11-22",
+      "published": "2026-11-23",
+      "checked": "2026-11-28",
+      "status": "weekly",
+      "note": "Ranks by distinct DJs, then sets. Combined DJ-play chart, not UK sales; sample: 58 DJs and 67 sets.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "No Letting Go",
+          "artist": "Wayne Wonder"
+        },
+        {
+          "rank": 2,
+          "title": "Blow Your Trumpet",
+          "artist": "Ezra Collective"
+        },
+        {
+          "rank": 3,
+          "title": "Power To Move Ya",
+          "artist": "Ziggy Marley & The Melody Makers"
+        },
+        {
+          "rank": 4,
+          "title": "You Don't Love Me (No No No)",
+          "artist": "Dawn Penn"
+        },
+        {
+          "rank": 5,
+          "title": "Murder She Wrote",
+          "artist": "Chaka Demus & Pliers"
+        },
+        {
+          "rank": 6,
+          "title": "What I Like",
+          "artist": "Rvssian & MOLIY & Ayetian & Tyga"
+        },
+        {
+          "rank": 7,
+          "title": "Money Money",
+          "artist": "Horace Andy"
+        },
+        {
+          "rank": 8,
+          "title": "Nice 'N' Easy",
+          "artist": "Susan Cadogan"
+        },
+        {
+          "rank": 9,
+          "title": "Lift Up Your Head",
+          "artist": "Everton Blender"
+        },
+        {
+          "rank": 10,
+          "title": "The Heathen",
+          "artist": "Bob Marley & The Wailers"
+        }
+      ]
+    },
+    {
+      "id": "dj-trance",
+      "genre": "Trance — DJ plays",
+      "source": "PlayedNext — published DJ-set play counts (not sales)",
+      "url": "https://playednext.com/classements/trance/2026-s47",
+      "from": "2026-11-16",
+      "through": "2026-11-22",
+      "published": "2026-11-23",
+      "checked": "2026-11-28",
+      "status": "weekly",
+      "note": "Ranks by distinct DJs, then sets. DJ plays, not sales; sample: 456 DJs and 516 sets.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Airwave (Radio Vocal Edit)",
+          "artist": "Rank 1"
+        },
+        {
+          "rank": 2,
+          "title": "Go All Night",
+          "artist": "Armin van Buuren & Mary Jensen"
+        },
+        {
+          "rank": 3,
+          "title": "Bleed Out",
+          "artist": "Roman Messer & Kadett & Sharon Valerona"
+        },
+        {
+          "rank": 4,
+          "title": "Something Beautiful",
+          "artist": "ReOrder & Diego Cassina"
+        },
+        {
+          "rank": 5,
+          "title": "The Legacy",
+          "artist": "Sneijder & Saltwater"
+        },
+        {
+          "rank": 6,
+          "title": "We Are One (Last Soldier Remix)",
+          "artist": "Mhammed El Alami & NELLY TGM"
+        },
+        {
+          "rank": 7,
+          "title": "For A Feeling (Doppenberg Remix)",
+          "artist": "Andrew Rayel & Lea König"
+        },
+        {
+          "rank": 8,
+          "title": "Thoughtstream",
+          "artist": "Sergey Salekhov & Trance Reserve"
+        },
+        {
+          "rank": 9,
+          "title": "Cloudwalking (Corti Organ Remix)",
+          "artist": "Pulser"
+        },
+        {
+          "rank": 10,
+          "title": "For you (Metta & Glyde Remix)",
+          "artist": "Roman Messer & Clare Stagg"
+        }
+      ]
+    },
+    {
+      "id": "dj-breaks",
+      "genre": "Breaks / Breakbeat / UK Bass — DJ plays",
+      "source": "PlayedNext — published DJ-set play counts (not sales)",
+      "url": "https://playednext.com/classements/breaks/2026-s47",
+      "from": "2026-11-16",
+      "through": "2026-11-22",
+      "published": "2026-11-23",
+      "checked": "2026-11-28",
+      "status": "weekly",
+      "note": "Ranks by distinct DJs, then sets. Broader DJ-play category, not Big Beat-only; sample: 132 DJs and 145 sets.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Smack My Bitch Up",
+          "artist": "The Prodigy"
+        },
+        {
+          "rank": 2,
+          "title": "No Good (Start The Dance)",
+          "artist": "The Prodigy"
+        },
+        {
+          "rank": 3,
+          "title": "Mirrors",
+          "artist": "Ayda & Alexander Turok"
+        },
+        {
+          "rank": 4,
+          "title": "South Of The Thames",
+          "artist": "Skalah & Novelist"
+        },
+        {
+          "rank": 5,
+          "title": "Speedway",
+          "artist": "Commodo"
+        },
+        {
+          "rank": 6,
+          "title": "Madrugada",
+          "artist": "Arthi & Sam Interface"
+        },
+        {
+          "rank": 7,
+          "title": "Out Of Space",
+          "artist": "The Prodigy & Lethal MG"
+        },
+        {
+          "rank": 8,
+          "title": "Ozone Breakdown (Altern 8 Rewire)",
+          "artist": "Renegade Soundwave"
+        },
+        {
+          "rank": 9,
+          "title": "Mojave Skyline (ANF Virtual Music Mix)",
+          "artist": "Ex-Terrestrial"
+        },
+        {
+          "rank": 10,
+          "title": "DIZZEE'S DRIFT TO TOKYO",
+          "artist": "Juicy Selekta"
+        }
+      ]
+    },
+    {
+      "id": "dj-downtempo",
+      "genre": "Downtempo / Chill-out — DJ plays",
+      "source": "PlayedNext — published DJ-set play counts (not sales)",
+      "url": "https://playednext.com/classements/downtempo/2026-s47",
+      "from": "2026-11-16",
+      "through": "2026-11-22",
+      "published": "2026-11-23",
+      "checked": "2026-11-28",
+      "status": "weekly",
+      "note": "Ranks by distinct DJs, then sets. Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Feely",
+          "artist": "STONE"
+        },
+        {
+          "rank": 2,
+          "title": "Redhead Girl",
+          "artist": "Air"
+        },
+        {
+          "rank": 3,
+          "title": "Magic",
+          "artist": "Yuki Kawamura"
+        },
+        {
+          "rank": 4,
+          "title": "Perfect You",
+          "artist": "Visions of Light"
+        },
+        {
+          "rank": 5,
+          "title": "7ilween",
+          "artist": "Fatima Al Qadiri & Bobo Secret & Lama3an"
+        },
+        {
+          "rank": 6,
+          "title": "マジックアワー",
+          "artist": "TAMTAM"
+        },
+        {
+          "rank": 7,
+          "title": "Luna Llena",
+          "artist": "Arca"
+        },
+        {
+          "rank": 8,
+          "title": "Long Road",
+          "artist": "Funki Porcini"
+        },
+        {
+          "rank": 9,
+          "title": "Freedom Is a State of Mind",
+          "artist": "Pig & Dan"
+        },
+        {
+          "rank": 10,
+          "title": "Divine Sounds",
+          "artist": "Rae & Christian"
+        }
+      ]
+    },
+    {
+      "id": "dj-dubstep",
+      "genre": "Dubstep — DJ plays",
+      "source": "PlayedNext — published DJ-set play counts (not sales)",
+      "url": "https://playednext.com/classements/dubstep/2026-s47",
+      "from": "2026-11-16",
+      "through": "2026-11-22",
+      "published": "2026-11-23",
+      "checked": "2026-11-28",
+      "status": "weekly",
+      "note": "Ranks by distinct DJs, then sets. DJ plays, not sales; sample: 67 DJs and 69 sets.",
+      "rows": [
+        {
+          "rank": 1,
+          "title": "Victory Lap",
+          "artist": "Fred again.. & Skepta & PlaqueBoyMax"
+        },
+        {
+          "rank": 2,
+          "title": "Fuccboi (SPAG Bootleg)",
+          "artist": "BAILO & Styles&Complete"
+        },
+        {
+          "rank": 3,
+          "title": "Throwin' Elbows",
+          "artist": "Excision & Space Laces"
+        },
+        {
+          "rank": 4,
+          "title": "Womp Womp",
+          "artist": "BIG FLORIDA & VRG"
+        },
+        {
+          "rank": 5,
+          "title": "Eyes Cut Deeper",
+          "artist": "Subtronics & Inéz"
+        },
+        {
+          "rank": 6,
+          "title": "Sharp",
+          "artist": "Sir Spyro & Top Cat"
+        },
+        {
+          "rank": 7,
+          "title": "Baile DF",
+          "artist": "Boys Noize & Adame DJ & MC Da Franca & Thalia Abdon"
+        },
+        {
+          "rank": 8,
+          "title": "Slave To The Rithm (Sullivan King Remix)",
+          "artist": "ILLENIUM & Bring Me The Horizon"
+        },
+        {
+          "rank": 9,
+          "title": "Centipede",
+          "artist": "Knife Party"
+        },
+        {
+          "rank": 10,
+          "title": "Tokyo Drift (The Fast And The Furious: Tokyo Drift OST) (Caster Curse)",
+          "artist": "Teriyaki Boyz"
+        }
+      ]
     }
   ],
   "sources": [
@@ -1204,6 +1524,31 @@
     [
       "Lounge / Chill Out",
       "https://www.traxsource.com/genre/1/lounge-chill"
+    ],
+    [
+      "Reggae / Dub / Dancehall",
+      "https://playednext.com/classements/reggae",
+      "dj-reggae"
+    ],
+    [
+      "Trance — DJ plays",
+      "https://playednext.com/classements/trance",
+      "dj-trance"
+    ],
+    [
+      "Breaks / Breakbeat / UK Bass — DJ plays",
+      "https://playednext.com/classements/breaks",
+      "dj-breaks"
+    ],
+    [
+      "Downtempo / Chill-out — DJ plays",
+      "https://playednext.com/classements/downtempo",
+      "dj-downtempo"
+    ],
+    [
+      "Dubstep — DJ plays",
+      "https://playednext.com/classements/dubstep",
+      "dj-dubstep"
     ]
   ],
   "rooms": [
@@ -1229,17 +1574,18 @@
     ],
     [
       "Trance",
-      "Trance (Main Floor)",
-      "Source covers main-floor trance only."
+      "Trance — DJ plays",
+      "DJ plays, not sales; sample: 456 DJs and 516 sets."
     ],
     [
       "Dubstep",
-      "Dubstep"
+      "Dubstep — DJ plays",
+      "DJ plays, not sales; sample: 67 DJs and 69 sets."
     ],
     [
       "Breakbeat / Big Beat",
-      "Breaks / Breakbeat / UK Bass",
-      "Broader source chart, not a Big Beat-only ranking."
+      "Breaks / Breakbeat / UK Bass — DJ plays",
+      "Broader DJ-play category, not Big Beat-only; sample: 132 DJs and 145 sets."
     ],
     [
       "Hip-Hop",
@@ -1292,13 +1638,13 @@
     ],
     [
       "Reggae & Dub",
-      null,
-      "No current dedicated track chart verified."
+      "Reggae / Dub / Dancehall",
+      "Combined DJ-play chart, not UK sales; sample: 58 DJs and 67 sets."
     ],
     [
       "Trip-Hop & Downtempo",
-      "Lounge / Chill Out",
-      "Related retailer category, not an exact genre match."
+      "Downtempo / Chill-out — DJ plays",
+      "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ]
 }
