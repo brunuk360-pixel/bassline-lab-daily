@@ -79,7 +79,7 @@ function build(){
  compactButton=button("−",()=>{compact=!compact;applyCompact();persist()});head.append(copy,previous,next,compactButton,close);
  host=make("div","sl-p-frame");notice=make("p","sl-p-notice");notice.setAttribute("role","status");
  original=make("a","sl-p-link","Open original release ↗");original.target="_blank";original.rel="noopener noreferrer";
- queueDetails=make("details","sl-p-queue");playableButton=button("Skip external-only: off",()=>{playableOnly=!playableOnly;refreshControls();persist()});const options=make("div","sl-p-options");const shuffle=button("Shuffle upcoming",()=>{for(let i=items.length-1;i>index+1;i--){const j=index+1+Math.floor(Math.random()*(i-index));[items[i],items[j]]=[items[j],items[i]]}redrawQueue();refreshControls();persist()});options.append(shuffle,playableButton);queueDetails.append(make("summary",null,"Listening queue"),options,queueList=make("div","sl-p-list"));
+ queueDetails=make("details","sl-p-queue");queueDetails.open=false;playableButton=button("Skip external-only: off",()=>{playableOnly=!playableOnly;refreshControls();persist()});const options=make("div","sl-p-options");const shuffle=button("Shuffle upcoming",()=>{for(let i=items.length-1;i>index+1;i--){const j=index+1+Math.floor(Math.random()*(i-index));[items[i],items[j]]=[items[j],items[i]]}redrawQueue();refreshControls();persist()});options.append(shuffle,playableButton);queueDetails.append(make("summary",null,"Listening queue"),options,queueList=make("div","sl-p-list"));
 
  providerButtons=make("div","sl-p-providers");providerButtons.setAttribute("aria-label","Available music players");providerLink=make("a","sl-p-link sl-p-provider-link");providerLink.target="_blank";providerLink.rel="noopener noreferrer";providerLink.hidden=true;const links=make("div","sl-p-links");links.append(original,providerLink);panel.append(head,host,providerButtons,notice,links,queueDetails);doc.body.append(panel);applyCompact();
  if(typeof ResizeObserver==="function")new ResizeObserver(()=>doc.documentElement.style.setProperty("--sl-player-space",panel.hidden?"0px":Math.ceil(panel.getBoundingClientRect().height)+"px")).observe(panel)
@@ -131,9 +131,9 @@ function select(i){
  if(activeID!==r.id||!host.firstElementChild)renderProvider(r,source(r));
  refreshQueue();persist()
 }
-function play(r,list=[r]){if(!r)return;items=clean(list);if(!items.some(x=>x.id===r.id))items=clean([r,...items]);select(items.findIndex(x=>x.id===r.id))}
+function play(r,list=[r]){if(!r)return;if(queueDetails)queueDetails.open=false;items=clean(list);if(!items.some(x=>x.id===r.id))items=clean([r,...items]);select(items.findIndex(x=>x.id===r.id))}
 function step(d){const i=adjacent(d);if(i>=0)select(i)}
-function stop(){if(!panel)return;host.replaceChildren();activeID=null;activeProvider=null;panel.hidden=true;doc.body.classList.remove("sl-player-open");doc.documentElement.style.setProperty("--sl-player-space","0px")}
+function stop(){if(!panel)return;queueDetails.open=false;host.replaceChildren();activeID=null;activeProvider=null;panel.hidden=true;doc.body.classList.remove("sl-player-open");doc.documentElement.style.setProperty("--sl-player-space","0px")}
 function resume(){if(index>=0)select(index)}
 function action(r,list){if(available(r))return button("▶ Play here",()=>play(r,list),"sl-d-button sl-p-launch");const a=make("a","sl-d-button sl-p-source","Open release ↗");a.href=r.url;a.target="_blank";a.rel="noopener noreferrer";return a}
 function addNext(r){if(!r)return;const current=items[index];if(current?.id===r.id)return;items=clean(items.filter(x=>x.id!==r.id));index=current?items.findIndex(x=>x.id===current.id):-1;items.splice(index+1,0,r);if(index<0)index=0;items=clean(items);if(panel&&!panel.hidden)refreshQueue();persist()}
