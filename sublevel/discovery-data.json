@@ -2400,5 +2400,97 @@
       "listenFor": "Compare the original and remix for changes in bass movement, percussion and atmosphere.",
       "checked": "2026-11-28"
     }
-  }
+  },
+  "upcomingReleases": [
+    {
+      "id": "pre-sl8r-brouhaha",
+      "title": "Brouhaha EP",
+      "artist": "Sl8r",
+      "date": "2026-12-02",
+      "genre": "Drum & bass / jungle",
+      "url": "https://sl8rdnb.bandcamp.com/album/brouhaha-ep",
+      "checked": "2026-11-28"
+    },
+    {
+      "id": "pre-enigma-bars",
+      "title": "Bars VIPs",
+      "artist": "ENiGMA Dubz",
+      "date": "2026-12-02",
+      "genre": "Bass / dubstep",
+      "url": "https://enigmadubzofficial.bandcamp.com/album/bars-vips",
+      "checked": "2026-11-28"
+    },
+    {
+      "id": "pre-drex-indefinition",
+      "title": "Indefinition EP",
+      "artist": "Drex174",
+      "date": "2026-12-04",
+      "genre": "Drum & bass",
+      "url": "https://dispatchrecordings.bandcamp.com/album/indefinition-ep",
+      "checked": "2026-11-28"
+    },
+    {
+      "id": "pre-dogger-northwest",
+      "title": "North West",
+      "artist": "Dogger",
+      "date": "2026-12-04",
+      "genre": "Liquid drum & bass",
+      "url": "https://ftnts.bandcamp.com/album/north-west",
+      "checked": "2026-11-28"
+    },
+    {
+      "id": "pre-typecell-zugzwang",
+      "title": "Typecell - Zugzwang EP [SUBPLATE-248]",
+      "artist": "Typecell",
+      "date": "2026-12-04",
+      "genre": "Halftime / drum & bass",
+      "url": "https://subplaterecordings.bandcamp.com/album/typecell-zugzwang-ep-subplate-248",
+      "checked": "2026-11-28"
+    },
+    {
+      "id": "pre-death-money",
+      "title": "Heads Of The Valleys",
+      "artist": "The Death of Money",
+      "date": "2026-12-04",
+      "genre": "Rock / metal",
+      "url": "https://thedeathofmoney.bandcamp.com/album/heads-of-the-valleys",
+      "checked": "2026-11-28"
+    },
+    {
+      "id": "pre-mako-come",
+      "title": "Come With Me",
+      "artist": "Mako",
+      "date": "2026-12-11",
+      "genre": "Drum & bass",
+      "url": "https://makodnb.bandcamp.com/album/come-with-me",
+      "checked": "2026-11-28"
+    },
+    {
+      "id": "pre-winslow-distortions",
+      "title": "See Through Distortions",
+      "artist": "Winslow & T.R.A.C.",
+      "date": "2026-12-11",
+      "genre": "Drum & bass",
+      "url": "https://winslowxyz.bandcamp.com/album/see-through-distortions",
+      "checked": "2026-11-28"
+    },
+    {
+      "id": "pre-dual-compound",
+      "title": "Dual Process - Compound [SUBPLATE-249]",
+      "artist": "Dual Process",
+      "date": "2026-12-12",
+      "genre": "Halftime / drum & bass",
+      "url": "https://subplaterecordings.bandcamp.com/album/dual-process-compound-subplate-249",
+      "checked": "2026-11-28"
+    },
+    {
+      "id": "pre-triplestack-hatch",
+      "title": "Hatch / The Box",
+      "artist": "Triplestack",
+      "date": "2026-12-18",
+      "genre": "Drum & bass",
+      "url": "https://intriguemusic.bandcamp.com/album/hatch-the-box",
+      "checked": "2026-11-28"
+    }
+  ]
 }
