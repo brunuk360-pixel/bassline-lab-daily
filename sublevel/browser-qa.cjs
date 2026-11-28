@@ -121,7 +121,9 @@ const server=http.createServer((req,res)=>{
  await nav("Today");await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open] .sl-d-editorial-head");
  const go=async label=>{assert.ok(await page.evaluate(label=>{const b=[...document.querySelectorAll(".sl-d-screen-nav button")].find(n=>n.textContent.includes(label));if(!b)return false;b.click();return true},label));await settle()};
  await page.waitForFunction(()=>document.querySelector(".sl-d-editorial-photo")?.naturalWidth>0);
- assert.equal(await page.$eval(".sl-d-editorial-head",n=>getComputedStyle(n).backgroundColor),"rgb(236, 236, 227)");
+ assert.equal(await page.$eval(".sl-d-editorial-photo",n=>n.getAttribute("src")),"section-art/daily-dig.jpg");
+ assert.equal(await page.$eval(".sl-d-editorial-photo",n=>getComputedStyle(n).clipPath),"none");
+ assert.equal(await page.$eval(".sl-d-editorial-head",n=>getComputedStyle(n).backgroundColor),"rgb(11, 19, 21)");
  await go("Explore");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"hub");
  await go("Library");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"journey");
  await page.click(".sl-d-back");await page.waitForSelector(".sl-d-hub");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"hub");
@@ -380,7 +382,10 @@ const server=http.createServer((req,res)=>{
  });
  await check("Apple Music official preview and catalogue availability filter",async()=>{
  await nav("Today");await page.waitForSelector(".sl-d-entry");await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
- await page.evaluate(()=>[...document.querySelectorAll(".sl-d-daily-link")].find(b=>b.textContent.includes("Browse new release archive")).click());await page.waitForSelector('.sl-discovery-dialog[data-room="dailyarchive"]');const select='select[aria-label="Filter by availability"]';await page.waitForSelector(select);await page.select(select,"covered");await settle();
+ await page.evaluate(()=>[...document.querySelectorAll(".sl-d-daily-link")].find(b=>b.textContent.includes("Browse new release archive")).click());await page.waitForSelector('.sl-discovery-dialog[data-room="dailyarchive"]');
+ const weeks=await page.$eval(".sl-d-results .sl-release-week[data-from]",nodes=>nodes.map(n=>({from:n.dataset.from,through:n.dataset.through,open:n.open})));assert.equal(weeks.length,4);assert.deepEqual(weeks.map(x=>x.open),[true,false,false,false]);for(let i=0;i<4;i++){assert.equal(Date.parse(weeks[i].through)-Date.parse(weeks[i].from),6*86400000);if(i)assert.equal(Date.parse(weeks[i-1].from)-Date.parse(weeks[i].through),86400000)}
+ await clickStable(".sl-d-results .sl-release-week:nth-child(2) summary");assert.equal(await page.$eval(".sl-d-results .sl-release-week:nth-child(2)",n=>n.open),true);
+ const select='select[aria-label="Filter by availability"]';await page.waitForSelector(select);await page.select(select,"covered");await settle();
  const count=await page.evaluate(()=>{const r=document.querySelector(".sl-d-results");return {all:r.querySelectorAll(".sl-d-record").length,empty:r.querySelectorAll(".sl-d-record.sl-d-no-art").length}});assert.ok(count.all>0);
  // Provider images are deliberately blocked, so inspect filter membership using original record titles.
  const shown=await page.evaluate(()=>Array.from(document.querySelectorAll(".sl-d-results .sl-d-record h3"),x=>x.textContent));const valid=await page.evaluate(()=>window.__slDiscovery.items.filter(r=>window.__slDiscovery.artwork[r[0]]).map(r=>r[1]));assert.ok(shown.every(t=>valid.includes(t)));
