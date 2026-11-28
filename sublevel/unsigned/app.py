@@ -1,7 +1,7 @@
 """SUBLEVEL Unsigned — invite-only, moderated community pilot."""
 import os, re, secrets, hmac, hashlib
 from datetime import timedelta
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlencode, parse_qs
 from flask import Flask, request, session, g, abort, redirect, url_for, render_template, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg
@@ -25,6 +25,26 @@ def music_link(raw):
             or host=="youtu.be" and re.fullmatch(r"/[A-Za-z0-9_-]{11}",p)):
             return u.geturl()
     except (ValueError,AttributeError):pass
+    return None
+def player_spec(raw,bandcamp_embed=""):
+    url=music_link(raw)
+    if not url:return None
+    u=urlsplit(url);host=u.hostname or ""
+    if host in ("soundcloud.com","www.soundcloud.com"):
+        return {"name":"SoundCloud","src":"https://w.soundcloud.com/player/?"+urlencode({"url":"https://soundcloud.com"+u.path,"auto_play":"false","visual":"false"}),"height":166}
+    if host in ("youtube.com","www.youtube.com","music.youtube.com","youtu.be"):
+        vid=u.path.strip("/") if host=="youtu.be" else parse_qs(u.query).get("v",[""])[0]
+        if re.fullmatch(r"[A-Za-z0-9_-]{11}",vid):
+            return {"name":"YouTube","src":"https://www.youtube-nocookie.com/embed/"+vid+"?playsinline=1","height":220}
+    if host.endswith(".bandcamp.com") and bandcamp_embed:
+        try:
+            e=urlsplit(bandcamp_embed)
+            if e.scheme!="https" or e.hostname!="bandcamp.com" or e.username or e.password or e.port or not e.path.startswith("/EmbeddedPlayer/"):return None
+            kind="track" if u.path.startswith("/track/") else "album"
+            m=re.search(r"(?:^|/)"+kind+r"=(\d{1,12})(?:/|$)",e.path)
+            if m:
+                return {"name":"Bandcamp","src":"https://bandcamp.com/EmbeddedPlayer/"+kind+"="+m.group(1)+"/size=large/bgcol=101b1c/linkcol=79c9b7/tracklist=false/artwork=small/transparent=true/","height":120}
+        except ValueError:pass
     return None
 def field(name,maxlen,minimum=1):
     value=request.form.get(name,"").strip()
@@ -54,7 +74,7 @@ def protect():
         if not g.user:session.clear()
 @app.after_request
 def headers(response):
-    response.headers["Content-Security-Policy"]="default-src 'none'; style-src 'self'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+    response.headers["Content-Security-Policy"]="default-src 'none'; style-src 'self'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'; script-src 'self'; frame-src https://w.soundcloud.com https://www.youtube-nocookie.com https://bandcamp.com"
     response.headers["X-Content-Type-Options"]="nosniff"
     response.headers["Referrer-Policy"]="no-referrer"
     response.headers["Permissions-Policy"]="camera=(), microphone=(), geolocation=()"
@@ -160,7 +180,7 @@ def track(track_id):
     feedback=rows("""SELECT f.rating,f.body,m.handle FROM feedback f JOIN members m ON m.id=f.author
       WHERE f.track=%s AND f.status='approved' AND m.active ORDER BY f.created DESC LIMIT 100""",(track_id,))
     own=one("SELECT rating,body,status FROM feedback WHERE track=%s AND author=%s",(track_id,g.user["id"])) if g.user else None
-    return render_template("page.html",view="track",t=t,feedback=feedback,own=own)
+    return render_template("page.html",view="track",t=t,feedback=feedback,own=own,player=player_spec(t["url"],t.get("embed_url","")))
 @app.post("/track/<int:track_id>/feedback")
 def rate(track_id):
     uid=member();limit("feedback",20,uid);t=accessible_track(track_id)
