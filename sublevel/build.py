@@ -207,7 +207,7 @@ assert n==1
 
 
 # Connected discovery rooms: curated release sources, artwork and on-device library.
-from discovery_assets import load_discovery
+from discovery_assets import load_discovery,fill_embed_covers,fill_chart_covers
 import shutil
 import subprocess
 discovery=load_discovery(root)
@@ -233,7 +233,10 @@ discovery_patch=('<style id="sublevel-discovery">'+discovery_css+'</style>').enc
 data,n=re.subn(br"</head\s*>",lambda m:discovery_patch+m.group(0),data,count=1,flags=re.I)
 assert n==1
 from embed_sources import resolve_embeds
-embed_json=json.dumps(resolve_embeds(discovery),ensure_ascii=True).replace("<",r"\u003c")
+embeds=resolve_embeds(discovery)
+fill_embed_covers(discovery,embeds)
+discovery_json=json.dumps(discovery,ensure_ascii=True).replace("<",r"\u003c")
+embed_json=json.dumps(embeds,ensure_ascii=True).replace("<",r"\u003c")
 player_js=(root/"player.js").read_text(encoding="utf-8")
 player_css=(root/"player.css").read_text(encoding="utf-8")
 if shutil.which("node"):
@@ -293,6 +296,7 @@ for chart in chart_feed["charts"]:
 for source in chart_feed["sources"]:
     assert source[1].startswith("https://")
     assert len(source)==2 or source[2] in chart_ids
+fill_chart_covers(chart_feed)
 chart_css=(root/"charts.css").read_text(encoding="utf-8")
 chart_js=(root/"charts.js").read_text(encoding="utf-8")
 if shutil.which("node"):
