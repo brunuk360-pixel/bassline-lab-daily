@@ -24,7 +24,11 @@ const server=http.createServer((req,res)=>{
  await page.goto(origin+"/",{waitUntil:"domcontentloaded",timeout:15000});await page.waitForSelector("#app .night-home");
  const check=async(name,fn)=>{try{await fn();checks.push(name+" PASS")}catch(e){failures++;checks.push(name+" FAIL ("+(e.name==="AssertionError"?"assertion":"navigation/runtime")+")");console.log("QA diagnostic "+name+": "+String(e.message).slice(0,500))}};
  const settle=()=>new Promise(r=>setTimeout(r,220));
- const nav=async name=>{await page.click('.bottom button[data-nav-label="'+name+'"]');await settle()};
+ const clickStable=async selector=>{
+   await page.waitForSelector(selector,{visible:true});
+   try{await page.click(selector)}catch(e){if(!/Node is detached from document/.test(String(e.message)))throw e;await settle();await page.waitForSelector(selector,{visible:true});await page.click(selector)}
+ };
+ const nav=async name=>{await clickStable('.bottom button[data-nav-label="'+name+'"]');await settle()};
  const overflow=()=>page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
  await check("390px homepage layout",async()=>{await page.waitForSelector(".sl-home-index");assert.equal(await overflow(),false)});
  await check("Daily Dig and listening queue",async()=>{
@@ -51,13 +55,13 @@ const server=http.createServer((req,res)=>{
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await nav("Today");await page.click(".sl-d-entry");await go("Home");await page.waitForSelector("#app .night-home");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.open),false);
  });
  await check("Artwork-linked archive and listening queue",async()=>{
- await nav("Today");await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
+ await nav("Today");await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
  await page.evaluate(()=>[...document.querySelectorAll(".sl-d-screen-nav button")].find(b=>b.textContent==="Explore").click());await settle();
  await page.evaluate(()=>[...document.querySelectorAll(".sl-d-tile")].find(b=>b.textContent.includes("On This Day")).click());await page.waitForSelector(".sl-d-history-event");
  const art=await page.evaluate(()=>{const imgs=[...document.querySelectorAll(".sl-d-history-event .sl-d-small-cover")];return {count:imgs.length,valid:imgs.every(img=>img.alt.endsWith("release artwork")&&Object.values(window.__slDiscovery.artwork).includes(img.getAttribute("src")))}});
  assert.ok(art.count>0&&art.valid,"nonempty archive artwork uses only verified release references");
  assert.ok(await page.$(".sl-d-history-event .sl-d-history-copy button"));
- await page.click(".sl-d-back");await page.waitForSelector(".sl-d-hub");await page.click(".sl-d-close");
+ await clickStable(".sl-d-back");await page.waitForSelector(".sl-d-hub");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"hub");await clickStable(".sl-d-close");
  await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
  });
  await check("Illustrated Explore shortcuts and unique room artwork",async()=>{
