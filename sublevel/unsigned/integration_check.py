@@ -72,6 +72,21 @@ def run(mod,conn):
             for row in conn.execute("SELECT id FROM feedback WHERE status='pending'").fetchall():
                 post(moderator,"/moderation/feedback/"+str(row["id"]),action="approve")
             check(b"12.70 / 19" in get(guest,"/").data,"weighted ranking after five ratings")
+            # A second track rated by an existing reviewer cannot add another
+            # independent reviewer to the producer's ranking.
+            second=post(owner,"/submit",title="Second test recording",genre="Jungle",url="https://soundcloud.com/example/second-track",note="Isolated test.",rights="yes")
+            second_path=second.headers["Location"]
+            second_id=int(second_path.rsplit("/",1)[1])
+            post(moderator,"/moderation/track/"+str(second_id),action="approve")
+            post(reviewer,second_path+"/feedback",rating="17",body="Second recording feedback for the same producer.")
+            second_review=conn.execute("SELECT id FROM feedback WHERE track=%s",(second_id,)).fetchone()["id"]
+            post(moderator,"/moderation/feedback/"+str(second_review),action="approve")
+            check(b"12.70 / 19" in get(guest,"/").data,"same reviewer contributes equally across multiple tracks")
+            check(b"5 reviewers" in get(guest,"/").data,"five unique reviewers")
+            post(reviewer,second_path+"/withdraw-feedback")
+            post(owner,second_path+"/withdraw")
+            post(moderator,"/moderation/track/"+str(second_id),expected=409,action="approve")
+            check(get(guest,second_path).status_code==404,"stale moderation cannot republish withdrawn recording")
             post(reviewer,track_path+"/report",reason="Synthetic report for integration testing.")
             report=conn.execute("SELECT id FROM reports WHERE track=%s",(track_id,)).fetchone()
             post(moderator,"/moderation/report/"+str(report["id"]),action="resolve")
@@ -126,7 +141,8 @@ def run(mod,conn):
             check(get(guest,track_path).status_code==404,"owner-withdrawn recording private")
             check(b"Test recording" not in get(guest,"/").data,"withdrawn recording excluded from discovery")
             check(get(owner,track_path).status_code==200,"owner retains private track access")
+            post(moderator,"/moderation/track/"+str(track_id),expected=409,action="approve")
             post(moderator,"/moderation/track/"+str(track_id),action="hide")
             check(get(guest,track_path).status_code==404,"hidden recording private")
     check(conn.execute("SELECT to_regnamespace(%s) IS NULL AS absent",(schema,)).fetchone()["absent"],"test schema rolled back")
-    print("Unsigned PostgreSQL route integration passed: registration, login, CSRF, profiles, link validation, private pending tracks, moderation, ratings, duplicate prevention, rank threshold, reports, owner withdrawal, feedback removal, private data export, password rotation, session revocation, one-time recovery and replay rejection, deletion; test schema rolled back.",flush=True)
+    print("Unsigned PostgreSQL route integration passed: registration, login, CSRF, profiles, link validation, private pending tracks, moderation, ratings, duplicate prevention, rank threshold, reports, owner withdrawal, feedback removal, private data export, password rotation, session revocation, one-time recovery and replay rejection, distinct-reviewer ranking, stale approval protection, deletion; test schema rolled back.",flush=True)
