@@ -179,7 +179,32 @@ function profileArtwork(p){
 }
 function record(r,list){const a=create("article","sl-d-record");if(r.art){const cover=artwork(r);a.append(cover);cover.addEventListener("error",()=>{a.querySelector(".sl-d-art-missing")?.remove();a.classList.add("sl-d-no-art")},{once:true})}else a.classList.add("sl-d-no-art");const copy=create("div","sl-d-copy");copy.append(create("span","sl-d-kicker",r.tag+(window.SUBLEVELResearch?.has(r.title,r.artist)?" / Track dossier":"")),create("h3",null,r.title),create("p","sl-d-muted",r.artist+" · "+r.genre+(r.date?" · "+r.date:"")),create("p",null,r.note));const actions=create("div","sl-d-actions");if(window.SUBLEVELPlayer)actions.append(window.SUBLEVELPlayer.action(r,list));actions.append(button("Listen / details →",()=>startListening(r.id,list)),button("Queue next",()=>playNext(r.id)),saveButton(r.id));copy.append(actions);a.append(copy);return a}
 function listRecords(list){const g=create("div","sl-d-list");list.filter(Boolean).forEach(r=>g.append(record(r,list)));return g}
-function dailyShelf(list){const shelf=create("div","sl-d-list sl-d-daily-shelf");list.forEach((r,i)=>{const row=create("article","sl-d-record sl-d-daily-row");const detail=button("",()=>startListening(r.id,list),"sl-d-daily-detail");detail.setAttribute("aria-label","Details for "+r.title+" by "+r.artist);const art=create("span","sl-d-daily-art");const img=smallCover(r);if(img)art.append(img);else art.append(create("span","sl-d-daily-no-art","No cover"));const copy=create("span","sl-d-daily-copy");copy.append(create("span","sl-d-daily-index",String(i+1).padStart(2,"0")+" / "+r.tag),create("h3",null,r.title),create("span","sl-d-daily-artist",r.artist),create("small",null,r.genre+(r.date?" · "+r.date:"")));detail.append(art,copy);const controls=create("div","sl-d-daily-controls");if(window.SUBLEVELPlayer?.available(r)){const play=window.SUBLEVELPlayer.action(r,list);play.textContent="▶";play.setAttribute("aria-label","Play "+r.title+" here");play.title="Play here";controls.append(play)}else{const open=button("↗",()=>startListening(r.id,list),"sl-d-button");open.setAttribute("aria-label","Open listening details for "+r.title);controls.append(open)}const save=saveButton(r.id);save.textContent=state.saved.includes(r.id)?"♥":"♡";save.setAttribute("aria-label","Save "+r.title);save.addEventListener("click",()=>{save.textContent=state.saved.includes(r.id)?"♥":"♡"});controls.append(save);row.append(detail,controls);shelf.append(row)});return shelf}
+function dailyStory(r){
+ const e=D.dailyEditorial?.[r.id],verified=e?.title===r.title&&e.artist===r.artist&&e.releaseSource===r.url?e:null;
+ const profile=D.profiles.find(p=>p[0]===r.artist&&p[3].includes(r.id));
+ const f=D.releaseFacts?.[r.id],facts=f?.title===r.title&&f.artist===r.artist&&f.source===r.url?f:null;
+ const box=create("div","sl-d-dig-story");
+ const block=(label,text,url,linkLabel)=>{if(!text)return;const part=create("section","sl-d-dig-story-block");part.append(create("span","sl-d-kicker",label),create("p",null,text));if(url)part.append(link(linkLabel||"Source ↗",url,"sl-d-dig-source"));box.append(part)};
+ block(r.artist==="Various Artists"?"About the compilation":"About the artist",verified?.artistContext||profile?.[2]||r.artist+" is credited on this "+r.genre+" release. A fuller artist biography has not yet been verified.",verified?.artistSource||profile?.[4]||r.url,"Artist / catalogue source ↗");
+ block("The record",verified?.releaseContext||r.note,r.url,"Original release ↗");
+ if(facts){const meta=create("div","sl-d-dig-facts");if(facts.label)meta.append(create("span",null,facts.label));meta.append(create("span",null,facts.tracks.length+" listed tracks"));if(facts.credits)meta.append(create("small",null,facts.credits));box.append(meta)}
+ if(verified?.listenFor)block("Listen for",verified.listenFor);
+ else if(verified&&r.note)block("Editorial listening note",r.note);
+ return box
+}
+function dailyShelf(list){
+ const shelf=create("div","sl-d-list sl-d-daily-shelf");
+ list.forEach((r,i)=>{
+  const row=create("article","sl-d-record sl-d-daily-row"),top=create("div","sl-d-daily-top");
+  const detail=button("",()=>startListening(r.id,list),"sl-d-daily-detail");detail.setAttribute("aria-label","Details for "+r.title+" by "+r.artist);
+  const art=create("span","sl-d-daily-art");const img=smallCover(r);if(img)art.append(img);else art.append(create("span","sl-d-daily-no-art","No cover"));
+  const copy=create("span","sl-d-daily-copy");copy.append(create("span","sl-d-daily-index",String(i+1).padStart(2,"0")+" / "+r.tag),create("h3",null,r.title),create("span","sl-d-daily-artist",r.artist),create("small",null,r.genre+(r.date?" · "+r.date:"")));detail.append(art,copy);
+  const controls=create("div","sl-d-daily-controls");if(window.SUBLEVELPlayer?.available(r)){const play=window.SUBLEVELPlayer.action(r,list);play.textContent="▶";play.setAttribute("aria-label","Play "+r.title+" here");play.title="Play here";controls.append(play)}else{const open=button("↗",()=>startListening(r.id,list),"sl-d-button");open.setAttribute("aria-label","Open listening details for "+r.title);controls.append(open)}
+  const save=saveButton(r.id);save.textContent=state.saved.includes(r.id)?"♥":"♡";save.setAttribute("aria-label","Save "+r.title);save.addEventListener("click",()=>{save.textContent=state.saved.includes(r.id)?"♥":"♡"});controls.append(save);top.append(detail,controls);row.append(top);
+  const story=dailyStory(r),parts=[...story.children];if(parts.length){const teaser=parts[1]?.querySelector("p")?.textContent||r.note;row.append(create("p","sl-d-dig-teaser",teaser));const more=create("details","sl-d-dig-story-toggle");more.append(create("summary",null,"Artist & record notes"),story);row.append(more)}
+  shelf.append(row)
+ });return shelf
+}
 
 function catalogue(list){
  const wrap=create("section","sl-d-catalogue");
@@ -471,7 +496,7 @@ file.addEventListener("change",async()=>{try{
  const primary=create("div","sl-d-actions sl-d-release-primary");if(window.SUBLEVELPlayer?.available(r))primary.append(window.SUBLEVELPlayer.action(r,queue.map(byId).filter(Boolean)));primary.append(link("Open original release ↗",r.url,"sl-d-button sl-d-primary"),saveButton(r.id));info.append(primary);hero.append(info);content.append(hero);
  if(queue.length>1){const pager=create("div","sl-d-pager");const prev=button("← Previous",()=>move(-1)),next=button("Next →",()=>move(1));prev.disabled=position<=0;next.disabled=position>=queue.length-1;pager.append(prev,create("span",null,(position+1)+" / "+queue.length),next);content.append(pager)}
  content.append(queuePanel());
- const editorial=create("section","sl-d-release-editorial");editorial.append(create("span","sl-d-kicker","EDITORIAL NOTES"),create("p",null,r.note));content.append(editorial);
+ const editorial=create("section","sl-d-release-editorial");editorial.append(create("span","sl-d-kicker","EDITORIAL NOTES"),create("p",null,r.note));content.append(editorial);if(D.dailyEditorial?.[r.id]||daily().some(p=>p.id===r.id))content.append(dailyStory(r));
  const facts=D.releaseFacts?.[r.id];
  if(facts?.title===r.title&&facts.artist===r.artist&&facts.source===r.url&&Array.isArray(facts.tracks)){
   const details=create("section","sl-d-release-tracklist");details.append(create("span","sl-d-kicker","FROM THE RELEASE PAGE"),create("h2",null,"Tracklist"));
