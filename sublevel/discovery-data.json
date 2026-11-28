@@ -564,11 +564,11 @@
       "soulintent-corruptions",
       "Corruptions Of Form",
       "Soul Intent",
-      "2026-11-27",
+      "2026-11-26",
       "Techstep / drum & bass",
       "New release",
-      "https://soulintent.bandcamp.com/album/corruptions-of-form",
-      "Two long-form cuts released on Bandcamp a week ahead of the general release. Compare the title track with Final Truth; credits identify Soul Intent as producer and Compound Audio as mastering engineer."
+      "https://losslessmusicuk.bandcamp.com/album/corruptions-of-form",
+      "Two tracks on Lossless Music: compare the title cut with Final Truth. The label credits Soul Intent as writer and producer, and Compound Audio for mastering."
     ],
     [
       "mv-dangerous",
@@ -1740,6 +1740,174 @@
       "source": "https://music.apple.com/gb/album/ketacid-single/6823775562?uo=4",
       "checked": "2026-11-28",
       "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    }
+  },
+  "releaseFacts": {
+    "soulintent-corruptions": {
+      "label": "Lossless Music",
+      "credits": "Written and produced by Soul Intent; mastered by Compound Audio.",
+      "tracks": [
+        [
+          "Corruptions Of Form",
+          "5:44"
+        ],
+        [
+          "Final Truth",
+          "6:08"
+        ]
+      ],
+      "title": "Corruptions Of Form",
+      "artist": "Soul Intent",
+      "source": "https://losslessmusicuk.bandcamp.com/album/corruptions-of-form",
+      "checked": "2026-11-28"
+    },
+    "postal-paranoia": {
+      "tracks": [
+        [
+          "Postal, B-Nabs – Paranoia",
+          "4:52"
+        ],
+        [
+          "Postal – Big Up",
+          "4:54"
+        ]
+      ],
+      "title": "Paranoia / Big Up",
+      "artist": "Postal",
+      "source": "https://postaldnb.bandcamp.com/album/paranoia-big-up",
+      "checked": "2026-11-28"
+    },
+    "velvet-dust": {
+      "label": "Arms & Legs",
+      "tracks": [
+        [
+          "The Dust",
+          "5:29"
+        ]
+      ],
+      "title": "The Dust",
+      "artist": "Kristin Velvet",
+      "source": "https://armsandlegsrecords.bandcamp.com/album/the-dust",
+      "checked": "2026-11-28"
+    },
+    "onho-entropic": {
+      "label": "The Gods Planet",
+      "credits": "Mastered by Audio Sol; artwork by Pianeti Sintetici.",
+      "tracks": [
+        [
+          "Primitive Machinery",
+          "6:53"
+        ],
+        [
+          "Nonlinear Pulse",
+          "6:59"
+        ],
+        [
+          "Entropic Voltage",
+          "6:46"
+        ],
+        [
+          "Descent and Defiance",
+          "7:20"
+        ]
+      ],
+      "title": "Entropic Voltage",
+      "artist": "Onho",
+      "source": "https://thegodsplanet.bandcamp.com/album/entropic-voltage",
+      "checked": "2026-11-28"
+    },
+    "dusky-bindweed": {
+      "label": "Anjunadeep",
+      "tracks": [
+        [
+          "Bindweed (Limonata Mix)",
+          "3:33"
+        ],
+        [
+          "Elm (Lost A Shoe in 92 Mix)",
+          "3:03"
+        ],
+        [
+          "Kadhalan (Loverboy Mix)",
+          "3:13"
+        ],
+        [
+          "Bindweed",
+          "3:42"
+        ],
+        [
+          "Elm",
+          "3:47"
+        ],
+        [
+          "Kadhalan",
+          "3:31"
+        ],
+        [
+          "Bindweed (Limonata Extended Mix)",
+          "4:54"
+        ],
+        [
+          "Elm (Lost A Shoe in 92 Extended Mix)",
+          "4:54"
+        ],
+        [
+          "Kadhalan (Loverboy Extended Mix)",
+          "4:49"
+        ],
+        [
+          "Bindweed (Extended Mix)",
+          "4:22"
+        ],
+        [
+          "Elm (Extended Mix)",
+          "4:58"
+        ],
+        [
+          "Kadhalan (Extended Mix)",
+          "4:15"
+        ]
+      ],
+      "credits": "Kadhalan also credits Nadeem Karim and Pritt.",
+      "title": "Bindweed (Limonata Mix)",
+      "artist": "Dusky",
+      "source": "https://duskymusic.bandcamp.com/album/bindweed-limonata-mix",
+      "checked": "2026-11-28"
+    },
+    "siwotha-fall": {
+      "label": "Sonaxx Records",
+      "credits": "Artwork and video credited to Sonaxx Records; the title track features vocalist Luna Sage.",
+      "tracks": [
+        [
+          "Nach dem Fall (Original Mix)",
+          "5:42"
+        ],
+        [
+          "Every last Promise (Original Mix)",
+          "4:20"
+        ]
+      ],
+      "title": "NACH DEM FALL",
+      "artist": "Siwotha You & Luna Sage",
+      "source": "https://sonaxxrecords.bandcamp.com/album/siwotha-you-luna-sage-nach-dem-fall",
+      "checked": "2026-11-28"
+    },
+    "pursefurst-pimp": {
+      "label": "Desolat",
+      "tracks": [
+        [
+          "PIMP",
+          "5:52"
+        ],
+        [
+          "CHECKUP",
+          "4:14"
+        ]
+      ],
+      "title": "PIMP",
+      "artist": "PurseFurst",
+      "source": "https://desolatmusicgroup.bandcamp.com/album/pimp",
+      "checked": "2026-11-28"
     }
   }
 }
