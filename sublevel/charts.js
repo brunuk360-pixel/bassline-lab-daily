@@ -21,7 +21,7 @@ function nativeChartRows(chart,template){
  const original=template?.querySelector(".track"),sample=original?.querySelector(".trackline"),sampleTitle=sample?.querySelector(".tracktitle"),sampleCover=sample?.querySelector(".cover");
  if(!sample||!sampleTitle||!sampleCover)return null;
  const list=nativeShell(template,"div","tracks");list.classList.add("tracks","sl-chart-native-list");
- const tracks=chart.rows.map(r=>({id:"chart:"+chart.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title),embedUrl:r.embedUrl}));
+ const tracks=chart.rows.map(r=>({id:"chart:"+chart.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||r.embedUrl||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title),embedUrl:r.embedUrl}));
  const sampleRank=Array.from(sample.children).find(n=>!n.contains(sampleTitle)&&!n.contains(sampleCover)&&(/^#?\d{1,2}$/.test(n.textContent.trim())||/rank|number|position/i.test(n.className||"")));
  const samplePlay=sample.querySelector(".play"),sampleExpand=sample.querySelector(".expandarrow"),sampleQueue=Array.from(sample.querySelectorAll(".iconbtn")).find(n=>!n.classList.contains("expandarrow"));
  const action=(cls,label,txt,fn)=>{const b=make("button",cls,txt);b.type="button";b.setAttribute("aria-label",label);b.title=label;b.addEventListener("click",fn);return b};
@@ -48,7 +48,7 @@ function nativeChartRows(chart,template){
   const queue=action(sampleQueue?.className||"iconbtn","Queue next: "+r.title,"+",()=>{window.SUBLEVELPlayer.addNext(track);queue.textContent="✓";queue.setAttribute("aria-label","Queued: "+r.title);queue.title="Added to listening queue"});
   queue.classList.add("sl-chart-native-queue");
   line.append(rank,cover,copy,play,queue,expand);
-  details.append(link(r.url?"Listen / release ↗":"Find music ↗",track.url));
+  details.append(link(r.url||r.embedUrl?"Listen / release ↗":"Find music ↗",track.url));
   if(playable){const p=action("sl-chart-link sl-chart-play","Play "+r.title+" here","▶ Play here",()=>window.SUBLEVELPlayer.play(track,tracks));details.append(p)}
   if(r.artSource)details.append(link("Artwork source ↗",r.artSource));
   row.append(line,details);list.append(row)
@@ -66,10 +66,10 @@ function chartPanel(genre,template=null){
  const native=template&&nativeChartRows(chart,template);
  if(native){panel.classList.add("sl-chart-native-panel");panel.prepend(native)}
  else{
- const list=make("ol","sl-chart-list");const tracks=chart.rows.map(r=>({id:"chart:"+chart.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title),embedUrl:r.embedUrl}));for(const r of chart.rows){
+ const list=make("ol","sl-chart-list");const tracks=chart.rows.map(r=>({id:"chart:"+chart.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||r.embedUrl||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title),embedUrl:r.embedUrl}));for(const r of chart.rows){
  const row=make("li","sl-chart-row");row.append(make("span","sl-chart-rank",String(r.rank).padStart(2,"0")));
  if(r.art){const img=make("img","sl-chart-cover");img.src=r.art;img.alt="";img.loading="lazy";img.addEventListener("error",()=>img.remove(),{once:true});row.append(img)}
- const copy=make("div","sl-chart-copy");copy.append(make("strong",null,r.title),make("small",null,r.artist));row.append(copy,link(r.url?"Listen / release ↗":"Find music ↗",r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title)));const track=tracks[r.rank-1];if(window.SUBLEVELPlayer?.available(track)){const play=make("button","sl-chart-link sl-chart-play","▶ Play here");play.type="button";play.addEventListener("click",()=>window.SUBLEVELPlayer.play(track,tracks));row.append(play)}list.append(row)}
+ const copy=make("div","sl-chart-copy");copy.append(make("strong",null,r.title),make("small",null,r.artist));row.append(copy,link(r.url||r.embedUrl?"Listen / release ↗":"Find music ↗",r.url||r.embedUrl||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title)));const track=tracks[r.rank-1];if(window.SUBLEVELPlayer?.available(track)){const play=make("button","sl-chart-link sl-chart-play","▶ Play here");play.type="button";play.addEventListener("click",()=>window.SUBLEVELPlayer.play(track,tracks));row.append(play)}list.append(row)}
  panel.append(list)
  }
  }else panel.append(make("p","sl-chart-meta",source?"A full verified Top 10 is not available in this edition. Check the live source rather than relying on an incomplete ranking.":"No verified dedicated chart has been linked for this genre. Editorial recommendations below are not current rankings."));
