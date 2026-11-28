@@ -29,6 +29,8 @@ const server=http.createServer((req,res)=>{
  await check("390px homepage layout",async()=>{await page.waitForSelector(".sl-home-index");assert.equal(await overflow(),false)});
  await check("Daily Dig and listening queue",async()=>{
  await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
+ const edition=await page.evaluate(()=>{const D=window.__slDiscovery,today=new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());const f=D.editorialFeature;if(f?.date!==today||f.ids.length!==10)return null;return {expected:f.ids.map(id=>D.items.find(r=>r[0]===id)?.[1]),actual:[...document.querySelectorAll(".sl-discovery-dialog .sl-d-list")][0]&&[...document.querySelectorAll(".sl-discovery-dialog .sl-d-list:first-of-type .sl-d-record h3")].slice(0,10).map(x=>x.textContent),firstList:[...document.querySelector(".sl-discovery-dialog .sl-d-list")?.querySelectorAll(".sl-d-record h3")||[]].map(x=>x.textContent)}});
+ if(edition)assert.deepEqual(edition.firstList,edition.expected,"today's editorial release order");
  const listen=await page.evaluate(()=>{const b=[...document.querySelectorAll(".sl-discovery-dialog button")].find(x=>x.textContent.includes("Start listening"));if(!b)return false;b.click();return true});assert.ok(listen);
  await page.waitForSelector(".sl-d-queue");assert.ok(await page.$(".sl-d-queue-row"));
  await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
