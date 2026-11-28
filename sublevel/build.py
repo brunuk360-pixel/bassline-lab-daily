@@ -361,7 +361,7 @@ if shutil.which("npm") and shutil.which("node"):
     try:
         qa_dir="/tmp/sublevel-qa"
         subprocess.run(["npm","install","--prefix",qa_dir,"--no-save","--ignore-scripts","--no-audit","--no-fund","puppeteer-core@23.8.0","@sparticuz/chromium@131.0.1"],check=True,timeout=90)
-        qa=subprocess.run(["node",str(root/"browser-qa.cjs"),str(output.parent.resolve())],timeout=75)
+        qa=subprocess.run(["node",str(root/"browser-qa.cjs"),str(output.parent.resolve())],timeout=150)
         print("Browser QA diagnostic exit:",qa.returncode)
     except (OSError,subprocess.SubprocessError) as exc:
         print("Browser QA could not complete:",type(exc).__name__)
