@@ -6,3 +6,4 @@ CREATE TABLE IF NOT EXISTS limits(key char(64) NOT NULL,hour timestamptz NOT NUL
 CREATE INDEX IF NOT EXISTS tracks_status_created ON tracks(status,created DESC);
 CREATE INDEX IF NOT EXISTS feedback_track_status ON feedback(track,status);
 DELETE FROM limits WHERE hour<now()-interval '7 days';
+ALTER TABLE tracks ADD COLUMN IF NOT EXISTS embed_url varchar(500) NOT NULL DEFAULT '';
