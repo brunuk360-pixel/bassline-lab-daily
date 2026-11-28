@@ -232,7 +232,16 @@ discovery_json=json.dumps(discovery,ensure_ascii=True).replace("<",r"\u003c")
 discovery_patch=('<style id="sublevel-discovery">'+discovery_css+'</style>').encode("utf-8")
 data,n=re.subn(br"</head\s*>",lambda m:discovery_patch+m.group(0),data,count=1,flags=re.I)
 assert n==1
-discovery_script=('<script>window.__slDiscovery='+discovery_json+';</script><script>'+listening_js+'</script><script>'+discovery_js+'</script>').encode("utf-8")
+from embed_sources import resolve_embeds
+embed_json=json.dumps(resolve_embeds(discovery),ensure_ascii=True).replace("<",r"\u003c")
+player_js=(root/"player.js").read_text(encoding="utf-8")
+player_css=(root/"player.css").read_text(encoding="utf-8")
+if shutil.which("node"):
+    subprocess.run(["node","--check",str(root/"player.js")],check=True)
+    subprocess.run(["node",str(root/"player-test.cjs")],check=True)
+data,n=re.subn(br"</head\s*>",lambda m:('<style id="sublevel-player">'+player_css+'</style>').encode("utf-8")+m.group(0),data,count=1,flags=re.I)
+assert n==1
+discovery_script=('<script>window.__slDiscovery='+discovery_json+';window.__slEmbeds='+embed_json+';</script><script>'+player_js+'</script><script>'+listening_js+'</script><script>'+discovery_js+'</script>').encode("utf-8")
 data,n=re.subn(br"</body\s*>",lambda m:discovery_script+m.group(0),data,count=1,flags=re.I)
 assert n==1
 print("Discovery catalogue validated:",len(ids),"entries;",len(discovery["profiles"]),"artist profiles.")
