@@ -76,5 +76,13 @@ def resolve_embeds(data):
         if key not in ids or key in entries:continue
         source=("https://open.spotify.com/"+kind+"/"+id if provider=="spotify" else "https://www.youtube.com/watch?v="+id)
         entries[key]={"provider":provider,"kind":kind,"id":id,"source":source}
+    for row in data["items"]:
+        item=data.get("reviewedEmbeds",{}).get(row[0],{})
+        if item.get("title")!=row[1] or item.get("artist")!=row[2]:continue
+        provider,kind,ident,source=(item.get(k,"") for k in ("provider","kind","id","source"))
+        if provider=="spotify" and kind in ("track","album") and re.fullmatch(r"[A-Za-z0-9]{22}",ident) and source=="https://open.spotify.com/"+kind+"/"+ident:
+            entries[row[0]]={"provider":provider,"kind":kind,"id":ident,"source":source}
+        elif provider=="youtube" and re.fullmatch(r"[A-Za-z0-9_-]{11}",ident) and source=="https://www.youtube.com/watch?v="+ident:
+            entries[row[0]]={"provider":provider,"id":ident,"source":source}
     print("Official embed identities resolved:",len(entries),"of",len(data["items"]),flush=True)
     return entries
