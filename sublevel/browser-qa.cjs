@@ -42,11 +42,22 @@ const server=http.createServer((req,res)=>{
  assert.equal(await overflow(),false);
  });
  await check("Drum & Bass room chart",async()=>{
- await page.reload({waitUntil:"domcontentloaded"});await page.waitForSelector("#app .night-home");await nav("Genres");
+ await nav("Today");await page.waitForSelector("#app .night-home");await nav("Genres");
  const clicked=await page.evaluate(()=>{const b=[...document.querySelectorAll("#app button")].find(b=>!b.closest(".sl-chart-directory")&&/drum\\s*(?:&|and)\\s*bass/i.test(b.textContent)&&/discover/i.test(b.textContent));if(!b)return false;b.click();return true});assert.ok(clicked,"Could not locate D&B genre card after fresh navigation");
  await page.waitForSelector(".sl-chart-room");await page.click(".sl-chart-room summary");await settle();
  assert.equal(await page.$eval(".sl-chart-room .sl-chart-row",x=>x.length),10);
  assert.equal(await overflow(),false);
+ });
+ await check("Persistent official player",async()=>{
+ await nav("Today");await page.waitForSelector(".sl-d-entry");
+ await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
+ const started=await page.evaluate(()=>{const r=window.__slDiscovery.items.find(x=>x[0]==="allnight");if(!r)return false;const items=window.__slDiscovery.items.filter(x=>["allnight","baddadan"].includes(x[0])).map(([id,title,artist,date,genre,tag,url])=>({id,title,artist,url}));window.SUBLEVELPlayer.play(items.find(x=>x.id==="allnight"),items);return true});assert.ok(started);
+ await page.waitForSelector(".sl-player iframe");const src=await page.$eval(".sl-player iframe",f=>f.src);assert.match(src,/^https:\/\/open\.spotify\.com\/embed\/track\//);
+ await page.evaluate(()=>{window.__qaPlayerFrame=document.querySelector(".sl-player iframe")});
+ await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
+ await nav("Genres");assert.equal(await page.evaluate(()=>window.__qaPlayerFrame===document.querySelector(".sl-player iframe")),true,"same iframe survives navigation");
+ await page.click('.sl-player button[aria-label="Next selection"]');assert.notEqual(await page.$eval(".sl-player iframe",f=>f.src),src);
+ await page.click('.sl-player button[aria-label="Stop and close player"]');assert.equal(await page.$(".sl-player iframe"),null);
  });
  await check("Saved library tabs",async()=>{await nav("Saved");await page.waitForSelector(".sl-library-entry");await page.click(".sl-library-entry button");await page.waitForSelector(".sl-library-tabs");assert.equal(await page.$$eval(".sl-library-tab",x=>x.length),6);await page.evaluate(()=>[...document.querySelectorAll(".sl-library-tab")].find(b=>b.textContent==="Profile & data").click());assert.ok(await page.$(".sl-library-account"));await page.click(".sl-d-close")});
  await check("Unsigned link",async()=>{await nav("Today");await page.waitForSelector(".sl-u-entry");assert.equal(await page.$eval(".sl-u-primary",a=>a.href),"https://sublevel-unsigned-xvpf.onrender.com/")});
