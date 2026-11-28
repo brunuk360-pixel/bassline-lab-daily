@@ -6,7 +6,8 @@ function fromURL(value){
  const u=urlOf(value);if(!u)return null;const h=u.hostname,p=u.pathname.replace(/\/$/,"");
  if(["soundcloud.com","www.soundcloud.com"].includes(h)&&/^\/[\w.-]+\/[\w.-]+$/.test(p))return {provider:"soundcloud",source:u.origin+p};
  if(["youtube.com","www.youtube.com","music.youtube.com","youtu.be"].includes(h)){
-  const id=h==="youtu.be"?p.slice(1):p==="/watch"?u.searchParams.get("v"):"";
+  const ids=u.searchParams.getAll("v");
+  const id=h==="youtu.be"&&ids.length===0?p.slice(1):h!=="youtu.be"&&p==="/watch"&&ids.length===1?ids[0]:"";
   if(/^[A-Za-z0-9_-]{11}$/.test(id||""))return {provider:"youtube",id,source:"https://www.youtube.com/watch?v="+id};
  }
  if(h==="music.apple.com"){
@@ -63,7 +64,7 @@ function choices(r){
 }
 function source(r){return choices(r)[0]||null}
 function available(r){return !!frame(source(r))}
-let items=[],index=-1,panel,host,title,meta,previous,next,original,queueList,queueDetails,notice,compactButton,playableButton,providerButtons,activeID=null,activeProvider=null,playableOnly=false,compact=false;
+let items=[],index=-1,panel,host,title,meta,previous,next,original,queueList,queueDetails,notice,compactButton,playableButton,providerButtons,providerLink,activeID=null,activeProvider=null,playableOnly=false,compact=false;
 const key="sublevel.player.queue.v1";
 function persist(){try{localStorage.setItem(key,JSON.stringify({items,index,playableOnly,compact}))}catch{}}
 try{const saved=JSON.parse(localStorage.getItem(key)||"null");items=clean(saved?.items).map(r=>byId(r.id)||r);index=items.length?Math.max(0,Math.min(items.length-1,Number.isInteger(saved?.index)?saved.index:0)):-1;playableOnly=saved?.playableOnly===true||saved?.skipExternal===true;compact=saved?.compact===true}catch{}
@@ -80,7 +81,7 @@ function build(){
  original=make("a","sl-p-link","Open original release ↗");original.target="_blank";original.rel="noopener noreferrer";
  queueDetails=make("details","sl-p-queue");playableButton=button("Skip external-only: off",()=>{playableOnly=!playableOnly;refreshControls();persist()});const options=make("div","sl-p-options");const shuffle=button("Shuffle upcoming",()=>{for(let i=items.length-1;i>index+1;i--){const j=index+1+Math.floor(Math.random()*(i-index));[items[i],items[j]]=[items[j],items[i]]}redrawQueue();refreshControls();persist()});options.append(shuffle,playableButton);queueDetails.append(make("summary",null,"Listening queue"),options,queueList=make("div","sl-p-list"));
 
- providerButtons=make("div","sl-p-providers");providerButtons.setAttribute("aria-label","Available music players");panel.append(head,host,providerButtons,notice,original,queueDetails);doc.body.append(panel);applyCompact();
+ providerButtons=make("div","sl-p-providers");providerButtons.setAttribute("aria-label","Available music players");providerLink=make("a","sl-p-link sl-p-provider-link");providerLink.target="_blank";providerLink.rel="noopener noreferrer";providerLink.hidden=true;const links=make("div","sl-p-links");links.append(original,providerLink);panel.append(head,host,providerButtons,notice,links,queueDetails);doc.body.append(panel);applyCompact();
  if(typeof ResizeObserver==="function")new ResizeObserver(()=>doc.documentElement.style.setProperty("--sl-player-space",panel.hidden?"0px":Math.ceil(panel.getBoundingClientRect().height)+"px")).observe(panel)
 }
 function applyCompact(){panel.classList.toggle("sl-p-compact",compact);compactButton.textContent=compact?"+":"−";compactButton.setAttribute("aria-expanded",String(!compact));compactButton.setAttribute("aria-label",compact?"Expand player details":"Compact player details");if(compact)queueDetails.open=false}
@@ -117,7 +118,8 @@ function adjacent(d){for(let i=index+d;i>=0&&i<items.length;i+=d)if(!playableOnl
 function refreshControls(){previous.disabled=adjacent(-1)<0;next.disabled=adjacent(1)<0;playableButton.textContent="Skip external-only: "+(playableOnly?"on":"off");playableButton.setAttribute("aria-pressed",String(playableOnly))}
 function renderProvider(r,e){
  const spec=frame(e);host.replaceChildren();activeID=r.id;activeProvider=e;
- original.href=e?.source||r.url;
+ original.href=r.url;original.textContent="Open original release ↗";
+ if(e?.source&&e.source!==r.url){providerLink.href=e.source;providerLink.textContent="Open "+(spec?.name||"provider")+" ↗";providerLink.hidden=false}else{providerLink.hidden=true;providerLink.removeAttribute("href")}
  if(spec){const f=make("iframe","sl-p-embed");f.src=spec.src;f.title=spec.name+" player — "+r.title;f.height=String(spec.height);f.allow="autoplay; encrypted-media; fullscreen; picture-in-picture";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";host.append(f);notice.textContent=spec.name==="Apple Music"?"Press play to preview. Full tracks require eligible Apple Music access. Availability depends on the provider.":"Press play in the "+spec.name+" player. Availability and playback length are controlled by the provider."}
  else notice.textContent="No verified embedded source for this selection. Use the original release link or choose the next record.";
  const options=choices(r);providerButtons.replaceChildren();providerButtons.hidden=options.length<2;
