@@ -618,7 +618,9 @@
           "artist": "Alix Perez",
           "url": "https://www.traxsource.com/track/12433088/elastic-soul-original-mix",
           "art": "https://i.scdn.co/image/ab67616d0000b27394ad753c86058551af82ff5e",
-          "artSource": "https://drumandbassuk.com/artist/alix-perez/entanglements-2410"
+          "artSource": "https://drumandbassuk.com/artist/alix-perez/entanglements-2410",
+          "embedUrl": "https://www.youtube.com/watch?v=3yhP_xyZdLw",
+          "embedEvidence": "Exact label-distributed YouTube recording; reviewed 2026-11-28"
         },
         {
           "rank": 2,
@@ -889,7 +891,10 @@
         {
           "rank": 7,
           "title": "LAST CHRISTMAS",
-          "artist": "WHAM"
+          "artist": "WHAM",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/47/55/0c/47550cd6-7ef5-bf86-c194-c7695d63c759/dj.xuditatj.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/last-christmas/282658449?i=282658482&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/last-christmas/282658449?i=282658482"
         },
         {
           "rank": 8,
@@ -1029,7 +1034,9 @@
           "title": "SURE THING",
           "artist": "MIGUEL",
           "embedUrl": "https://open.spotify.com/track/0JXXNGljqupsJaZsgSbMZV",
-          "url": "https://open.spotify.com/track/0JXXNGljqupsJaZsgSbMZV"
+          "url": "https://open.spotify.com/track/0JXXNGljqupsJaZsgSbMZV",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/4b/85/3f/4b853f59-1e43-5e93-54cf-5a799c04ed1d/884977670820.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/sure-thing/439618070?i=439618071&uo=4"
         },
         {
           "rank": 8,
@@ -1101,7 +1108,10 @@
         {
           "rank": 7,
           "title": "Miami Vice (Extended Mix)",
-          "artist": "DJ PP, Mark Knight, James Hurr"
+          "artist": "DJ PP, Mark Knight, James Hurr",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ee/14/80/ee1480ef-9038-bb5b-c760-f4e164d7d8d4/5052075036946.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/miami-vice-extended-mix/6808310197?i=6808310199&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/miami-vice-extended-mix/6808310197?i=6808310199"
         },
         {
           "rank": 8,
@@ -1628,17 +1638,28 @@
         {
           "rank": 1,
           "artist": "Sammy Virji",
-          "title": "Repeaty"
+          "title": "Repeaty",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/1e/3f/24/1e3f24a4-ebc1-4b06-d365-0f0dcf09bcc8/18064.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/repeaty/6822410220?i=6822410222&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/repeaty/6822410220?i=6822410222"
         },
         {
           "rank": 2,
           "artist": "Sweet Female Attitude",
-          "title": "Flowers (Sunship Remix)"
+          "title": "Flowers (Sunship Remix)",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/b5/24/f7/b524f78e-4a70-52e0-f272-b5223317a767/15UMGIM38378.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/flowers-sunship-remix/1491744726?i=1491744752&uo=4",
+          "embedUrl": "https://www.youtube.com/watch?v=z95GDkzjezY",
+          "alternateEmbedUrl": "https://music.apple.com/gb/album/flowers-sunship-remix/1491744726?i=1491744752",
+          "embedEvidence": "Exact label-distributed YouTube recording; reviewed 2026-11-28"
         },
         {
           "rank": 3,
           "artist": "Osmosis Jones",
-          "title": "Rockin With The Best"
+          "title": "Rockin With The Best",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ee/8d/e4/ee8de4c2-d9e7-a07b-13a5-3475323e0ba3/1200220057467.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/rockin-with-the-best/6808323255?i=6808323256&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/rockin-with-the-best/6808323255?i=6808323256"
         },
         {
           "rank": 4,
@@ -1664,7 +1685,10 @@
         {
           "rank": 7,
           "artist": "Fold & Cu.Rve",
-          "title": "Business"
+          "title": "Business",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/42/0f/f3/420ff356-524c-4168-650b-40c6aa56b50f/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/business/1821037825?i=1821038075&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/business/1821037825?i=1821038075"
         },
         {
           "rank": 8,
@@ -1674,12 +1698,18 @@
         {
           "rank": 9,
           "artist": "Lemtom",
-          "title": "Back 2 Front"
+          "title": "Back 2 Front",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/19/24/31/192431ee-b2d9-f36f-cb4c-cbd232adc151/199538174533.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/back-2-front/1824440620?i=1824440663&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/back-2-front/1824440620?i=1824440663"
         },
         {
           "rank": 10,
           "artist": "Brasstooth",
-          "title": "I Can't Quite"
+          "title": "I Can't Quite",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f1/8b/17/f18b177b-6de1-937d-ef9f-4596ee96859f/artwork.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/i-cant-quite/6831455646?i=6831455648&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/i-cant-quite/6831455646?i=6831455648"
         }
       ]
     }
@@ -1951,8 +1981,8 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 96,
+  "lookupCursor": 108,
   "lookupPriority": [
-    "dj-ukg"
+    "dnb"
   ]
 }
