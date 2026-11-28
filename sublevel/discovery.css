@@ -271,3 +271,24 @@ html body #app .night-home .sl-d-entry{background:linear-gradient(90deg,#080e10e
 .sl-d-queue:not([open])>:not(summary){display:none!important}.sl-d-queue[open]>:not(summary){margin-inline:10px}
 @media(max-width:360px){.sl-d-content .sl-d-daily-detail{grid-template-columns:48px minmax(0,1fr);gap:7px}.sl-d-daily-art{width:48px;height:48px}.sl-d-content .sl-d-daily-controls{flex-direction:column;gap:2px}.sl-d-content .sl-d-daily-copy h3{font-size:14px!important}}
 @media(min-width:720px){.sl-d-content .sl-d-daily-detail{grid-template-columns:76px minmax(0,1fr)}.sl-d-daily-art{width:76px;height:76px}.sl-d-content .sl-d-daily-copy h3{font-size:18px!important}}
+
+/* Daily Dig editorial journal — distinct from the native Discover 10 track list. */
+.sl-d-content .sl-d-daily-shelf .sl-d-daily-row{display:block!important;padding:14px 12px 11px!important;margin:12px 0!important;border:1px solid #79c9b733!important;border-left:2px solid #79c9b7!important;background:#111e1e!important;border-radius:0!important}
+.sl-d-daily-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px}
+.sl-d-content .sl-d-daily-row .sl-d-daily-detail{grid-template-columns:76px minmax(0,1fr);min-height:76px;gap:10px}
+.sl-d-daily-row .sl-d-daily-art{width:76px;height:76px}
+.sl-d-content .sl-d-dig-teaser{margin:11px 0 7px!important;font-size:13px!important;line-height:1.55!important;color:#d4dfd9!important;overflow-wrap:anywhere}
+.sl-d-dig-story-toggle{border-top:1px solid #79c9b733;margin:0}
+.sl-d-dig-story-toggle>summary{min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:10px;list-style:none;cursor:pointer;color:#8bd4c1;font-weight:650;font-size:12px;padding:0 2px}
+.sl-d-dig-story-toggle>summary::-webkit-details-marker{display:none}
+.sl-d-dig-story-toggle>summary::after{content:"+";font-size:20px;font-weight:400}
+.sl-d-dig-story-toggle[open]>summary::after{content:"−"}
+.sl-d-dig-story-toggle:not([open])>.sl-d-dig-story{display:none!important}
+.sl-d-dig-story{display:grid;gap:12px;padding:5px 0 12px;min-width:0}
+.sl-d-dig-story-block{border-top:1px solid #79c9b72a;padding-top:10px;min-width:0}
+.sl-d-content .sl-d-dig-story-block p{font-size:13px!important;line-height:1.6!important;color:#d4dfd9!important;margin:6px 0!important;overflow-wrap:anywhere}
+.sl-d-dig-source{display:inline-flex;align-items:center;min-height:32px;font-size:11px;color:#8bd4c1;text-decoration:underline;overflow-wrap:anywhere}
+.sl-d-dig-facts{display:flex;flex-wrap:wrap;gap:6px;color:#c6dbd2;font-size:11px}
+.sl-d-dig-facts>span{background:#1b302c;padding:5px 8px}.sl-d-dig-facts small{display:block;width:100%;line-height:1.5;color:#b5c5c0}
+@media(max-width:360px){.sl-d-content .sl-d-daily-shelf .sl-d-daily-row{padding-inline:9px!important}.sl-d-content .sl-d-daily-row .sl-d-daily-detail{grid-template-columns:56px minmax(0,1fr);gap:8px}.sl-d-daily-row .sl-d-daily-art{width:56px;height:56px}}
+@media(min-width:720px){.sl-d-content .sl-d-daily-shelf .sl-d-daily-row{padding:17px 20px 10px!important}.sl-d-content .sl-d-daily-row .sl-d-daily-detail{grid-template-columns:100px minmax(0,1fr)}.sl-d-daily-row .sl-d-daily-art{width:100px;height:100px}.sl-d-content .sl-d-dig-teaser{font-size:14px!important}}
