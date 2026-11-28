@@ -173,7 +173,13 @@ const server=http.createServer((req,res)=>{
   const labels=await page.evaluate(()=>[...document.querySelectorAll("#app .sl-unified-genre-tabs button")].map(b=>({label:b.textContent.trim(),added:b.dataset.slGenreExtraTab||""})));
   const keys=labels.map(b=>b.label.toLowerCase().replace(/[^a-z0-9]/g,""));
   assert.deepEqual(keys.filter(k=>expected.includes(k)),expected,genre+" same ordered core tabs");
-  reports.push({genre,labels});
+  const banner=await page.evaluate(()=>{const h=document.querySelector(".roomhead.sl-genre-angled"),copy=h?.querySelector(".roomcopy"),title=copy?.querySelector("h1"),controls=[...h?.querySelectorAll("button,a")||[]].map(b=>({label:b.innerText.trim(),height:b.getBoundingClientRect().height,visible:!!b.getClientRects().length}));if(!h||!copy||!title)return null;const bg=[getComputedStyle(h).backgroundImage,getComputedStyle(h,"::before").backgroundImage,...[...h.querySelectorAll("img")].map(i=>i.getAttribute("src"))].map(s=>s?.length>1000?"embedded:"+s.length:s);return {theme:h.dataset.slGenreTheme,panel:h.style.getPropertyValue("--sl-genre-panel"),accent:h.style.getPropertyValue("--sl-genre-accent"),width:h.getBoundingClientRect().width,height:h.getBoundingClientRect().height,copy:copy.getBoundingClientRect().width,title:title.getBoundingClientRect().height,controls,bg}});
+  assert.ok(banner&&banner.panel&&banner.accent&&banner.width>0&&banner.copy>=120,genre+" readable themed banner");
+  assert.ok(banner.controls.some(b=>/random/i.test(b.label)&&b.visible),genre+" original Random visible");
+  assert.ok(banner.controls.some(b=>/pin genre|pinned/i.test(b.label)&&b.visible),genre+" original Pin genre visible");
+  assert.equal(await overflow(),false,genre+" banner overflow");
+  reports.push({genre,labels,banner});
+  console.log("SUBLEVEL_GENRE_BANNER "+JSON.stringify({genre,...banner}));
   // Public editorial track identities only; no account/session or private data.
   const nativeTracks=await page.evaluate(()=>[...document.querySelectorAll("#app .tracks:not(.sl-chart-native-list) .track")].filter(r=>r.getClientRects().length).map(r=>({title:r.querySelector(".tracktitle strong,.tracktitle b")?.textContent.trim()||"",artist:r.querySelector(".tracktitle small")?.textContent.trim()||"",href:r.querySelector("a.play")?.getAttribute("href")||"",embedded:!!r.querySelector("a.play[data-sl-native-play=true]")})));
   console.log("SUBLEVEL_NATIVE_TRACKS "+JSON.stringify({genre,tracks:nativeTracks}));
