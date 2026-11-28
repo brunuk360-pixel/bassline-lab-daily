@@ -17,3 +17,5 @@ dialog.sl-discovery-dialog{z-index:2147483000!important}
 .sl-p-queue>.sl-p-button{font-size:11px;width:100%;text-align:left;min-height:44px;margin-bottom:4px}
 .sl-p-head .sl-p-button{flex-shrink:0}
 @media(max-width:360px){.sl-p-head{gap:3px}.sl-p-head .sl-p-button{min-width:38px}.sl-player{padding-inline:8px}}
+
+.sl-p-options{display:flex;flex-wrap:wrap;gap:5px;margin:5px 0}.sl-p-options .sl-p-button{font-size:11px}.sl-p-compact .sl-p-queue,.sl-p-compact .sl-p-notice{display:none}.sl-p-compact .sl-p-link{min-height:30px}.sl-p-dossier{margin:8px 0}.sl-p-compact .sl-p-head{gap:3px}.sl-p-copy{overflow:hidden}.sl-p-copy strong{line-height:1.25}.sl-player .sl-p-head .sl-p-button{flex-shrink:0}
