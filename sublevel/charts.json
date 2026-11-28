@@ -46,7 +46,10 @@
         {
           "rank": 6,
           "title": "FANCY FOOTWORK",
-          "artist": "CHRIS LORENZO/CHROMEO"
+          "artist": "CHRIS LORENZO/CHROMEO",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/0a/4e/c7/0a4ec7ea-d4bd-6cb4-6bec-379162475904/16865.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/fancy-footwork/6811941081?i=6811941086&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/fancy-footwork/6811941081?i=6811941086"
         },
         {
           "rank": 7,
@@ -1090,7 +1093,10 @@
         {
           "rank": 6,
           "title": "Strike",
-          "artist": "Tiger Stripes"
+          "artist": "Tiger Stripes",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/94/e8/6d/94e86dd3-741a-1e54-5f71-14b4829bace8/885288787986.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/strike/6819304152?i=6819304153&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/strike/6819304152?i=6819304153"
         },
         {
           "rank": 7,
@@ -1224,7 +1230,10 @@
         {
           "rank": 6,
           "title": "What I Like",
-          "artist": "Rvssian & MOLIY & Ayetian & Tyga"
+          "artist": "Rvssian & MOLIY & Ayetian & Tyga",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/5e/ec/fc/5eecfc09-1942-17ef-b460-96e42c023705/199806707173.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/what-i-like/1870979820?i=1870979831&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/what-i-like/1870979820?i=1870979831"
         },
         {
           "rank": 7,
@@ -1297,7 +1306,10 @@
         {
           "rank": 6,
           "title": "We Are One (Last Soldier Remix)",
-          "artist": "Mhammed El Alami & NELLY TGM"
+          "artist": "Mhammed El Alami & NELLY TGM",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ab/88/a2/ab88a266-a43d-d933-1a9c-c603ebf4bf56/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/we-are-one-last-soldier-remix/6824754880?i=6824754881&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/we-are-one-last-soldier-remix/6824754880?i=6824754881"
         },
         {
           "rank": 7,
@@ -1370,7 +1382,10 @@
         {
           "rank": 6,
           "title": "Madrugada",
-          "artist": "Arthi & Sam Interface"
+          "artist": "Arthi & Sam Interface",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b6/14/ef/b614efae-470b-3453-7fa4-b2bf3bfac1a9/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/madrugada/6820945486?i=6820945488&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/madrugada/6820945486?i=6820945488"
         },
         {
           "rank": 7,
@@ -1437,7 +1452,10 @@
         {
           "rank": 6,
           "title": "マジックアワー",
-          "artist": "TAMTAM"
+          "artist": "TAMTAM",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/fc/bd/6d/fcbd6da1-88e3-7daa-13d9-f02c5eb6256e/840200591676_cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/%E3%83%9E%E3%82%B8%E3%83%83%E3%82%AF%E3%82%A2%E3%83%AF%E3%83%BC/1808537353?i=1808537354&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/%E3%83%9E%E3%82%B8%E3%83%83%E3%82%AF%E3%82%A2%E3%83%AF%E3%83%BC/1808537353?i=1808537354"
         },
         {
           "rank": 7,
@@ -1504,7 +1522,10 @@
         {
           "rank": 6,
           "title": "Sharp",
-          "artist": "Sir Spyro & Top Cat"
+          "artist": "Sir Spyro & Top Cat",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/59/ce/65/59ce65c1-988b-b51b-6f46-f28e80c54614/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/sharp/6815711345?i=6815711590&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/sharp/6815711345?i=6815711590"
         },
         {
           "rank": 7,
@@ -1635,7 +1656,10 @@
         {
           "rank": 6,
           "artist": "Main Phase & TSVI",
-          "title": "Nectar"
+          "title": "Nectar",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b3/57/5e/b3575e76-799b-e913-28db-65b5c9176cb4/885288040111.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/nectar/6798772202?i=6798772424&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/nectar/6798772202?i=6798772424"
         },
         {
           "rank": 7,
@@ -1927,5 +1951,8 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 84
+  "lookupCursor": 96,
+  "lookupPriority": [
+    "dj-ukg"
+  ]
 }
