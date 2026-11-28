@@ -23,23 +23,34 @@ function nativeChartRows(chart,template){
  const list=nativeShell(template,"div","tracks");list.classList.add("tracks","sl-chart-native-list");
  const tracks=chart.rows.map(r=>({id:"chart:"+chart.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||"https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title),embedUrl:r.embedUrl}));
  const sampleRank=Array.from(sample.children).find(n=>!n.contains(sampleTitle)&&!n.contains(sampleCover)&&(/^#?\d{1,2}$/.test(n.textContent.trim())||/rank|number|position/i.test(n.className||"")));
- const sampleEnd=Array.from(sample.children).find(n=>n!==sampleRank&&!n.contains(sampleTitle)&&!n.contains(sampleCover));
+ const samplePlay=sample.querySelector(".play"),sampleExpand=sample.querySelector(".expandarrow"),sampleQueue=Array.from(sample.querySelectorAll(".iconbtn")).find(n=>!n.classList.contains("expandarrow"));
+ const action=(cls,label,txt,fn)=>{const b=make("button",cls,txt);b.type="button";b.setAttribute("aria-label",label);b.title=label;b.addEventListener("click",fn);return b};
  for(const r of chart.rows){
   const row=nativeShell(original,"article","track");row.classList.add("track","sl-chart-native-row");row.dataset.rank=String(r.rank);
-  const line=nativeShell(sample,"button","trackline");line.classList.add("trackline");if(line.tagName==="BUTTON")line.type="button";else{line.setAttribute("role","button");line.tabIndex=0}
-  line.setAttribute("aria-expanded","false");
+  const line=make("div",sample.className||"trackline");line.classList.add("trackline");
   const rank=nativeShell(sampleRank,"span","rank");rank.classList.add("sl-chart-native-rank");rank.textContent=String(r.rank).padStart(2,"0");
   const cover=nativeShell(sampleCover,"div","cover");cover.classList.add("cover","sl-chart-native-cover");
   if(r.art){const img=make("img");img.src=r.art;img.alt="";img.loading="lazy";img.decoding="async";img.addEventListener("error",()=>{img.remove();cover.classList.add("sl-chart-cover-unavailable")},{once:true});cover.append(img)}else cover.classList.add("sl-chart-cover-unavailable");
   const copy=nativeShell(sampleTitle,"div","tracktitle");copy.classList.add("tracktitle");
   const title=nativeShell(sampleTitle.querySelector("strong,b"),"strong");title.textContent=r.title;title.classList.add("sl-chart-native-title");
   const artist=nativeShell(sampleTitle.querySelector("small"),"small");artist.textContent=r.artist;copy.append(title,artist);
-  const end=nativeShell(sampleEnd,"span");if(end.tagName==="BUTTON"){const span=make("span",end.className,"›");span.classList.add("sl-chart-native-chevron");line.append(rank,cover,copy,span)}else{end.textContent="›";end.classList.add("sl-chart-native-chevron");line.append(rank,cover,copy,end)}
+  const track=tracks[r.rank-1],playable=window.SUBLEVELPlayer?.available(track);
   const details=make("div","sl-chart-native-detail");details.hidden=true;
-  details.append(link(r.url?"Listen / release ↗":"Find music ↗",tracks[r.rank-1].url));
-  if(window.SUBLEVELPlayer?.available(tracks[r.rank-1])){const play=make("button","sl-chart-link sl-chart-play","▶ Play here");play.type="button";play.addEventListener("click",()=>window.SUBLEVELPlayer.play(tracks[r.rank-1],tracks));details.append(play)}
-  const toggle=()=>{details.hidden=!details.hidden;line.setAttribute("aria-expanded",String(!details.hidden))};
-  line.addEventListener("click",toggle);if(line.tagName!=="BUTTON")line.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}});
+  const expand=action(sampleExpand?.className||"iconbtn expandarrow","Expand "+r.title,"⌄",()=>toggle());
+  expand.classList.add("sl-chart-native-expand");expand.setAttribute("aria-expanded","false");
+  const toggle=()=>{details.hidden=!details.hidden;expand.setAttribute("aria-expanded",String(!details.hidden));expand.textContent=details.hidden?"⌄":"⌃";copy.setAttribute("aria-expanded",String(!details.hidden))};
+  if(copy.tagName==="BUTTON")copy.type="button";else{copy.setAttribute("role","button");copy.tabIndex=0;copy.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}})}
+  copy.setAttribute("aria-expanded","false");copy.addEventListener("click",toggle);
+  let play;
+  if(playable)play=action(samplePlay?.className||"play","Play "+r.title+" here","▶",()=>window.SUBLEVELPlayer.play(track,tracks));
+  else{play=make("a",samplePlay?.className||"play","▶");play.href=track.url;play.target="_blank";play.rel="noopener noreferrer";play.setAttribute("aria-label","Open "+r.title+" release");play.title="Open original release"}
+  play.classList.add("sl-chart-native-play");
+  const queue=action(sampleQueue?.className||"iconbtn","Queue next: "+r.title,"+",()=>{window.SUBLEVELPlayer.addNext(track);queue.textContent="✓";queue.setAttribute("aria-label","Queued: "+r.title);queue.title="Added to listening queue"});
+  queue.classList.add("sl-chart-native-queue");
+  line.append(rank,cover,copy,play,queue,expand);
+  details.append(link(r.url?"Listen / release ↗":"Find music ↗",track.url));
+  if(playable){const p=action("sl-chart-link sl-chart-play","Play "+r.title+" here","▶ Play here",()=>window.SUBLEVELPlayer.play(track,tracks));details.append(p)}
+  if(r.artSource)details.append(link("Artwork source ↗",r.artSource));
   row.append(line,details);list.append(row)
  }
  return list
