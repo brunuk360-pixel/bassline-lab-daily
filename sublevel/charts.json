@@ -730,7 +730,10 @@
         {
           "rank": 3,
           "title": "DON'T STOP ME NOW",
-          "artist": "QUEEN"
+          "artist": "QUEEN",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/15/c7/55/15c755bc-7603-3ce3-e243-e59f1f9863ea/602527724171.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/dont-stop-me-now/6781080933?i=6781080941&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/dont-stop-me-now/6781080933?i=6781080941"
         },
         {
           "rank": 4,
@@ -934,7 +937,9 @@
           "title": "NO SCRUBS",
           "artist": "TLC",
           "embedUrl": "https://open.spotify.com/track/4fgeZ3ItvsqGpBQrqu7re6",
-          "url": "https://open.spotify.com/track/4fgeZ3ItvsqGpBQrqu7re6"
+          "url": "https://open.spotify.com/track/4fgeZ3ItvsqGpBQrqu7re6",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/d0/94/0f/d0940f87-3c4e-4e47-7ca8-86272fc93aab/dj.egyjyybr.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/no-scrubs/298575243?i=298575248&uo=4"
         },
         {
           "rank": 4,
@@ -1133,7 +1138,10 @@
         {
           "rank": 3,
           "title": "Power To Move Ya",
-          "artist": "Ziggy Marley & The Melody Makers"
+          "artist": "Ziggy Marley & The Melody Makers",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/db/4c/83/db4c83ec-9558-b90d-a199-3a62ef2c96a5/603497984619_1.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/power-to-move-ya/1349766723?i=1349767089&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/power-to-move-ya/1349766723?i=1349767089"
         },
         {
           "rank": 4,
@@ -1203,7 +1211,10 @@
         {
           "rank": 3,
           "title": "Bleed Out",
-          "artist": "Roman Messer & Kadett & Sharon Valerona"
+          "artist": "Roman Messer & Kadett & Sharon Valerona",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/84/87/c3/8487c315-64c3-d1b0-ee4f-5e1f43c717ca/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/bleed-out/6827651852?i=6827651853&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/bleed-out/6827651852?i=6827651853"
         },
         {
           "rank": 4,
@@ -1270,7 +1281,10 @@
         {
           "rank": 3,
           "title": "Mirrors",
-          "artist": "Ayda & Alexander Turok"
+          "artist": "Ayda & Alexander Turok",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/34/e4/ff/34e4ffb9-e201-3af3-1392-0db5a16d0b08/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/mirrors/6827671063?i=6827671064&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/mirrors/6827671063?i=6827671064"
         },
         {
           "rank": 4,
@@ -1836,5 +1850,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 36
+  "lookupCursor": 48
 }
