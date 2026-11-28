@@ -23,4 +23,27 @@ class ArtworkTests(unittest.TestCase):
         with patch("discovery_assets.urlopen") as fetch:
             self.assertEqual(spotify_thumbnail("https://open.spotify.com/search/raindance","RAINDANCE"),"")
             fetch.assert_not_called()
+from embed_sources import Page,identity
+from html import escape
+class BandcampIdentityTests(unittest.TestCase):
+    def props(self,kind,ident):
+        return '<meta name="bc-page-properties" content="'+escape(json.dumps({"item_type":kind,"item_id":ident}),quote=True)+'">'
+    def check(self,markup,kind="album"):
+        page=Page();page.feed(markup)
+        return identity(page,"https://artist.bandcamp.com/"+kind+"/release")
+    def test_album(self):
+        self.assertEqual(self.check(self.props("a",12345)),("album","12345"))
+    def test_track(self):
+        self.assertEqual(self.check(self.props("t",456),"track"),("track","456"))
+    def test_wrong_kind(self):
+        self.assertIsNone(self.check(self.props("t",123)))
+    def test_conflict(self):
+        self.assertIsNone(self.check(self.props("a",123)+'<meta property="og:video" content="https://bandcamp.com/EmbeddedPlayer/album=456/size=large/">'))
+    def test_agreement(self):
+        self.assertEqual(self.check(self.props("a",123)+'<meta property="og:video" content="https://bandcamp.com/EmbeddedPlayer/album=123/size=large/">'),("album","123"))
+    def test_invalid(self):
+        for value in (0,-1,"abc","123/track=4",True,None):
+            self.assertIsNone(self.check(self.props("a",value)))
+    def test_legacy(self):
+        self.assertEqual(self.check('<div data-tralbum="'+escape(json.dumps({"current":{"item_type":"a","id":987}}),quote=True)+'"></div>'),("album","987"))
 if __name__=="__main__":unittest.main()
