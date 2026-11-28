@@ -381,7 +381,22 @@ const server=http.createServer((req,res)=>{
  assert.equal(await page.$eval(".sl-d-release-tracklist a",a=>a.href),"https://duskymusic.bandcamp.com/album/bindweed-limonata-mix");assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
  await page.click(".sl-d-close");
  });
- await check("Saved library tabs",async()=>{await nav("Saved");await page.waitForSelector(".sl-library-entry");await page.click(".sl-library-entry button");await page.waitForSelector(".sl-library-tabs");assert.equal(await page.$$eval(".sl-library-tab",x=>x.length),6);await page.evaluate(()=>[...document.querySelectorAll(".sl-library-tab")].find(b=>b.textContent==="Profile & data").click());assert.ok(await page.$(".sl-library-account"));await page.click(".sl-d-close")});
+ await check("Release wishlist saves dates and displays due alerts",async()=>{
+ if(await page.$(".sl-discovery-dialog[open]")){await clickStable(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);await settle()}
+ await nav("Saved");await page.waitForSelector(".sl-wishlist-entry");await clickStable(".sl-wishlist-entry");await page.waitForSelector(".sl-wishlist-form");
+ const fields={artist:"QA test artist",title:"QA test release",date:"2020-01-01",url:"https://example.org/qa-test-release"};
+ await page.evaluate(fields=>{for(const [name,value] of Object.entries(fields))document.querySelector(".sl-wishlist-form input[name="+name+"]").value=value},fields);
+ await clickStable(".sl-wishlist-form button[type=submit]");
+ await page.waitForSelector(".sl-wishlist-item");assert.ok(await page.$eval(".sl-wishlist-item",n=>n.textContent.includes("RELEASE DATE REACHED")));
+ assert.ok(await page.evaluate(()=>JSON.parse(localStorage.getItem("sublevel.discovery.journey.v1")).wishlist.some(w=>w.title==="QA test release")));
+ assert.ok(await page.$eval(".sl-wishlist-item",n=>[...n.querySelectorAll("button")].some(b=>b.textContent==="Calendar reminder")));
+ assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
+ await page.evaluate(()=>[...document.querySelectorAll(".sl-wishlist-item button")].find(b=>b.textContent==="Mark alert read").click());
+ assert.ok(await page.evaluate(()=>JSON.parse(localStorage.getItem("sublevel.discovery.journey.v1")).wishlist.some(w=>w.title==="QA test release"&&w.dismissed===w.date)));
+ await page.evaluate(()=>[...document.querySelectorAll(".sl-wishlist-item button")].find(b=>b.textContent==="Remove").click());assert.equal(await page.$(".sl-wishlist-item"),null);
+ await clickStable(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);await settle();
+ });
+ await check("Saved library tabs",async()=>{await nav("Saved");await page.waitForSelector(".sl-library-entry");await page.click(".sl-library-entry button");await page.waitForSelector(".sl-library-tabs");assert.equal(await page.$eval(".sl-library-tab",x=>x.length),7);await page.evaluate(()=>[...document.querySelectorAll(".sl-library-tab")].find(b=>b.textContent==="Profile & data").click());assert.ok(await page.$(".sl-library-account"));await page.click(".sl-d-close")});
  await check("Unsigned link",async()=>{await nav("Today");await page.waitForSelector(".sl-u-entry");assert.equal(await page.$eval(".sl-u-primary",a=>a.href),"https://sublevel-unsigned-xvpf.onrender.com/")});
  for(const width of [320,360,430,1280])await check(width+"px homepage layout",async()=>{await page.setViewport({width,height:844,isMobile:width<700,hasTouch:width<700,deviceScaleFactor:1});await page.reload({waitUntil:"domcontentloaded"});await page.waitForSelector(".sl-home-index");assert.equal(await overflow(),false)});
  console.log("SUBLEVEL browser QA: "+JSON.stringify(checks)+"; uncaught page errors="+runtimeErrors+"; failures="+failures);
