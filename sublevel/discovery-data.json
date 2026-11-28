@@ -1354,7 +1354,47 @@
       "provider": "spotify",
       "kind": "album",
       "id": "3a3Quoo1NG0K8RRgpksRIA",
-      "source": "https://open.spotify.com/album/3a3Quoo1NG0K8RRgpksRIA"
+      "source": "https://open.spotify.com/album/3a3Quoo1NG0K8RRgpksRIA",
+      "checked": "2026-11-28",
+      "evidence": "https://drumandbassuk.com/artist/seba/conscious-life-feat-sapele-67796"
+    },
+    "physics-invisible-prvail": {
+      "title": "Invisible Line (PRVAIL Remix)",
+      "artist": "Physics",
+      "provider": "spotify",
+      "kind": "album",
+      "id": "0T3hHNn7LxDPh3IAJiSu9F",
+      "source": "https://open.spotify.com/album/0T3hHNn7LxDPh3IAJiSu9F",
+      "checked": "2026-11-28",
+      "evidence": "https://drumandbassuk.com/artist/physics/invisible-line-prvail-remix-67873"
+    },
+    "hoax": {
+      "title": "Genesis",
+      "artist": "Hoax",
+      "provider": "spotify",
+      "kind": "album",
+      "id": "42jOtzX5KZm8wHNhFT0URx",
+      "source": "https://open.spotify.com/album/42jOtzX5KZm8wHNhFT0URx",
+      "checked": "2026-11-28",
+      "evidence": "https://drumandbassuk.com/artist/hoax/genesis-54757"
+    }
+  },
+  "reviewedArtwork": {
+    "physics-invisible-prvail": {
+      "title": "Invisible Line (PRVAIL Remix)",
+      "artist": "Physics",
+      "releaseUrl": "https://msrdnb.bandcamp.com/track/physics-invisible-line-prvail-remix",
+      "art": "https://i.scdn.co/image/ab67616d00004851161239efcba64702b1b1e1ea",
+      "source": "https://drumandbassuk.com/artist/physics/invisible-line-prvail-remix-67873",
+      "checked": "2026-11-28"
+    },
+    "seba-paradox-conscious": {
+      "title": "Conscious/Life (feat. Sapele)",
+      "artist": "Seba, Paradox",
+      "releaseUrl": "https://randsrecords.bandcamp.com/album/conscious-life-feat-sapele",
+      "art": "https://i.scdn.co/image/ab67616d0000485138946724fd783502801ed8ed",
+      "source": "https://drumandbassuk.com/artist/seba/conscious-life-feat-sapele-67796",
+      "checked": "2026-11-28"
     }
   }
 }
