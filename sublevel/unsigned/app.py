@@ -257,10 +257,42 @@ def change_password():
     if not 12<=len(replacement)<=128 or replacement!=request.form.get("confirm_password","") or replacement==current:
         abort(400,"Choose a different password of 12–128 characters and confirm it.")
     user=confirm_account(uid,current)
-    changed=one("UPDATE members SET password_hash=%s,session_version=session_version+1 WHERE id=%s AND session_version=%s RETURNING session_version",(generate_password_hash(replacement,method="scrypt"),uid,user["session_version"]))
+    changed=one("UPDATE members SET password_hash=%s,recovery_hash=NULL,session_version=session_version+1 WHERE id=%s AND session_version=%s RETURNING session_version",(generate_password_hash(replacement,method="scrypt"),uid,user["session_version"]))
     if not changed:abort(403,"Account changed. Please sign in again.")
     session.clear()
     flash("Password updated. All previous sessions have been signed out. Sign in with your new password.")
+    return redirect(url_for("login_page"))
+def recovery_digest(code):
+    if not isinstance(code,str) or not re.fullmatch(r"[A-Za-z0-9_-]{43}",code):return None
+    return hashlib.sha256(code.encode("ascii")).hexdigest()
+@app.post("/account/recovery-code")
+def create_recovery_code():
+    uid=member();limit("recovery-create",5,uid)
+    user=confirm_account(uid,request.form.get("password",""))
+    code=secrets.token_urlsafe(32)
+    changed=one("UPDATE members SET recovery_hash=%s WHERE id=%s AND session_version=%s AND active RETURNING id",(recovery_digest(code),uid,user["session_version"]))
+    if not changed:abort(403,"Account changed. Please sign in again.")
+    # The plaintext code is shown once in the direct POST response only.
+    # It is never placed in cookies, query strings, logs or account exports.
+    return render_template("page.html",view="recovery_code",code=code)
+@app.get("/recover")
+def recover_page():return render_template("page.html",view="recover")
+@app.post("/recover")
+def recover_account():
+    handle=field("handle",24,3).lower()
+    limit("recovery-ip",20);limit("recovery-account",5,handle)
+    replacement=request.form.get("new_password","")
+    if not 12<=len(replacement)<=128 or replacement!=request.form.get("confirm_password",""):
+        abort(400,"Choose a password of 12–128 characters and confirm it.")
+    digest=recovery_digest(request.form.get("recovery_code","").strip())
+    if not HANDLE.fullmatch(handle) or not digest:abort(403,"Incorrect handle or recovery code.")
+    user=one("SELECT id,session_version,recovery_hash FROM members WHERE handle=%s AND active",(handle,))
+    if not user or not user["recovery_hash"] or not hmac.compare_digest(user["recovery_hash"],digest):
+        abort(403,"Incorrect handle or recovery code.")
+    changed=one("UPDATE members SET password_hash=%s,recovery_hash=NULL,session_version=session_version+1 WHERE id=%s AND session_version=%s AND recovery_hash=%s AND active RETURNING id",(generate_password_hash(replacement,method="scrypt"),user["id"],user["session_version"],digest))
+    if not changed:abort(403,"Incorrect handle or recovery code.")
+    session.clear()
+    flash("Password reset. Your recovery code was used and all old sessions were signed out. Sign in and create a new recovery code.")
     return redirect(url_for("login_page"))
 @app.post("/account/export")
 def export_account():
