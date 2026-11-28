@@ -64,7 +64,10 @@
         {
           "rank": 9,
           "title": "ON 2NITE",
-          "artist": "SILVA BUMPA"
+          "artist": "SILVA BUMPA",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/50/ee/af/50eeaf04-22c6-8a83-1fa7-12e8e8c08146/196874442296.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/on-2nite/6772312874?i=6772312877&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/on-2nite/6772312874?i=6772312877"
         },
         {
           "rank": 10,
@@ -192,7 +195,10 @@
         {
           "rank": 9,
           "title": "Play All Night (Extended Mix)",
-          "artist": "Groove P"
+          "artist": "Groove P",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/41/2f/e8/412fe805-0350-7b0a-d691-ac871471cc63/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/play-all-night-extended-mix/6822891693?i=6822891700&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/play-all-night-extended-mix/6822891693?i=6822891700"
         },
         {
           "rank": 10,
@@ -404,7 +410,10 @@
         {
           "rank": 10,
           "title": "Turn Up The Music",
-          "artist": "Jeremy Sylvester"
+          "artist": "Jeremy Sylvester",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/87/fe/ee/87feee89-4b16-1dc2-6e4a-7a4130491a22/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/turn-up-the-music/6809710067?i=6809710069&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/turn-up-the-music/6809710067?i=6809710069"
         }
       ]
     },
@@ -535,7 +544,10 @@
         {
           "rank": 10,
           "title": "Cielo",
-          "artist": "Issam Dahmani"
+          "artist": "Issam Dahmani",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e3/50/49/e3504910-c9fe-3136-806b-eef41148dadc/4062548156089.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/cielo/6830170394?i=6830170395&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/cielo/6830170394?i=6830170395"
         }
       ]
     },
@@ -602,7 +614,10 @@
         {
           "rank": 10,
           "title": "A Million Cascades",
-          "artist": "Sébastien Léger, Dulus"
+          "artist": "Sébastien Léger, Dulus",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b7/cf/2b/b7cf2ba0-6345-8781-3b09-3e0e3f5910b0/711641025214.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/a-million-cascades/6822806585?i=6822806588&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/a-million-cascades/6822806585?i=6822806588"
         }
       ]
     },
@@ -840,7 +855,9 @@
           "artist": "AC/DC",
           "art": "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/fc/c2/f8/fcc2f850-1d81-7440-c0a0-de7fcef1e911/dj.rrgizfic.jpg/400x400bb.jpg",
           "artSource": "https://music.apple.com/gb/album/thunderstruck/574049507?i=574051407&uo=4",
-          "embedUrl": "https://music.apple.com/gb/album/thunderstruck/574049507?i=574051407"
+          "embedUrl": "https://www.youtube.com/watch?v=v2AC41dglnM",
+          "alternateEmbedUrl": "https://music.apple.com/gb/album/thunderstruck/574049507?i=574051407",
+          "embedEvidence": "Official artist video; source https://www.acdc.com/thunderstruck-1b-views-on-youtube/; reviewed 2026-11-28"
         },
         {
           "rank": 9,
@@ -928,7 +945,9 @@
           "artist": "SAM FENDER & OLIVIA DEAN",
           "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ec/81/1d/ec811d0e-64d9-224c-25df-9d26456874f9/25UMGIM75096.rgb.jpg/400x400bb.jpg",
           "artSource": "https://music.apple.com/gb/album/rein-me-in/1820918843?i=1820918844&uo=4",
-          "embedUrl": "https://music.apple.com/gb/album/rein-me-in/1820918843?i=1820918844"
+          "embedUrl": "https://www.youtube.com/watch?v=3triLkS0nq4",
+          "alternateEmbedUrl": "https://music.apple.com/gb/album/rein-me-in/1820918843?i=1820918844",
+          "embedEvidence": "Official artist video; source https://readdork.com/music-videos/sam-fender-olivia-dean-rein-me-in; reviewed 2026-11-28"
         },
         {
           "rank": 10,
@@ -999,7 +1018,9 @@
           "artist": "ARCTIC MONKEYS",
           "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/69/9c/b5/699cb5d6-115c-ff73-9d26-e57ea4350d72/887828031795.png/400x400bb.jpg",
           "artSource": "https://music.apple.com/gb/album/do-i-wanna-know/663097964?i=663097965&uo=4",
-          "embedUrl": "https://music.apple.com/gb/album/do-i-wanna-know/663097964?i=663097965"
+          "embedUrl": "https://www.youtube.com/watch?v=bpOSxM0rNPM",
+          "alternateEmbedUrl": "https://music.apple.com/gb/album/do-i-wanna-know/663097964?i=663097965",
+          "embedEvidence": "Official artist video; source https://www.arcticmonkeys.com/pages/videos; reviewed 2026-11-28"
         },
         {
           "rank": 10,
@@ -1580,7 +1601,10 @@
         {
           "rank": 9,
           "title": "Centipede",
-          "artist": "Knife Party"
+          "artist": "Knife Party",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ea/22/f8/ea22f863-d024-9704-dd04-b4c2b805bb72/825646581917.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/centipede/530207558?i=530207562&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/centipede/530207558?i=530207562"
         },
         {
           "rank": 10,
@@ -2011,5 +2035,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 132
+  "lookupCursor": 144
 }
