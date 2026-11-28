@@ -19,7 +19,7 @@ const server=http.createServer((req,res)=>{
  chromium.setGraphicsMode=false;
  browser=await puppeteer.launch({executablePath:await chromium.executablePath(),args:[...chromium.args,"--disable-dev-shm-usage"],headless:true,defaultViewport:{width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1}});
  const page=await browser.newPage();page.setDefaultTimeout(6000);await page.setRequestInterception(true);
- page.on("request",r=>{const u=r.url();if(u.startsWith(origin+"/")||u.startsWith("data:")||u.startsWith("blob:")||u==="about:blank")r.continue().catch(()=>{});else r.abort().catch(()=>{})});
+ page.on("request",r=>{const u=r.url();if(u.startsWith(origin+"/")||u.startsWith("data:")||u.startsWith("blob:")||u==="about:blank")r.continue().catch(()=>{});else if(r.resourceType()==="image"&&/^https:\/\/([a-z0-9-]+\.(?:mzstatic\.com|bcbits\.com|shopify\.com)|coverartarchive\.org|i\.scdn\.co)\//.test(u)){r.respond({status:200,contentType:"image/jpeg",body:fs.readFileSync(path.join(root,"section-art","warehouse.jpg"))}).catch(()=>{})}else r.abort().catch(()=>{})});
  let runtimeErrors=0;page.on("pageerror",()=>runtimeErrors++);
  await page.goto(origin+"/",{waitUntil:"domcontentloaded",timeout:15000});await page.waitForSelector("#app .night-home");
  const check=async(name,fn)=>{try{await fn();checks.push(name+" PASS")}catch(e){failures++;checks.push(name+" FAIL ("+(e.name==="AssertionError"?"assertion":"navigation/runtime")+")");console.log("QA diagnostic "+name+": "+String(e.message).slice(0,500))}};
@@ -54,11 +54,21 @@ const server=http.createServer((req,res)=>{
  await nav("Today");await page.click(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");
  await page.evaluate(()=>[...document.querySelectorAll(".sl-d-screen-nav button")].find(b=>b.textContent==="Explore").click());await settle();
  await page.evaluate(()=>[...document.querySelectorAll(".sl-d-tile")].find(b=>b.textContent.includes("On This Day")).click());await page.waitForSelector(".sl-d-history-event");
- const art=await page.evaluate(()=>[...document.querySelectorAll(".sl-d-history-event .sl-d-small-cover")].every(img=>img.alt.endsWith("release artwork")&&Object.values(window.__slDiscovery.artwork).includes(img.getAttribute("src"))));
- assert.ok(art,"archive uses only verified release art");
+ const art=await page.evaluate(()=>{const imgs=[...document.querySelectorAll(".sl-d-history-event .sl-d-small-cover")];return {count:imgs.length,valid:imgs.every(img=>img.alt.endsWith("release artwork")&&Object.values(window.__slDiscovery.artwork).includes(img.getAttribute("src")))}});
+ assert.ok(art.count>0&&art.valid,"nonempty archive artwork uses only verified release references");
  assert.ok(await page.$(".sl-d-history-event .sl-d-history-copy button"));
  await page.click(".sl-d-back");await page.waitForSelector(".sl-d-hub");await page.click(".sl-d-close");
  await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
+ });
+ await check("Illustrated Explore shortcuts and unique room artwork",async()=>{
+ await nav("Explore");await page.waitForSelector(".sl-d-shortcut-image");
+ const inspect=selector=>page.evaluate(sel=>{const imgs=[...document.querySelectorAll(sel)];return {count:imgs.length,unique:new Set(imgs.map(n=>n.getAttribute("src"))).size,known:imgs.every(n=>Object.values(window.__slDiscovery.artwork).includes(n.getAttribute("src"))||/^section-art\/(genres|warehouse|underground|afterhours|late-drive)\.jpg$/.test(n.getAttribute("src"))) }},selector);
+ const entry=await inspect(".sl-d-shortcut-image");assert.equal(entry.count,8);assert.equal(entry.unique,8);assert.ok(entry.known);
+ await page.evaluate(()=>[...document.querySelectorAll(".sl-d-explore button")].find(b=>b.textContent.includes("Browse complete catalogue")).click());await page.waitForSelector(".sl-d-hub");
+ const hub=await inspect(".sl-d-tile-image");assert.equal(hub.count,8);assert.equal(hub.unique,8);assert.ok(hub.known);
+ await page.setViewport({width:320,height:700,isMobile:true,hasTouch:true,deviceScaleFactor:1});await settle();assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.scrollWidth>n.clientWidth+2),false);
+ await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);assert.equal(await overflow(),false);
+ await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await nav("Today");
  });
  await check("Genre directory and chart selector",async()=>{
  await nav("Genres");await page.waitForSelector(".sl-chart-directory");
