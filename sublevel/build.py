@@ -238,6 +238,13 @@ for key,fact in discovery.get("releaseFacts",{}).items():
     assert 1<=len(fact["tracks"])<=80
     assert all(len(t)==2 and t[0].strip() and re.fullmatch(r"\d+:[0-5]\d",t[1]) for t in fact["tracks"]),"Invalid source track duration"
 print("Source-reviewed release tracklists:",len(discovery.get("releaseFacts",{})))
+for key, story in discovery.get("dailyEditorial",{}).items():
+    row=next((r for r in discovery["items"] if r[0]==key),None)
+    assert row and (story["title"],story["artist"],story["releaseSource"])==(row[1],row[2],row[6]),"Daily editorial identity mismatch"
+    assert all(story[k].strip() for k in ("artistContext","releaseContext","listenFor"))
+    assert story["artistSource"].startswith("https://") and date.fromisoformat(story["checked"])
+print("Source-reviewed Daily Dig stories:",len(discovery.get("dailyEditorial",{})))
+
 
 assert all(set(profile[3]).issubset(ids) for profile in discovery["profiles"])
 assert all(edge["from"] in ids and edge["to"] in ids and edge["type"] in ("Sample","Remix") and edge["source"].startswith("https://") for edge in discovery.get("connections",[])), "Invalid discovery relationship"
