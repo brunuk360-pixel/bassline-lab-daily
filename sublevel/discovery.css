@@ -51,7 +51,7 @@ dialog.sl-discovery-dialog{position:fixed!important;inset:0!important;width:100%
 .sl-d-notice{position:sticky;bottom:0;background:#102321;color:#a0decf;font-size:12px;text-align:center;padding:8px;z-index:10}
 .sl-d-notice:empty{display:none}
 .sl-d-content :is(button,a,select):focus-visible,.sl-d-bar button:focus-visible{outline:2px solid #79c9b7;outline-offset:2px}
-html body #app .sl-d-entry{display:block;width:100%;text-align:left;background:linear-gradient(110deg,#122321,#080e10);border:0;border-left:2px solid #79c9b7;border-radius:0;margin:16px 0 0;padding:13px 15px;color:#f3f5ef;cursor:pointer}
+html body #app .sl-d-entry{display:block;width:100%;text-align:left;background:linear-gradient(110deg,#122321,#080e10);border:0;border-radius:0;margin:16px 0 0;padding:13px 15px;color:#f3f5ef;cursor:pointer}
 html body #app .sl-d-entry strong{display:block;font-size:24px;letter-spacing:-.035em;line-height:1.12;margin:5px 0}
 html body #app .sl-d-entry small{display:block;color:#b5c5c0;font-size:12px}
 html body #app .sl-d-explore{padding:12px 0 17px;border-bottom:1px solid #b5cbc32a;margin-bottom:18px}
@@ -273,7 +273,7 @@ html body #app .night-home .sl-d-entry{background:linear-gradient(90deg,#080e10e
 @media(min-width:720px){.sl-d-content .sl-d-daily-detail{grid-template-columns:76px minmax(0,1fr)}.sl-d-daily-art{width:76px;height:76px}.sl-d-content .sl-d-daily-copy h3{font-size:18px!important}}
 
 /* Daily Dig editorial journal — distinct from the native Discover 10 track list. */
-.sl-d-content .sl-d-daily-shelf .sl-d-daily-row{display:block!important;padding:14px 12px 11px!important;margin:12px 0!important;border:1px solid #79c9b733!important;border-left:2px solid #79c9b7!important;background:#111e1e!important;border-radius:0!important}
+.sl-d-content .sl-d-daily-shelf .sl-d-daily-row{display:block!important;padding:14px 12px 11px!important;margin:12px 0!important;border:0!important;border-bottom:1px solid #b5cbc32a!important;background:transparent!important;border-radius:0!important}
 .sl-d-daily-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px}
 .sl-d-content .sl-d-daily-row .sl-d-daily-detail{grid-template-columns:76px minmax(0,1fr);min-height:76px;gap:10px}
 .sl-d-daily-row .sl-d-daily-art{width:76px;height:76px}
