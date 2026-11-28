@@ -1314,7 +1314,10 @@
         {
           "rank": 10,
           "title": "The Heathen",
-          "artist": "Bob Marley & The Wailers"
+          "artist": "Bob Marley & The Wailers",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/23/fa/f8/23faf820-c4fa-2bf1-d672-846971f5cf5c/06UMGIM31355.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/the-heathen/1625213430?i=1625213798&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/the-heathen/1625213430?i=1625213798"
         }
       ]
     },
@@ -1390,7 +1393,10 @@
         {
           "rank": 10,
           "title": "For you (Metta & Glyde Remix)",
-          "artist": "Roman Messer & Clare Stagg"
+          "artist": "Roman Messer & Clare Stagg",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c0/51/99/c0519993-eaa1-7e23-f42b-a3636060cc1d/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/for-you-metta-glyde-remix/6822004850?i=6822004851&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/for-you-metta-glyde-remix/6822004850?i=6822004851"
         }
       ]
     },
@@ -1466,7 +1472,10 @@
         {
           "rank": 10,
           "title": "DIZZEE'S DRIFT TO TOKYO",
-          "artist": "Juicy Selekta"
+          "artist": "Juicy Selekta",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/8f/f8/2f/8ff82ff9-53b8-cd70-b7f5-4ee70f577cac/5057272484828_cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/dizzees-drift-to-tokyo/1703139764?i=1703140069&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/dizzees-drift-to-tokyo/1703139764?i=1703140069"
         }
       ]
     },
@@ -1536,7 +1545,10 @@
         {
           "rank": 10,
           "title": "Divine Sounds",
-          "artist": "Rae & Christian"
+          "artist": "Rae & Christian",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music111/v4/42/32/1b/42321bde-35fd-5905-a73f-927dcd6d3ebf/5050580669857.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/divine-sounds/1219520462?i=1219520837&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/divine-sounds/1219520462?i=1219520837"
         }
       ]
     },
@@ -1673,7 +1685,10 @@
         {
           "rank": 10,
           "artist": "Visages",
-          "title": "Chat Too Much"
+          "title": "Chat Too Much",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/df/08/50/df08506b-9ec4-480f-cbca-2bcf53a8128b/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/chat-too-much/6819121175?i=6819121177&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/chat-too-much/6819121175?i=6819121177"
         }
       ]
     },
@@ -2035,5 +2050,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 144
+  "lookupCursor": 156
 }
