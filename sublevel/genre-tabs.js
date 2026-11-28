@@ -67,7 +67,7 @@ function show(b,id,name,tabs){
  panel.append(button("← Back to Discover 10",()=>{const d=[...tabs.querySelectorAll("button")].find(n=>key(n)==="discover10");if(d)d.click()},"sl-genre-back"));
  tabs.after(panel);extra=panel;
 }
-app.addEventListener("click",e=>{const b=e.target.closest?.(".tabs button");if(b&&!b.dataset.slGenreExtraTab)clear()},true);
+app.addEventListener("click",e=>{const b=e.target.closest?.(".tabs button");if(!b)return;if(key(b)==="newreleases"&&!b.dataset.slGenreExtraTab){e.preventDefault();e.stopImmediatePropagation();show(b,"newreleases",title(),b.closest(".tabs"));return}if(!b.dataset.slGenreExtraTab)clear()},true);
 const genrePalettes={"drumbass":["#112c2a","#c6ed75"],"ukgarage":["#38203e","#dda2ef"],"house":["#3b3022","#f0c68c"],"techhouse":["#302f23","#79c9b7"],"techno":["#252b3a","#9eb7fa"],"trance":["#30263e","#bca5ff"],"dubstep":["#392a22","#ffb277"],"breakbeatbigbeat":["#342c20","#e8cc81"],"hiphop":["#3a2a24","#edb28a"],"grime":["#25352b","#b9da91"],"rb":["#392538","#efa8cd"],"soul":["#3d2e25","#eac18c"],"funkdisco":["#402d35","#ffb0c9"],"rock":["#382b28","#efaa94"],"indiealternative":["#2c3430","#b7d2a9"],"metal":["#362526","#f5a5a0"],"pop":["#392c42","#e8bafa"],"afrobeats":["#3d3220","#f2cd76"],"reggaedub":["#253627","#e4d28b"],"triphopdowntempo":["#29313b","#a9c8de"]};
 // Keep original credited scene assets where discoverable; a local licensed
 // editorial photograph is a visible fallback, never substituted as record art.
