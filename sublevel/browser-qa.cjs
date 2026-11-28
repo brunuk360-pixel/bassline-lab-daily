@@ -66,6 +66,9 @@ const server=http.createServer((req,res)=>{
  const entry=await inspect(".sl-d-shortcut-image");assert.equal(entry.count,8);assert.equal(entry.unique,8);assert.ok(entry.known);
  await page.evaluate(()=>[...document.querySelectorAll(".sl-d-explore button")].find(b=>b.textContent.includes("Browse complete catalogue")).click());await page.waitForSelector(".sl-d-hub");
  const hub=await inspect(".sl-d-tile-image");assert.equal(hub.count,8);assert.equal(hub.unique,8);assert.ok(hub.known);
+ const labels=await page.evaluate(()=>{const cards=[...document.querySelectorAll(".sl-d-label-card")],imgs=cards.flatMap(c=>[...c.querySelectorAll("img")]);return {count:cards.length,art:imgs.length,unique:new Set(imgs.map(i=>i.src)).size,expected:window.__slDiscovery.labelCatalogue.length,valid:imgs.every(i=>Object.values(window.__slDiscovery.artwork).includes(i.getAttribute("src")))}});
+ assert.equal(labels.count,labels.expected);assert.ok(labels.art>0&&labels.valid&&labels.unique===labels.art);
+ await page.click(".sl-d-label-card");assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.dataset.room),"label");await page.click(".sl-d-back");await page.waitForSelector(".sl-d-hub");
  await page.setViewport({width:320,height:700,isMobile:true,hasTouch:true,deviceScaleFactor:1});await settle();assert.equal(await page.$eval(".sl-discovery-dialog",n=>n.scrollWidth>n.clientWidth+2),false);
  await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);assert.equal(await overflow(),false);
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await nav("Today");
