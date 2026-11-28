@@ -231,6 +231,14 @@ print("Source-reviewed release tracklists:",len(discovery.get("releaseFacts",{})
 assert all(set(profile[3]).issubset(ids) for profile in discovery["profiles"])
 assert all(edge["from"] in ids and edge["to"] in ids and edge["type"] in ("Sample","Remix") and edge["source"].startswith("https://") for edge in discovery.get("connections",[])), "Invalid discovery relationship"
 print("Discovery relationships validated:",len(discovery.get("connections",[])))
+for event in discovery.get("events",[]):
+    assert len(event) in (3,4) and date.fromisoformat(event[0])
+    if event[2]:
+        record=next((r for r in discovery["items"] if r[0]==event[2]),None)
+        assert record and record[1]==event[1],"Archive release identity mismatch"
+    else:
+        assert len(event)==4 and event[3].startswith("https://"),"Archive event requires an independent source"
+
 discovery_css=(root/"discovery.css").read_text(encoding="utf-8")
 discovery_js=(root/"discovery.js").read_text(encoding="utf-8")
 listening_js=(root/"listening-state.js").read_text(encoding="utf-8")
