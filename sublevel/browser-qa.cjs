@@ -180,6 +180,24 @@ const server=http.createServer((req,res)=>{
  console.log("SUBLEVEL all genre tab audit: "+JSON.stringify(reports));
  await nav("Today");
  });
+ await check("Native genre Discover play buttons use persistent official player",async()=>{
+ const genres=["Drum & Bass","UK Garage","House","Techno"];const coverage=[];let played=false;
+ for(const genre of genres){
+  await nav("Today");await nav("Genres");
+  assert.ok(await page.evaluate(name=>{const norm=s=>(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");const card=[...document.querySelectorAll("#app .genre")].find(n=>norm(n.querySelector(".genre-name")?.textContent)===norm(name));if(!card)return false;card.click();return true},genre));
+  await page.waitForSelector("#app .roomhead");await settle();
+  const info=await page.evaluate(()=>{const rows=[...document.querySelectorAll("#app .tracks:not(.sl-chart-native-list) .track")].filter(r=>r.getClientRects().length);const marked=rows.filter(r=>r.querySelector("a.play[data-sl-native-play=true]"));return {total:rows.length,embedded:marked.length,first:marked[0]?.querySelector(".tracktitle strong,.tracktitle b")?.textContent.trim(),valid:marked.every(r=>r.querySelector("a.play").href.startsWith("https://"))}});
+  assert.ok(info.total>0&&info.valid,genre+" native rows");coverage.push({genre,...info});
+  if(!played&&info.embedded){
+   const url=page.url();await clickStable("#app .tracks:not(.sl-chart-native-list) a.play[data-sl-native-play=true]");await page.waitForSelector(".sl-player iframe");
+   assert.equal(page.url(),url);assert.equal(await page.$eval(".sl-p-copy strong",n=>n.textContent),info.first);assert.ok(await page.$eval(".sl-player iframe",n=>["www.youtube-nocookie.com","open.spotify.com","w.soundcloud.com","bandcamp.com","embed.music.apple.com"].includes(new URL(n.src).hostname)));
+   await clickStable('.sl-player button[aria-label="Stop and close player"]');played=true
+  }
+ }
+ console.log("SUBLEVEL native Discover playback coverage: "+JSON.stringify(coverage));
+ assert.ok(played,"At least one native track has a verified embedded provider");
+ await nav("Today")
+ });
  await check("YouTube and Apple provider switching stays inside SUBLEVEL",async()=>{
  await page.evaluate(()=>{const c=window.__slCharts.charts.find(x=>x.id==="dj-ukg"),r=c.rows.find(r=>r.title==="Flowers (Sunship Remix)");window.SUBLEVELPlayer.play({id:"chart:"+c.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.embedUrl,embedUrl:r.embedUrl,alternateEmbedUrl:r.alternateEmbedUrl})});
  await page.waitForSelector(".sl-player iframe");
