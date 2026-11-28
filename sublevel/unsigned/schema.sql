@@ -9,3 +9,5 @@ DELETE FROM limits WHERE hour<now()-interval '7 days';
 ALTER TABLE tracks ADD COLUMN IF NOT EXISTS embed_url varchar(500) NOT NULL DEFAULT '';
 
 ALTER TABLE members ADD COLUMN IF NOT EXISTS session_version integer NOT NULL DEFAULT 1;
+
+ALTER TABLE members ADD COLUMN IF NOT EXISTS recovery_hash char(64);
