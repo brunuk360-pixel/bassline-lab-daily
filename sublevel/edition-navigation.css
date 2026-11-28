@@ -160,21 +160,21 @@ html body #app .sl-d-shortcut:not(:has(>.sl-d-shortcut-image))>.sl-d-shortcut-co
 html body #app .sl-d-shortcut:not(:has(>.sl-d-shortcut-image))>.sl-d-shortcut-arrow{grid-column:3!important}
 @media(max-width:360px){html body #app .sl-d-shortcut{grid-template-columns:40px 18px minmax(0,1fr) 14px!important;gap:5px!important;min-height:64px!important}html body #app .sl-d-shortcut>.sl-d-shortcut-image{width:40px!important;height:40px!important}html body #app .sl-d-shortcut:not(:has(>.sl-d-shortcut-image)){grid-template-columns:18px minmax(0,1fr) 14px!important}}
 
-/* Homepage Daily Dig: a compact editorial feature, not a generic action tile. */
+/* Restore the original full-bleed photography and quiet homepage styling. */
 html body #app .night-home > button.sl-d-entry.sl-home-dig,
 html body #app .night-home > button.sl-d-entry{
  position:relative!important;isolation:isolate!important;overflow:hidden!important;display:flex!important;align-items:center!important;text-align:left!important;box-sizing:border-box!important;
- width:100%!important;min-height:clamp(128px,34vw,170px)!important;height:auto!important;margin:20px 0 0!important;padding:15px 16px!important;
- border:0!important;border-left:2px solid #79c9b7!important;border-radius:0!important;box-shadow:none!important;background:#101b1c!important;color:#eef0e7!important;
+ width:100%!important;min-height:clamp(112px,31vw,150px)!important;height:auto!important;margin:20px 0 0!important;padding:15px 16px!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;background:#0b1315!important;color:#eef0e7!important;
 }
-html body #app .night-home .sl-d-entry > .sl-d-dig-image{position:absolute!important;right:0!important;top:0!important;width:48%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center!important;clip-path:polygon(23% 0,100% 0,100% 100%,0 100%);z-index:-2!important;opacity:1!important;filter:none!important;border-radius:0!important}
-html body #app .night-home .sl-d-entry::before{content:""!important;position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#101b1c 0%,#101b1c 46%,#101b1c44 65%,transparent 100%)!important}
+html body #app .night-home .sl-d-entry > .sl-d-dig-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center 45%!important;clip-path:none!important;z-index:-2!important;opacity:1!important;filter:none!important;border-radius:0!important}
+html body #app .night-home .sl-d-entry::before{content:""!important;position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#080e10ed 0%,#080e10bf 45%,#080e1030 100%)!important}
 html body #app .night-home .sl-d-entry::after{content:none!important}
-html body #app .night-home .sl-d-entry .sl-d-dig-copy{display:flex!important;flex-direction:column;align-items:flex-start;position:relative;min-width:0;width:66%;gap:4px;z-index:1}
+html body #app .night-home .sl-d-entry .sl-d-dig-copy{display:flex!important;flex-direction:column;align-items:flex-start;position:relative;min-width:0;width:100%;gap:4px;z-index:1}
 html body #app .night-home .sl-d-entry .sl-d-kicker{font-size:9px!important;font-weight:700!important;color:#8bd4c1!important;letter-spacing:.11em!important;line-height:1.4!important}
 html body #app .night-home .sl-d-entry strong{font-size:clamp(24px,6.5vw,34px)!important;line-height:1.08!important;letter-spacing:-.04em!important;margin:0!important;color:#eef0e7!important}
 html body #app .night-home .sl-d-entry small{font-size:12px!important;color:#b5c5c0!important;line-height:1.4!important}
 html body #app .night-home .sl-d-entry .sl-d-dig-cta{font-size:11px!important;color:#8bd4c1!important;line-height:1.4!important;font-weight:650!important;margin-top:4px}
 html body #app .night-home .sl-d-entry:focus-visible{outline:2px solid #8bd4c1;outline-offset:2px}
-html body #app .night-home > .sl-d-playable-entry{margin:0 0 0!important;width:100%!important;min-height:44px!important;text-align:left!important;padding:9px 16px!important;border:0!important;border-left:2px solid #79c9b755!important;border-bottom:1px solid #79c9b733!important;border-radius:0!important;background:#111e1e!important;color:#a3dfd1!important;font-size:12px!important;box-shadow:none!important}
-@media(min-width:800px){html body #app .night-home > button.sl-d-entry{padding:20px 22px!important;min-height:160px!important}html body #app .night-home .sl-d-entry .sl-d-dig-copy{width:65%}}
+html body #app .night-home > .sl-d-playable-entry{margin:0 0 0!important;width:100%!important;min-height:44px!important;text-align:left!important;padding:9px 0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#a3dfd1!important;font-size:12px!important;box-shadow:none!important}
+@media(min-width:800px){html body #app .night-home > button.sl-d-entry{padding:20px 22px!important;min-height:150px!important}}
