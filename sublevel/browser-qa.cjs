@@ -33,19 +33,22 @@ const server=http.createServer((req,res)=>{
  await check("390px homepage layout",async()=>{await page.waitForSelector(".sl-home-index");assert.equal(await overflow(),false)});
  await check("Record of the Day random chart hits and original restore",async()=>{
  await nav("Today");await page.waitForSelector(".sl-rod-shuffle",{visible:true});
- const original=await page.$eval(".ed-rotation .ed-record:not(.sl-rod-hit)",n=>n.textContent);
- const originalGeometry=await page.$eval(".sl-rod-feature",n=>{const f=n.getBoundingClientRect(),b=n.querySelector(".sl-rod-shuffle").getBoundingClientRect();return {width:f.width,inside:b.left>=f.left&&b.right<=f.right&&b.top>=f.top&&b.bottom<=f.bottom}});assert.ok(originalGeometry.inside,"Random control overlays original banner");
- const seen=new Set();
+ const selector=".sl-rod-feature>button.ed-record";
+ const original=await page.$eval(selector,n=>{window.__qaRecordBanner=n;const r=n.getBoundingClientRect();return {text:n.textContent,art:n.querySelector(".cover img")?.getAttribute("src"),width:r.width,height:r.height}});
+ const seen=new Set();let lastArt=original.art;
  for(let i=0;i<5;i++){
-  await clickStable(".sl-rod-shuffle");await page.waitForSelector(".sl-rod-hit",{visible:true});
-  const item=await page.evaluate(()=>{const n=document.querySelector(".sl-rod-hit"),chart=window.__slCharts.charts.find(c=>c.id===n.dataset.chartId),r=chart?.rows.find(r=>String(r.rank)===n.dataset.rank),img=n.querySelector("img");return {key:n.dataset.recordKey,rank:Number(n.dataset.rank),valid:!!r&&["verified","weekly"].includes(chart.status)&&n.querySelector("strong").textContent===r.title&&img?.getAttribute("src")===r.art,play:!!document.querySelector(".sl-rod-output .sl-p-launch"),originalHidden:!!document.querySelector(".ed-record.sl-rod-hidden")}});
-  assert.ok(item.valid&&item.play&&item.originalHidden&&item.rank>=1&&item.rank<=10);assert.ok(!seen.has(item.key),"no repeats during rotation");seen.add(item.key);
-  const geometry=await page.$eval(".sl-rod-feature",n=>{const f=n.getBoundingClientRect(),card=n.querySelector(".sl-rod-hit").getBoundingClientRect(),img=n.querySelector(".sl-rod-cover"),art=img.getBoundingClientRect(),b=n.querySelector(".sl-rod-shuffle").getBoundingClientRect();return {width:card.width,fullBleed:Math.abs(art.width-card.width)<2&&Math.abs(art.height-card.height)<2&&getComputedStyle(img).objectFit==="cover",inside:b.left>=f.left&&b.right<=f.right&&b.top>=card.top&&b.bottom<=card.bottom,oneVisible:[...n.querySelectorAll(".ed-record")].filter(x=>x.getClientRects().length).length,source:img.getAttribute("src")}});
-  assert.ok(geometry.fullBleed&&geometry.inside&&geometry.oneVisible===1,"One full-bleed banner with integrated Random control: "+JSON.stringify(geometry));assert.ok(Math.abs(geometry.width-originalGeometry.width)<2,"Same banner width");
+  await clickStable(".sl-rod-shuffle");await page.waitForSelector(selector+".sl-rod-random",{visible:true});
+  const item=await page.$eval(selector,n=>{const chart=window.__slCharts.charts.find(c=>c.id===n.dataset.chartId),r=chart?.rows.find(r=>String(r.rank)===n.dataset.rank),img=n.querySelector(".cover img"),card=n.getBoundingClientRect(),art=img.getBoundingClientRect(),b=n.parentElement.querySelector(".sl-rod-shuffle").getBoundingClientRect();return {key:n.dataset.recordKey,rank:Number(n.dataset.rank),valid:!!r&&["verified","weekly"].includes(chart.status)&&n.querySelector(".ed-recordtext b").textContent===r.title&&n.querySelector(".ed-recordtext small").textContent===r.artist&&img.getAttribute("src")===r.art,art:img.getAttribute("src"),sameNode:n===window.__qaRecordBanner,count:document.querySelectorAll(".ed-rotation .ed-record").length,width:card.width,height:card.height,fullBleed:Math.abs(art.width-card.width)<2&&Math.abs(art.height-card.height)<2&&getComputedStyle(img).objectFit==="cover",inside:b.left>=card.left&&b.right<=card.right&&b.top>=card.top&&b.bottom<=card.bottom}});
+  assert.ok(item.valid&&item.rank>=1&&item.rank<=10,"Exact ranked record and art");assert.ok(!seen.has(item.key),"No repeated track");seen.add(item.key);
+  assert.ok(item.sameNode&&item.count===1&&item.fullBleed&&item.inside,"Exactly one original banner, full artwork and integrated control: "+JSON.stringify(item));assert.ok(Math.abs(item.width-original.width)<2&&Math.abs(item.height-original.height)<2,"Unchanged banner dimensions");
+  assert.ok(item.art,"Selected record has source artwork");lastArt=item.art;
   assert.equal(await overflow(),false);
  }
- const before=page.url();await clickStable(".sl-rod-output .sl-p-launch");await page.waitForSelector(".sl-player iframe");assert.equal(page.url(),before);await clickStable('.sl-player button[aria-label="Stop and close player"]');
- await clickStable(".sl-rod-restore");assert.equal(await page.$eval(".ed-rotation .ed-record:not(.sl-rod-hit)",n=>n.textContent),original);assert.equal(await page.$eval(".sl-rod-output",n=>n.hidden),true);
+ const before=page.url(),expected=await page.$eval(selector,n=>n.querySelector(".ed-recordtext b").textContent);
+ await clickStable(selector);await page.waitForSelector(".sl-player:not([hidden]) iframe");assert.equal(page.url(),before);assert.equal(await page.$eval(".sl-p-copy strong",n=>n.textContent),expected);await clickStable('.sl-player button[aria-label="Stop and close player"]');
+ await clickStable(".sl-rod-restore");
+ const restored=await page.$eval(selector,n=>({sameNode:n===window.__qaRecordBanner,text:n.textContent,art:n.querySelector(".cover img")?.getAttribute("src"),count:document.querySelectorAll(".ed-rotation .ed-record").length,random:n.classList.contains("sl-rod-random")}));
+ assert.ok(restored.sameNode&&restored.count===1&&!restored.random);assert.equal(restored.text,original.text);assert.equal(restored.art,original.art);
  });
  await check("Daily Dig and listening queue",async()=>{
  await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
