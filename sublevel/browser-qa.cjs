@@ -290,7 +290,7 @@ const server=http.createServer((req,res)=>{
  await nav("Today");
  });
  await check("Native genre Discover play buttons use persistent official player",async()=>{
- const minimums={"Drum & Bass":8,"UK Garage":2,"House":5,"Techno":1,"Breakbeat / Big Beat":1};const genres=Object.keys(minimums);const coverage=[];let played=0;
+ const minimums={"Drum & Bass":9,"UK Garage":4,"House":6,"Tech House":2,"Techno":1,"Dubstep":1,"Breakbeat / Big Beat":3,"Pop":3};const genres=Object.keys(minimums);const coverage=[];let played=0;
  for(const genre of genres){
   await nav("Today");await nav("Genres");
   assert.ok(await page.evaluate(name=>{const norm=s=>(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");const card=[...document.querySelectorAll("#app .genre")].find(n=>norm(n.querySelector(".genre-name")?.textContent)===norm(name));if(!card)return false;card.click();return true},genre));
@@ -311,6 +311,14 @@ const server=http.createServer((req,res)=>{
  }
  console.log("SUBLEVEL native Discover playback coverage: "+JSON.stringify(coverage));
  assert.equal(played,genres.length,"Each audited genre opens its official embedded player");
+ await nav("Today")
+ });
+ await check("Native unknown source opens explicit listening fallback without redirect",async()=>{
+ await nav("Today");await nav("Genres");
+ assert.ok(await page.evaluate(()=>{const card=[...document.querySelectorAll("#app .genre")].find(n=>n.querySelector(".genre-name")?.textContent.trim().toLowerCase()==="metal");if(!card)return false;card.click();return true}));
+ await page.waitForSelector("#app .roomhead");await settle();
+ const sel="#app .tracks:not(.sl-chart-native-list) a.play:not([data-sl-native-play=true])";
+ if(await page.$(sel)){const url=page.url();await clickStable(sel);await page.waitForSelector(".sl-player:not([hidden])");assert.equal(page.url(),url);assert.equal(await page.$(".sl-player iframe"),null);assert.match(await page.$eval(".sl-p-notice",n=>n.textContent),/No verified in-site source/);assert.match(await page.$eval(".sl-p-links a",n=>n.href),/^https:\/\/music\.youtube\.com\/search/);await clickStable('.sl-player button[aria-label="Stop and close player"]')}
  await nav("Today")
  });
  await check("YouTube and Apple provider switching stays inside SUBLEVEL",async()=>{
