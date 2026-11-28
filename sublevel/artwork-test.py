@@ -123,6 +123,16 @@ class ChartEnrichmentTests(unittest.TestCase):
         feed=self.feed()
         self.assertEqual(len(chart_apple_jobs(feed,1)),1)
         self.assertEqual(set(chart_apple_jobs(feed,20)),{("Artist","Track","song"),("Artist","Other (Extended Mix)","song")})
+    def test_cursor_rotates_unresolved_candidates(self):
+        feed=self.feed()
+        first=chart_apple_jobs(feed,1)
+        feed["lookupCursor"]=1
+        second=chart_apple_jobs(feed,1)
+        self.assertNotEqual(first,second)
+        feed["lookupCursor"]=2
+        self.assertEqual(chart_apple_jobs(feed,1),first)
+        feed["lookupCursor"]=-1
+        self.assertEqual(chart_apple_jobs(feed,1),first)
     def test_exact_identity_applied_without_overwriting(self):
         feed=self.feed()
         feed["charts"][0]["rows"][0]["embedUrl"]="https://open.spotify.com/track/5XDOInNwslPcQM8xv2rUkL"
