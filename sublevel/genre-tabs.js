@@ -76,6 +76,7 @@ const sceneFallback={
  drumbass:"warehouse",ukgarage:"underground",house:"afterhours",techhouse:"underground",techno:"warehouse",trance:"genres",dubstep:"warehouse",breakbeatbigbeat:"underground",hiphop:"late-drive",grime:"late-drive",rb:"afterhours",soul:"afterhours",funkdisco:"genres",rock:"warehouse",indiealternative:"late-drive",metal:"warehouse",pop:"genres",afrobeats:"genres",reggaedub:"afterhours",triphopdowntempo:"late-drive"
 };
 const sceneCredits={genres:["Pixels and Blue Skies","https://unsplash.com/photos/MN_P-C0CXb4"],underground:["Emmanuel Black","https://unsplash.com/photos/vuZOquKODGs"],warehouse:["Colton Sturgeon","https://unsplash.com/photos/YViBSFfKubI"],afterhours:["Ramin Talebi","https://unsplash.com/photos/2_KldkmLkzQ"],"late-drive":["MChe Lee","https://unsplash.com/photos/DHwy7bYDmhk"]};
+const dedicatedScenes={rock:["scene-rock","Adam Gritco","https://unsplash.com/photos/A33Dif_TpII"],hiphop:["scene-hiphop","David Vilches","https://unsplash.com/photos/iSWb2dnkEW4"],indiealternative:["scene-indie","Brooke Balentine","https://unsplash.com/photos/Wx66pPYvdjk"]};
 function nativeScene(head){
  const valid=raw=>{if(!raw||typeof raw!=="string")return null;try{const u=new URL(raw,document.baseURI);return (u.protocol==="https:"&&!u.username&&!u.password)||u.origin===location.origin||/^data:image\/(?:jpeg|png|webp);base64,/.test(raw)?raw:null}catch{return null}};
  // Original hero may use a CSS background, pseudo-element or a scene image.
@@ -114,7 +115,9 @@ function decorateGenre(name){
  const useFallback=()=>{if(photo.dataset.sceneOrigin==="fallback")return;photo.dataset.sceneOrigin="fallback";photo.src="section-art/"+fallback+".jpg";credit.href=sceneCredits[fallback][1];credit.textContent="Banner photo: "+sceneCredits[fallback][0]+" ↗";credit.hidden=false};
  photo.addEventListener("error",useFallback);
  head.prepend(photo);head.append(credit);
- if(original){photo.dataset.sceneOrigin="original";photo.src=original}else useFallback();
+ const dedicated=dedicatedScenes[k];
+ if(dedicated){photo.dataset.sceneOrigin="dedicated";credit.href=dedicated[2];credit.textContent="Banner photo: "+dedicated[1]+" ↗";credit.hidden=false;photo.src="section-art/"+dedicated[0]+".jpg"}
+ else if(original){photo.dataset.sceneOrigin="original";photo.src=original}else useFallback();
 }
 function mount(){
  const name=title(),tabs=app.querySelector(".roomhead")&&app.querySelector(".tabs");
