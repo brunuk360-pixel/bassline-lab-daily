@@ -212,6 +212,7 @@ import shutil
 import subprocess
 import sys
 subprocess.run([sys.executable,str(root/"artwork-test.py")],check=True)
+subprocess.run([sys.executable,str(root/"unsigned"/"test_backup_operator.py")],check=True)
 discovery=load_discovery(root)
 assert len(discovery["items"])>=10
 ids=[row[0] for row in discovery["items"]]
