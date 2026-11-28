@@ -818,7 +818,10 @@
         {
           "rank": 10,
           "title": "TREAT U RIGHT",
-          "artist": "FOLA & AYRA STARR"
+          "artist": "FOLA & AYRA STARR",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/cc/a5/cf/cca5cf10-c6cb-e9f8-b1cc-4723b199a177/199316650884_cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/treat-u-right/6778493192?i=6778493193&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/treat-u-right/6778493192?i=6778493193"
         }
       ]
     },
@@ -906,7 +909,10 @@
         {
           "rank": 10,
           "title": "ENTER SANDMAN",
-          "artist": "METALLICA"
+          "artist": "METALLICA",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c6/9b/1d/c69b1ddb-f873-53b4-9fc9-87ca49af2062/21UMGIM48676.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/enter-sandman/1571968136?i=1571968519&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/enter-sandman/1571968136?i=1571968519"
         }
       ]
     },
@@ -1354,7 +1360,10 @@
         {
           "rank": 9,
           "title": "Lift Up Your Head",
-          "artist": "Everton Blender"
+          "artist": "Everton Blender",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/06/69/4d/06694daf-c96c-5c16-0dd5-8f9a24157c40/820200009708.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/lift-up-your-head/1868343602?i=1868343609&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/lift-up-your-head/1868343602?i=1868343609"
         },
         {
           "rank": 10,
@@ -1524,7 +1533,10 @@
         {
           "rank": 9,
           "title": "Mojave Skyline (ANF Virtual Music Mix)",
-          "artist": "Ex-Terrestrial"
+          "artist": "Ex-Terrestrial",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/d6/16/56/d61656a1-466c-7034-641e-3aa2f1a22155/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/mojave-skyline-anf-virtual-music-mix/1443540176?i=1443540364&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/mojave-skyline-anf-virtual-music-mix/1443540176?i=1443540364"
         },
         {
           "rank": 10,
@@ -2125,5 +2137,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 228
+  "lookupCursor": 240
 }
