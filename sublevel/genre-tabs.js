@@ -70,15 +70,44 @@ function show(b,id,name,tabs){
 }
 app.addEventListener("click",e=>{const b=e.target.closest?.(".tabs button");if(b&&!b.dataset.slGenreExtraTab)clear()},true);
 const genrePalettes={"drumbass":["#112c2a","#c6ed75"],"ukgarage":["#38203e","#dda2ef"],"house":["#3b3022","#f0c68c"],"techhouse":["#302f23","#79c9b7"],"techno":["#252b3a","#9eb7fa"],"trance":["#30263e","#bca5ff"],"dubstep":["#392a22","#ffb277"],"breakbeatbigbeat":["#342c20","#e8cc81"],"hiphop":["#3a2a24","#edb28a"],"grime":["#25352b","#b9da91"],"rb":["#392538","#efa8cd"],"soul":["#3d2e25","#eac18c"],"funkdisco":["#402d35","#ffb0c9"],"rock":["#382b28","#efaa94"],"indiealternative":["#2c3430","#b7d2a9"],"metal":["#362526","#f5a5a0"],"pop":["#392c42","#e8bafa"],"afrobeats":["#3d3220","#f2cd76"],"reggaedub":["#253627","#e4d28b"],"triphopdowntempo":["#29313b","#a9c8de"]};
+// Keep original credited scene assets where discoverable; a local licensed
+// editorial photograph is a visible fallback, never substituted as record art.
+const sceneFallback={
+ drumbass:"warehouse",ukgarage:"underground",house:"afterhours",techhouse:"underground",techno:"warehouse",trance:"genres",dubstep:"warehouse",breakbeatbigbeat:"underground",hiphop:"late-drive",grime:"late-drive",rb:"afterhours",soul:"afterhours",funkdisco:"genres",rock:"warehouse",indiealternative:"late-drive",metal:"warehouse",pop:"genres",afrobeats:"genres",reggaedub:"afterhours",triphopdowntempo:"late-drive"
+};
+const sceneCredits={genres:["Pixels and Blue Skies","https://unsplash.com/photos/MN_P-C0CXb4"],underground:["Emmanuel Black","https://unsplash.com/photos/vuZOquKODGs"],warehouse:["Colton Sturgeon","https://unsplash.com/photos/YViBSFfKubI"],afterhours:["Ramin Talebi","https://unsplash.com/photos/2_KldkmLkzQ"],"late-drive":["MChe Lee","https://unsplash.com/photos/DHwy7bYDmhk"]};
+function nativeScene(head){
+ const valid=raw=>{try{const u=new URL(raw,document.baseURI);return (u.protocol==="https:"&&!u.username&&!u.password)||u.origin===location.origin||/^data:image\/(?:jpeg|png|webp);base64,/.test(raw)?raw:null}catch{return null}};
+ // Original hero may use a CSS background, pseudo-element or a scene image.
+ const nodes=[head,...head.querySelectorAll(":scope > :not(.roomcopy)")];
+ for(const n of nodes){
+  if(n.matches("img")&&valid(n.getAttribute("src")))return valid(n.getAttribute("src"));
+  for(const pseudo of [null,"::before","::after"]){
+   const value=getComputedStyle(n,pseudo).backgroundImage;
+   const match=value.match(/url\(["']?(.*?)["']?\)/);
+   if(match&&valid(match[1]))return valid(match[1])
+  }
+  for(const img of n.querySelectorAll("img"))if(!img.closest(".roomcopy")&&valid(img.getAttribute("src")))return valid(img.getAttribute("src"))
+ }
+ return null
+}
 function decorateGenre(name){
  const head=app.querySelector(".roomhead"),copy=head?.querySelector(".roomcopy"),h=copy?.querySelector("h1");
  if(!head||!copy||!h)return;
- const p=genrePalettes[norm(name)];if(!p)return;
- // Preserve the original scene photography, attribution and every native control.
- head.classList.add("sl-genre-angled");head.dataset.slGenreTheme=norm(name);
+ const k=norm(name),p=genrePalettes[k];if(!p)return;
+ if(head.dataset.slGenreTheme===k&&head.querySelector(".sl-genre-scene"))return;
+ // Read the original public visual layer before applying our scoped CSS.
+ const original=nativeScene(head),fallback=sceneFallback[k]||"genres";
+ head.classList.add("sl-genre-angled");head.dataset.slGenreTheme=k;
  head.style.setProperty("--sl-genre-panel",p[0]);head.style.setProperty("--sl-genre-accent",p[1]);
  app.style.setProperty("--sl-genre-accent",p[1]);
  if(!copy.querySelector(".sl-genre-banner-kicker"))h.before(make("div","sl-genre-banner-kicker","SUBLEVEL / "+name.toUpperCase()));
+ const photo=make("img","sl-genre-scene");photo.alt="";photo.decoding="async";
+ const credit=make("a","sl-genre-banner-credit");credit.target="_blank";credit.rel="noopener noreferrer";credit.hidden=true;
+ const useFallback=()=>{if(photo.dataset.sceneOrigin==="fallback")return;photo.dataset.sceneOrigin="fallback";photo.src="section-art/"+fallback+".jpg";credit.href=sceneCredits[fallback][1];credit.textContent="Banner photo: "+sceneCredits[fallback][0]+" ↗";credit.hidden=false};
+ photo.addEventListener("error",useFallback);
+ head.prepend(photo);head.append(credit);
+ if(original){photo.dataset.sceneOrigin="original";photo.src=original}else useFallback();
 }
 function mount(){
  const name=title(),tabs=app.querySelector(".roomhead")&&app.querySelector(".tabs");
