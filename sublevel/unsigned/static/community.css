@@ -2,3 +2,16 @@
 .unsigned-player{margin:20px 0;padding:15px 0;border-block:1px solid var(--line)}.unsigned-player-frame iframe{display:block;width:100%;min-width:200px;border:0;margin-top:10px;background:#101b1c}
 
 .guide{max-width:700px}.guide .lead{font-size:17px;color:var(--muted)}.guide .department{margin-top:22px}.withdraw-form button{font-size:12px;color:#f3c4bd;background:transparent;border-color:#8d6660}.track .withdraw-form{margin:8px 0 0!important}.withdraw-form button:hover{background:#292020}
+
+/* Match the magazine's ivory masthead, charcoal/teal palette and compact bottom tabs. */
+body{font-family:"Space Grotesk","DM Sans",Arial,sans-serif;padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+.mast{background:#ecece3;color:#13201e;padding-block:10px;border-bottom:2px solid #79c9b7}
+.brand{color:#13201e;font-size:24px}.brand span{color:#236c62}.mast nav a{color:#236c62}.mast nav button{background:#13201e;color:#ecece3}
+.hero{position:relative;isolation:isolate;overflow:hidden;padding:20px 14px 15px;min-height:155px;background:#101819}
+.hero-photo{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#080e10 5%,#080e10eb 42%,#080e1033 100%),url("https://crate-music.onrender.com/section-art/warehouse.jpg") center right/cover no-repeat}
+.hero h1{font-size:clamp(30px,7vw,48px);max-width:80%;margin:9px 0}
+.screen-nav{position:fixed;bottom:0;left:0;right:0;z-index:20;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:#101b1c;border-top:1px solid #344c47;padding:3px 8px calc(3px + env(safe-area-inset-bottom))}
+.screen-link{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;gap:0;color:#b5c5c0;font-size:19px;line-height:1.2;text-decoration:none}
+.screen-link span{font-size:11px;font-weight:650}.screen-link[aria-current=page]{color:#79c9b7;border-top:2px solid #79c9b7}
+.screen-back{display:inline-flex;align-items:center;min-height:44px;font-size:13px;font-weight:700;margin:-10px 0 8px}
+@media(min-width:800px){.screen-nav{width:min(100%,960px);left:50%;right:auto;transform:translateX(-50%)}}
