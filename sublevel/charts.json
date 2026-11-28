@@ -156,7 +156,10 @@
         {
           "rank": 4,
           "title": "Luv Musica (Richard Earnshaw Revision)",
-          "artist": "Ridney"
+          "artist": "Ridney",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d9/5c/04/d95c0432-78dd-e6a1-455d-c60047015fc9/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/luv-musica-richard-earnshaw-revision/6824906043?i=6824906044&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/luv-musica-richard-earnshaw-revision/6824906043?i=6824906044"
         },
         {
           "rank": 5,
@@ -220,7 +223,10 @@
         {
           "rank": 4,
           "title": "Essence of a Black Track (Rick and Gary Deep Mix)",
-          "artist": "Black Traxx"
+          "artist": "Black Traxx",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/bb/b6/a2/bbb6a29a-3f28-d7ce-520f-e485bb96b12d/885288537444.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/essence-of-a-black-track-rick-and-gary-deep-mix/6812243576?i=6812243583&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/essence-of-a-black-track-rick-and-gary-deep-mix/6812243576?i=6812243583"
         },
         {
           "rank": 5,
@@ -289,7 +295,10 @@
         {
           "rank": 5,
           "title": "Dawn Over the Blue Planet (Edward's Subtile Drum Version)",
-          "artist": "Aubrey"
+          "artist": "Aubrey",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e4/e1/64/e4e16408-ba36-0cde-0111-2df5d4c86601/4070209009391_3000.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/dawn-over-the-blue-planet-edwards-subtile-drum-version/6825337355?i=6825337626&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/dawn-over-the-blue-planet-edwards-subtile-drum-version/6825337355?i=6825337626"
         },
         {
           "rank": 6,
@@ -414,7 +423,10 @@
         {
           "rank": 5,
           "title": "Ha Ya (Afro Mix)",
-          "artist": "Mike Flexx"
+          "artist": "Mike Flexx",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/57/37/85/57378546-f7b5-eab3-3f8b-3da6e67a5f63/5061082681759.png/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/ha-ya-afro-mix/6820044971?i=6820044973&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/ha-ya-afro-mix/6820044971?i=6820044973"
         },
         {
           "rank": 6,
@@ -475,7 +487,10 @@
         {
           "rank": 5,
           "title": "Love Will Save The Day (Extended Mix)",
-          "artist": "Re-Tide"
+          "artist": "Re-Tide",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c0/f5/72/c0f572f5-56d0-1ca0-9bfb-8fd68ba906ee/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/love-will-save-the-day-extended-mix/6813028899?i=6813028900&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/love-will-save-the-day-extended-mix/6813028899?i=6813028900"
         },
         {
           "rank": 6,
@@ -687,7 +702,10 @@
         {
           "rank": 5,
           "title": "OH NO",
-          "artist": "REMA"
+          "artist": "REMA",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/7a/70/db/7a70dba9-1df6-e379-e6fa-19feda48d7a1/26UM1IM04727.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/oh-no/6805176799?i=6805176803&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/oh-no/6805176799?i=6805176803"
         },
         {
           "rank": 6,
@@ -758,7 +776,10 @@
         {
           "rank": 5,
           "title": "SWEET CHILD O' MINE",
-          "artist": "GUNS N' ROSES"
+          "artist": "GUNS N' ROSES",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/56/47/b7/5647b700-6b9d-9e72-ec9f-51140b6d4492/00602567673781.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/sweet-child-o-mine/1377826053?i=1377826892&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/sweet-child-o-mine/1377826053?i=1377826892"
         },
         {
           "rank": 6,
@@ -1871,5 +1892,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 60
+  "lookupCursor": 72
 }
