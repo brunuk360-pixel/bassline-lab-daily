@@ -376,3 +376,40 @@ def fill_chart_covers(feed):
     resolve_chart_bandcamp(feed)
     rows=[row for chart in feed["charts"] for row in chart["rows"]]
     print("Chart artwork available:",sum(bool(r.get("art")) for r in rows),"of",len(rows),"; chart player sources:",sum(bool(r.get("embedUrl") or r.get("embedSpec")) for r in rows),"of",len(rows),flush=True)
+
+def enrich_native_apple(data,limit=18):
+    """Bounded, exact recording lookups for the original Discover 10 rows.
+    YouTube remains preferred. Apple is an official fallback, not a full-song guarantee.
+    Persist exact match logs into the reviewed manifest on the next maintenance pass.
+    """
+    from embed_sources import apple_identity
+    from datetime import date
+    rows=data.get("nativeCatalogue",[])
+    originals={r["originalUrl"]:r for r in rows}
+    existing={}
+    for m in data.get("reviewedNativeApple",[]):
+        row=originals.get(m.get("originalUrl"))
+        if row and (row["title"],row["artist"])==(m.get("title"),m.get("artist")) and apple_identity(m.get("source",""),"track"):
+            existing[row["originalUrl"]]=m
+    video={r["originalUrl"] for r in data.get("reviewedNativeEmbeds",[])}
+    candidates=[r for r in rows if r["originalUrl"] not in existing and r["originalUrl"] not in video]
+    cursor=data.get("nativeLookupCursor",0)
+    if not isinstance(cursor,int) or cursor<0:cursor=0
+    if candidates:
+        start=cursor%len(candidates)
+        jobs=(candidates[start:]+candidates[:start])[:limit]
+        for offset in range(0,len(jobs),3):
+            batch=jobs[offset:offset+3]
+            specs=[(r["artist"],r["title"],"song") for r in batch]
+            with ThreadPoolExecutor(max_workers=3) as pool:
+                for row,(art,source) in zip(batch,pool.map(apple_cover,specs)):
+                    verified=apple_identity(source,"track") if source else None
+                    if not verified:continue
+                    item={"title":row["title"],"artist":row["artist"],"originalUrl":row["originalUrl"],"source":verified["source"],"checked":date.today().isoformat()}
+                    existing[row["originalUrl"]]=item
+                    print("SUBLEVEL_NATIVE_APPLE "+json.dumps(item,ensure_ascii=True,separators=(",",":")),flush=True)
+            if offset+3<len(jobs):time.sleep(3.1)
+        data["nativeLookupCursor"]=cursor+len(jobs)
+        print("SUBLEVEL_NATIVE_CURSOR "+str(data["nativeLookupCursor"]),flush=True)
+    data["reviewedNativeApple"]=list(existing.values())
+    print("Exact native Apple fallback identities:",len(existing),"; reviewed native videos:",len(video),"; indexed native rows:",len(rows),flush=True)
