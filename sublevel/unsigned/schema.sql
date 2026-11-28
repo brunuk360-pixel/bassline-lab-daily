@@ -11,3 +11,5 @@ ALTER TABLE tracks ADD COLUMN IF NOT EXISTS embed_url varchar(500) NOT NULL DEFA
 ALTER TABLE members ADD COLUMN IF NOT EXISTS session_version integer NOT NULL DEFAULT 1;
 
 ALTER TABLE members ADD COLUMN IF NOT EXISTS recovery_hash char(64);
+
+ALTER TABLE tracks ADD COLUMN IF NOT EXISTS withdrawn boolean NOT NULL DEFAULT false;
