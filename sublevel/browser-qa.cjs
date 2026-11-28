@@ -34,11 +34,14 @@ const server=http.createServer((req,res)=>{
  await check("Record of the Day random chart hits and original restore",async()=>{
  await nav("Today");await page.waitForSelector(".sl-rod-shuffle",{visible:true});
  const original=await page.$eval(".ed-rotation .ed-record:not(.sl-rod-hit)",n=>n.textContent);
+ const originalGeometry=await page.$eval(".sl-rod-feature",n=>{const f=n.getBoundingClientRect(),b=n.querySelector(".sl-rod-shuffle").getBoundingClientRect();return {width:f.width,inside:b.left>=f.left&&b.right<=f.right&&b.top>=f.top&&b.bottom<=f.bottom}});assert.ok(originalGeometry.inside,"Random control overlays original banner");
  const seen=new Set();
  for(let i=0;i<5;i++){
   await clickStable(".sl-rod-shuffle");await page.waitForSelector(".sl-rod-hit",{visible:true});
   const item=await page.evaluate(()=>{const n=document.querySelector(".sl-rod-hit"),chart=window.__slCharts.charts.find(c=>c.id===n.dataset.chartId),r=chart?.rows.find(r=>String(r.rank)===n.dataset.rank),img=n.querySelector("img");return {key:n.dataset.recordKey,rank:Number(n.dataset.rank),valid:!!r&&["verified","weekly"].includes(chart.status)&&n.querySelector("strong").textContent===r.title&&img?.getAttribute("src")===r.art,play:!!document.querySelector(".sl-rod-output .sl-p-launch"),originalHidden:!!document.querySelector(".ed-record.sl-rod-hidden")}});
   assert.ok(item.valid&&item.play&&item.originalHidden&&item.rank>=1&&item.rank<=10);assert.ok(!seen.has(item.key),"no repeats during rotation");seen.add(item.key);
+  const geometry=await page.$eval(".sl-rod-feature",n=>{const f=n.getBoundingClientRect(),card=n.querySelector(".sl-rod-hit").getBoundingClientRect(),img=n.querySelector(".sl-rod-cover"),art=img.getBoundingClientRect(),b=n.querySelector(".sl-rod-shuffle").getBoundingClientRect();return {width:card.width,fullBleed:Math.abs(art.width-card.width)<2&&Math.abs(art.height-card.height)<2&&getComputedStyle(img).objectFit==="cover",inside:b.left>=f.left&&b.right<=f.right&&b.top>=card.top&&b.bottom<=card.bottom,oneVisible:[...n.querySelectorAll(".ed-record")].filter(x=>x.getClientRects().length).length,source:img.getAttribute("src")}});
+  assert.ok(geometry.fullBleed&&geometry.inside&&geometry.oneVisible===1,"One full-bleed banner with integrated Random control: "+JSON.stringify(geometry));assert.ok(Math.abs(geometry.width-originalGeometry.width)<2,"Same banner width");
   assert.equal(await overflow(),false);
  }
  const before=page.url();await clickStable(".sl-rod-output .sl-p-launch");await page.waitForSelector(".sl-player iframe");assert.equal(page.url(),before);await clickStable('.sl-player button[aria-label="Stop and close player"]');
