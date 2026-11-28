@@ -114,4 +114,30 @@ class ReleaseCoverFetchTests(unittest.TestCase):
         self.assertEqual(apple_identity(base+"?i=654321","track")["id"],"654321")
         for url,kind in [(base,"track"),(base+"?i=654321","album"),(base+"?i=654321&i=123","track"),(base+"?i=","album"),("https://music.apple.com.evil.test/gb/album/test/123","album")]:
             self.assertIsNone(apple_identity(url,kind))
+from discovery_assets import chart_apple_jobs,enrich_chart_apple
+class ChartEnrichmentTests(unittest.TestCase):
+    def feed(self):
+        rows=[{"rank":1,"title":"Track","artist":"Artist","url":"https://example.com/track"},{"rank":2,"title":"Other (Extended Mix)","artist":"Artist","url":"https://example.com/other"},{"rank":3,"title":"Unknown","artist":"Unknown Artist"}]
+        return {"checked":"2026-11-28","charts":[{"id":"one","rows":rows},{"id":"two","rows":[dict(rows[0])]}]}
+    def test_bounded_deduplicated_selection(self):
+        feed=self.feed()
+        self.assertEqual(len(chart_apple_jobs(feed,1)),1)
+        self.assertEqual(set(chart_apple_jobs(feed,20)),{("Artist","Track","song"),("Artist","Other (Extended Mix)","song")})
+    def test_exact_identity_applied_without_overwriting(self):
+        feed=self.feed()
+        feed["charts"][0]["rows"][0]["embedUrl"]="https://open.spotify.com/track/5XDOInNwslPcQM8xv2rUkL"
+        art="https://is1-ssl.mzstatic.com/image/thumb/test/400x400bb.jpg"
+        player="https://music.apple.com/gb/album/track/123?i=456"
+        with patch("discovery_assets.apple_cover",side_effect=lambda s:(art,player) if s[1]=="Track" else ("","")):
+            enrich_chart_apple(feed)
+        one,two=feed["charts"]
+        self.assertEqual(one["rows"][0]["art"],art)
+        self.assertTrue(one["rows"][0]["embedUrl"].startswith("https://open.spotify.com/"))
+        self.assertEqual(two["rows"][0]["embedUrl"],player)
+        self.assertNotIn("art",one["rows"][1])
+    def test_wrong_source_kind_rejected(self):
+        feed=self.feed()
+        with patch("discovery_assets.apple_cover",return_value=("https://is1-ssl.mzstatic.com/test.jpg","https://music.apple.com/gb/album/track/123")):
+            enrich_chart_apple(feed)
+        self.assertTrue(all(not r.get("art") and not r.get("embedUrl") for c in feed["charts"] for r in c["rows"]))
 if __name__=="__main__":unittest.main()
