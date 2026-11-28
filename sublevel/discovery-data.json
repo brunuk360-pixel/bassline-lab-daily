@@ -1497,6 +1497,36 @@
       "source": "https://music.apple.com/gb/album/ketacid-single/6823775562",
       "evidence": "https://music.apple.com/gb/album/ketacid-single/6823775562?uo=4",
       "checked": "2026-11-28"
+    },
+    "owl": {
+      "title": "Spectral Shadows EP",
+      "artist": "Owl",
+      "provider": "apple",
+      "kind": "album",
+      "id": "1853009939",
+      "source": "https://music.apple.com/gb/album/spectral-shadows-ep/1853009939",
+      "evidence": "https://music.apple.com/gb/album/spectral-shadows-ep/1853009939?uo=4",
+      "checked": "2026-11-28"
+    },
+    "elys": {
+      "title": "Serenity",
+      "artist": "Elys",
+      "provider": "apple",
+      "kind": "album",
+      "id": "1777078602",
+      "source": "https://music.apple.com/gb/album/serenity-single/1777078602",
+      "evidence": "https://music.apple.com/gb/album/serenity-single/1777078602?uo=4",
+      "checked": "2026-11-28"
+    },
+    "siwotha-fall": {
+      "title": "NACH DEM FALL",
+      "artist": "Siwotha You & Luna Sage",
+      "provider": "apple",
+      "kind": "album",
+      "id": "6809747193",
+      "source": "https://music.apple.com/gb/album/nach-dem-fall-single/6809747193",
+      "evidence": "https://music.apple.com/gb/album/nach-dem-fall-single/6809747193?uo=4",
+      "checked": "2026-11-28"
     }
   },
   "reviewedArtwork": {
@@ -1740,6 +1770,42 @@
       "source": "https://music.apple.com/gb/album/ketacid-single/6823775562?uo=4",
       "checked": "2026-11-28",
       "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "owl": {
+      "title": "Spectral Shadows EP",
+      "artist": "Owl",
+      "releaseUrl": "https://ebbsflows.bandcamp.com/album/spectral-shadows-ep-ebbs01",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e3/40/0a/e3400a3f-5501-627f-fd64-9c156f43086d/738019630153.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/spectral-shadows-ep/1853009939?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact release artwork validated in 28 November build."
+    },
+    "elys": {
+      "title": "Serenity",
+      "artist": "Elys",
+      "releaseUrl": "https://dnbbrecords.bandcamp.com/album/serenity",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7f/8f/f7/7f8ff712-796b-d2d2-fdb4-3a81aa4b1432/cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/serenity-single/1777078602?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact release artwork validated in 28 November build."
+    },
+    "hoax": {
+      "title": "Genesis",
+      "artist": "Hoax",
+      "releaseUrl": "https://hospitalrecords.bandcamp.com/track/genesis-2",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/39/47/c3/3947c314-0cf9-c997-e1f1-1bb10d576c3d/cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/genesis-single/1839418735?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact release artwork validated in 28 November build."
+    },
+    "siwotha-fall": {
+      "title": "NACH DEM FALL",
+      "artist": "Siwotha You & Luna Sage",
+      "releaseUrl": "https://sonaxxrecords.bandcamp.com/album/siwotha-you-luna-sage-nach-dem-fall",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/17/52/13/1752131e-41db-dfe5-2d38-945b03886baf/5063857079822_cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/nach-dem-fall-single/6809747193?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact release artwork validated in 28 November build."
     }
   },
   "releaseFacts": {
