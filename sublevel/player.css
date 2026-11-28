@@ -1,0 +1,12 @@
+
+.sl-player[hidden]{display:none!important}
+.sl-player{position:fixed;z-index:2147483001;bottom:calc(72px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(100%,660px);max-height:65dvh;overflow:auto;overscroll-behavior:contain;background:#101b1c;color:#eef0e7;border:1px solid #79c9b777;border-top:2px solid #79c9b7;box-shadow:0 -6px 28px #0008;padding:9px 12px;font:13px/1.4 system-ui,sans-serif}
+.sl-p-head{display:flex;align-items:center;gap:5px}.sl-p-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.sl-p-copy strong{font-size:15px;overflow-wrap:anywhere}.sl-p-copy small{color:#b5c5c0;font-size:11px;overflow-wrap:anywhere}.sl-p-kicker{font-size:9px;color:#79c9b7;font-weight:700;letter-spacing:.12em}
+.sl-p-button,.sl-p-resume{min-width:44px;min-height:44px;border:1px solid #79c9b755;background:#142321;color:#e6f3ee;cursor:pointer;font:inherit;padding:6px 9px}.sl-p-button:disabled{opacity:.35}.sl-p-head .sl-p-button{font-size:24px;padding:0}.sl-p-frame{margin-top:7px}.sl-p-embed{display:block;width:100%;min-width:200px;border:0;background:#0b1113}.sl-p-notice{font-size:11px;color:#b5c5c0;margin:6px 0;line-height:1.4}.sl-p-link{color:#a0decf;font-size:12px;display:inline-flex;align-items:center;min-height:34px}.sl-p-queue summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#79c9b7}.sl-p-list{max-height:135px;overflow:auto}.sl-p-list .sl-p-button{display:block;width:100%;text-align:left;border-width:0 0 1px}.sl-p-list [aria-current=true]{color:#79c9b7;background:#19312c}.sl-p-resume{display:block;width:100%;margin:10px 0;text-align:left}.sl-p-launch{border-color:#79c9b7!important}
+body.sl-player-open #app{padding-bottom:calc(var(--sl-player-space,260px) + 90px)!important}
+body.sl-player-open .sl-discovery-dialog{padding-bottom:var(--sl-player-space,260px)!important}
+body.sl-discovery-lock .sl-player{bottom:env(safe-area-inset-bottom)}
+dialog.sl-discovery-dialog{z-index:2147483000!important}
+.sl-player button:focus-visible,.sl-player a:focus-visible,.sl-player summary:focus-visible{outline:2px solid #79c9b7;outline-offset:2px}
+@media(min-width:800px){.sl-player{bottom:84px;max-height:70dvh}}
+@media(max-height:550px){.sl-player{max-height:80dvh;bottom:0}}
