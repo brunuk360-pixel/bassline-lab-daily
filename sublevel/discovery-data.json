@@ -1908,6 +1908,78 @@
       "artist": "PurseFurst",
       "source": "https://desolatmusicgroup.bandcamp.com/album/pimp",
       "checked": "2026-11-28"
+    },
+    "edlan": {
+      "label": "Galacy Records",
+      "tracks": [
+        [
+          "Know It All",
+          "3:40"
+        ],
+        [
+          "Stand Alone",
+          "4:37"
+        ]
+      ],
+      "title": "Know It All / Stand Alone",
+      "artist": "Edlan & TENEM",
+      "source": "https://galacy.bandcamp.com/album/know-it-all-stand-alone",
+      "checked": "2026-11-28"
+    },
+    "malps-luv": {
+      "label": "ec2a",
+      "tracks": [
+        [
+          "We Luv It",
+          "5:50"
+        ],
+        [
+          "Mic Check",
+          "5:50"
+        ]
+      ],
+      "title": "We Luv It EP",
+      "artist": "Malps & Cam Foster",
+      "source": "https://ec2a.bandcamp.com/album/we-luv-it-ep",
+      "checked": "2026-11-28"
+    },
+    "buttermere-touch": {
+      "label": "PURISM",
+      "tracks": [
+        [
+          "Touch Typing",
+          "5:07"
+        ],
+        [
+          "Don't You Know",
+          "6:02"
+        ],
+        [
+          "Tha Difference",
+          "5:18"
+        ],
+        [
+          "Buttermere & Nicholas Nothing - Deep Roots",
+          "6:37"
+        ]
+      ],
+      "credits": "Adam Stikuts wrote and produced the release; Nicholas Taylor co-produced Deep Roots. Mastering: DDA Mastering.",
+      "title": "Touch Typing",
+      "artist": "Buttermere",
+      "source": "https://purismlabel.bandcamp.com/album/touch-typing",
+      "checked": "2026-11-28"
+    },
+    "toya-ngia": {
+      "tracks": [
+        [
+          "Ngiakuthanda",
+          "4:35"
+        ]
+      ],
+      "title": "Ngiakuthanda",
+      "artist": "Toya Delazy & Neekeetone",
+      "source": "https://neekeetone.bandcamp.com/track/ngiakuthanda",
+      "checked": "2026-11-28"
     }
   }
 }
