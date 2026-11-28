@@ -210,6 +210,8 @@ assert n==1
 from discovery_assets import load_discovery,fill_embed_covers,fill_chart_covers
 import shutil
 import subprocess
+import sys
+subprocess.run([sys.executable,str(root/"artwork-test.py")],check=True)
 discovery=load_discovery(root)
 assert len(discovery["items"])>=10
 ids=[row[0] for row in discovery["items"]]
