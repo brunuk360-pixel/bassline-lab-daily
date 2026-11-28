@@ -16,3 +16,12 @@ a.equal(P.frame({provider:"apple",kind:"album",id:"1",source:apple}),null);
 const r={id:"a",title:"Test",artist:"Artist",url:"https://example.org/track"};
 a.equal(P.clean([r,r,{...r,id:"b",url:"javascript:alert(1)"}]).length,1);
 console.log("Player tests passed: exact provider URLs, hostile URLs rejected, duplicate-free queue.");
+
+const queue=[r,{...r,id:"b",title:"B"},{...r,id:"c",title:"C"},{...r,id:"d",title:"D"}];
+let edit=P.editQueue(queue,0,"c","up");a.deepEqual(edit.items.map(r=>r.id),["a","c","b","d"]);a.equal(edit.index,0);
+edit=P.editQueue(queue,2,"a","remove");a.deepEqual(edit.items.map(r=>r.id),["b","c","d"]);a.equal(edit.index,1);
+edit=P.editQueue(queue,0,"a","remove");a.equal(edit.items.length,4);
+edit=P.editQueue(queue,0,"b","up");a.deepEqual(edit.items.map(r=>r.id),["a","b","c","d"]);
+a.equal(P.fromURL(apple+"?i=6818548340&i=6818548341"),null);
+a.equal(P.fromURL(apple+"?i="),null);
+console.log("Player queue editing preserves the current selection and rejects ambiguous Apple identities.");
