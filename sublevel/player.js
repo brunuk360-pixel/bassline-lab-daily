@@ -136,8 +136,47 @@ function resume(){if(index>=0)select(index)}
 function action(r,list){if(available(r))return button("▶ Play here",()=>play(r,list),"sl-d-button sl-p-launch");const a=make("a","sl-d-button sl-p-source","Open release ↗");a.href=r.url;a.target="_blank";a.rel="noopener noreferrer";return a}
 function addNext(r){if(!r)return;const current=items[index];if(current?.id===r.id)return;items=clean(items.filter(x=>x.id!==r.id));index=current?items.findIndex(x=>x.id===current.id):-1;items.splice(index+1,0,r);if(index<0)index=0;items=clean(items);if(panel&&!panel.hidden)refreshQueue();persist()}
 root.SUBLEVELPlayer=Object.freeze({play,action,available,resume,stop,addNext,hasSession:()=>index>=0,updateQueue(list,id){if(!panel||panel.hidden||!items.some(r=>r.id===id)||items.some(r=>r.id.startsWith("chart:")))return;const updated=clean(list);if(!updated.length)return;const current=items[index]?.id;items=updated;index=items.findIndex(r=>r.id===current);if(index<0){stop();index=0}else{refreshControls();meta.textContent=items[index].artist+" · "+(index+1)+"/"+items.length;redrawQueue();refreshControls()}persist()}});
+// Integrate the original magazine's native track rows without replacing
+// their artwork, saving, details, or original source URLs.
+const identityText=v=>(v||"").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]/gu,"");
+function nativeRecord(row){
+ const title=row.querySelector(".tracktitle strong,.tracktitle b")?.textContent.trim();
+ const artist=row.querySelector(".tracktitle small")?.textContent.trim();
+ const a=row.querySelector("a.play[href]");
+ const url=a?.href;
+ if(!title||!artist||!urlOf(url))return null;
+ const exact=r=>identityText(r.title)===identityText(title)&&identityText(r.artist)===identityText(artist);
+ const catalogue=records.filter(exact);
+ if(catalogue.length===1&&available(catalogue[0]))return {...catalogue[0],url};
+ const direct=fromURL(url);
+ if(direct&&direct.kind!=="album"&&direct.kind!=="playlist")return {id:"native:"+title+":"+artist,title,artist,url};
+ const found=(root.__slCharts?.charts||[]).flatMap(c=>c.rows.filter(exact)).filter(r=>r.embedUrl||r.embedSpec);
+ // Only use an exact matching chart identity if provider references agree.
+ const unique=new Map(found.map(r=>[JSON.stringify([r.embedUrl||"",r.alternateEmbedUrl||"",r.embedSpec||null]),r]));
+ if(unique.size===1){const r=[...unique.values()][0];const track={id:"native:"+title+":"+artist,title,artist,url,embedUrl:r.embedUrl,alternateEmbedUrl:r.alternateEmbedUrl,embedSpec:r.embedSpec};if(available(track))return track}
+ return {id:"native:"+title+":"+artist,title,artist,url};
+}
+function nativeRows(app){return [...app.querySelectorAll(".tracks:not(.sl-chart-native-list) .track")].filter(row=>!row.closest(".sl-chart-inline")&&row.getClientRects().length)}
+function enhanceNative(app){
+ if(!app.querySelector(".roomhead"))return;
+ for(const row of nativeRows(app)){
+  const a=row.querySelector("a.play[href]");if(!a)continue;
+  const r=nativeRecord(row),can=!!r&&available(r);
+  if(can){a.dataset.slNativePlay="true";a.setAttribute("aria-label","Play "+r.title+" here");a.title="Play here"}else if(a.dataset.slNativePlay){delete a.dataset.slNativePlay;a.removeAttribute("aria-label");a.removeAttribute("title")}
+ }
+}
+doc.addEventListener("click",e=>{
+ if(e.defaultPrevented||e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;
+ const a=e.target.closest?.("#app .tracks:not(.sl-chart-native-list) a.play[href]");
+ const app=doc.getElementById("app");if(!a||!app?.querySelector(".roomhead")||a.closest(".sl-chart-inline"))return;
+ const row=a.closest(".track"),r=row&&nativeRecord(row);
+ if(!r||!available(r))return;
+ e.preventDefault();e.stopImmediatePropagation();
+ play(r,nativeRows(app).map(nativeRecord).filter(Boolean))
+},true);
 function mount(){
  const app=doc.getElementById("app");if(!app)return;
+ enhanceNative(app);
  const norm=v=>(v||"").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]/gu,"");
  for(const hero of app.querySelectorAll(".sl-dossier-hero")){if(hero.parentElement.querySelector(".sl-p-dossier"))continue;const t=norm(hero.querySelector("h2")?.textContent),a=norm(hero.querySelector(".sl-dossier-artist")?.textContent);if(!t||!a)continue;const m=records.filter(r=>norm(r.title)===t&&norm(r.artist)===a&&available(r));if(m.length===1){const b=action(m[0],records.filter(available));b.classList.add("sl-p-dossier");hero.after(b)}}
  if(index>=0&&!app.querySelector(".sl-p-resume")&&app.querySelector(".night-home")){const b=button("Resume music player →",resume,"sl-p-resume");app.querySelector(".night-home").prepend(b)}
