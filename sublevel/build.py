@@ -220,6 +220,17 @@ assert len(ids)==len(set(ids)), "Duplicate discovery IDs"
 assert all(row[6].startswith("https://") for row in discovery["items"])
 from datetime import date
 import re
+from urllib.parse import quote
+native_sources=discovery.get("reviewedNativeEmbeds",[])
+native_seen=set()
+for item in native_sources:
+    assert item["title"].strip() and item["artist"].strip()
+    expected="https://music.youtube.com/search?q="+quote(item["artist"]+" "+item["title"],safe="~!*'()")
+    assert item["originalUrl"]==expected and expected not in native_seen,"Invalid or duplicate native track identity"
+    native_seen.add(expected)
+    assert re.fullmatch(r"https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}",item["source"]),"Invalid native reviewed video"
+    assert item["evidence"].strip() and date.fromisoformat(item["checked"])
+print("Reviewed native editorial video sources:",len(native_sources))
 for key,fact in discovery.get("releaseFacts",{}).items():
     row=next((r for r in discovery["items"] if r[0]==key),None)
     assert row and (fact["title"],fact["artist"],fact["source"])==(row[1],row[2],row[6]),"Release fact identity mismatch"
