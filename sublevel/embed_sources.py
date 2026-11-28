@@ -127,3 +127,21 @@ def resolve_embeds(data):
             print("SUBLEVEL_EXACT_APPLE "+json.dumps({"recordId":key,**verified},separators=(",",":")),flush=True)
     print("Official embed identities resolved:",len(entries),"of",len(data["items"]),flush=True)
     return entries
+
+def resolve_chart_bandcamp(feed):
+    """Only editor-reviewed exact track pages; never substitute an album or search result."""
+    jobs=[]
+    for chart in feed["charts"]:
+        for row in chart["rows"]:
+            source=row.get("reviewedBandcamp","")
+            if source and not row.get("embedUrl"):
+                jobs.append((chart,row,source))
+    def work(job):
+        chart,row,url=job
+        ident=resolve(("chart",row["title"],row["artist"],"","","",url))
+        return job,ident
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        for (chart,row,url),ident in pool.map(work,jobs):
+            if ident and ident[1]["kind"]=="track":
+                row["embedSpec"]=ident[1]
+                print("SUBLEVEL_CHART_BANDCAMP "+json.dumps({"chartId":chart["id"],"title":row["title"],"artist":row["artist"],"spec":ident[1]},separators=(",",":")),flush=True)
