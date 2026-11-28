@@ -88,6 +88,10 @@ const server=http.createServer((req,res)=>{
  await clickStable(".sl-d-profile-title");await page.waitForSelector('.sl-discovery-dialog[open][data-room="artist"]');
  await page.evaluate(()=>history.back());await page.waitForSelector('.sl-discovery-dialog[open][data-room="artists"]');
  await page.evaluate(()=>history.back());await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);await settle();
+ await nav("Saved");await clickStable(".sl-d-journey-entry .sl-d-primary");await page.waitForSelector('.sl-discovery-dialog[open][data-room="journey"]');
+ await tapNamed(".sl-library-tab","Playlists");await page.waitForFunction(()=>[...document.querySelectorAll(".sl-library-tab")].some(b=>b.textContent==="Playlists"&&b.getAttribute("aria-current")==="page"));
+ await page.evaluate(()=>history.back());await page.waitForFunction(()=>[...document.querySelectorAll(".sl-library-tab")].some(b=>b.textContent==="Overview"&&b.getAttribute("aria-current")==="page"));
+ await page.evaluate(()=>history.back());await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);await settle();
  await nav("Today");await nav("Genres");await page.waitForSelector("#app .genre");
  await tapNamed("#app .genre","Drum & Bass");
  await page.waitForSelector("#app .roomhead");await settle();
