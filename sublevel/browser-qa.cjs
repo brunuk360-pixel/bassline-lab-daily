@@ -31,6 +31,19 @@ const server=http.createServer((req,res)=>{
  const nav=async name=>{await clickStable('.bottom button[data-nav-label="'+name+'"]');await settle()};
  const overflow=()=>page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
  await check("390px homepage layout",async()=>{await page.waitForSelector(".sl-home-index");assert.equal(await overflow(),false)});
+ await check("Record of the Day random chart hits and original restore",async()=>{
+ await nav("Today");await page.waitForSelector(".sl-rod-shuffle",{visible:true});
+ const original=await page.$eval(".ed-rotation .ed-record:not(.sl-rod-hit)",n=>n.textContent);
+ const seen=new Set();
+ for(let i=0;i<5;i++){
+  await clickStable(".sl-rod-shuffle");await page.waitForSelector(".sl-rod-hit",{visible:true});
+  const item=await page.evaluate(()=>{const n=document.querySelector(".sl-rod-hit"),chart=window.__slCharts.charts.find(c=>c.id===n.dataset.chartId),r=chart?.rows.find(r=>String(r.rank)===n.dataset.rank),img=n.querySelector("img");return {key:n.dataset.recordKey,rank:Number(n.dataset.rank),valid:!!r&&["verified","weekly"].includes(chart.status)&&n.querySelector("strong").textContent===r.title&&img?.getAttribute("src")===r.art,play:!!document.querySelector(".sl-rod-output .sl-p-launch"),originalHidden:!!document.querySelector(".ed-record.sl-rod-hidden")}});
+  assert.ok(item.valid&&item.play&&item.originalHidden&&item.rank>=1&&item.rank<=10);assert.ok(!seen.has(item.key),"no repeats during rotation");seen.add(item.key);
+  assert.equal(await overflow(),false);
+ }
+ const before=page.url();await clickStable(".sl-rod-output .sl-p-launch");await page.waitForSelector(".sl-player iframe");assert.equal(page.url(),before);await clickStable('.sl-player button[aria-label="Stop and close player"]');
+ await clickStable(".sl-rod-restore");assert.equal(await page.$eval(".ed-rotation .ed-record:not(.sl-rod-hit)",n=>n.textContent),original);assert.equal(await page.$eval(".sl-rod-output",n=>n.hidden),true);
+ });
  await check("Daily Dig and listening queue",async()=>{
  await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
  const edition=await page.evaluate(()=>{const D=window.__slDiscovery,today=new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());const f=D.editorialFeature;if(f?.date!==today||f.ids.length!==10)return null;return {expected:f.ids.map(id=>D.items.find(r=>r[0]===id)?.[1]),actual:[...document.querySelectorAll(".sl-discovery-dialog .sl-d-list")][0]&&[...document.querySelectorAll(".sl-discovery-dialog .sl-d-list:first-of-type .sl-d-record h3")].slice(0,10).map(x=>x.textContent),firstList:[...document.querySelector(".sl-discovery-dialog .sl-d-list")?.querySelectorAll(".sl-d-record h3")||[]].map(x=>x.textContent)}});
