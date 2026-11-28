@@ -3760,5 +3760,87 @@
     }
   ],
   "nativeLookupCursor": 0,
-  "reviewedNativeApple": []
+  "reviewedNativeApple": [],
+  "trackMetrics": [
+    {
+      "title": "No Problem",
+      "artist": "Chase & Status",
+      "bpm": 175,
+      "key": null,
+      "source": "https://songbpm.com/@chase-status/no-problem",
+      "note": "4:31 recording; key not established",
+      "checked": "2026-11-28",
+      "method": "catalogue estimate"
+    },
+    {
+      "title": "We Got It",
+      "artist": "Metrik",
+      "bpm": 174,
+      "key": "B♭ major",
+      "source": "https://songbpm.com/@metrik/we-got-it",
+      "note": "4:04 recording",
+      "checked": "2026-11-28",
+      "method": "catalogue estimate"
+    },
+    {
+      "title": "Afterglow",
+      "artist": "Wilkinson",
+      "bpm": 174,
+      "key": "G major",
+      "source": "https://songbpm.com/@wilkinson/afterglow",
+      "note": "3:45 recording",
+      "checked": "2026-11-28",
+      "method": "catalogue estimate"
+    },
+    {
+      "title": "If We Ever",
+      "artist": "High Contrast",
+      "bpm": 173,
+      "key": "G major",
+      "source": "https://tunebat.com/Info/If-We-Ever-High-Contrast/33LQ2hkSecs8ax6Bz2t9D8",
+      "note": "Original recording",
+      "checked": "2026-11-28",
+      "method": "catalogue estimate"
+    },
+    {
+      "title": "Memory Lane",
+      "artist": "Netsky",
+      "bpm": 175,
+      "key": "C♯ minor",
+      "source": "https://songbpm.com/@netsky/memory-lane",
+      "note": "5:36 recording",
+      "checked": "2026-11-28",
+      "method": "catalogue estimate"
+    },
+    {
+      "title": "Tarantula",
+      "artist": "Pendulum",
+      "bpm": 174,
+      "key": null,
+      "source": "https://songbpm.com/@pendulum/tarantula",
+      "note": "5:31 recording; key reports conflict",
+      "checked": "2026-11-28",
+      "method": "catalogue estimate"
+    },
+    {
+      "title": "All Night",
+      "artist": "Camo & Krooked",
+      "bpm": 175,
+      "key": "C minor",
+      "source": "https://songbpm.com/@camo-krooked/all-night",
+      "note": "4:31 album recording",
+      "checked": "2026-11-28",
+      "method": "catalogue estimate"
+    },
+    {
+      "title": "Gold Dust",
+      "artist": "DJ Fresh",
+      "bpm": 177,
+      "key": "C major",
+      "source": "https://songbpm.com/@dj-fresh/golddust---original-mix",
+      "note": "2010 original 3:12 mix",
+      "checked": "2026-11-28",
+      "method": "catalogue estimate"
+    }
+  ]
 }
