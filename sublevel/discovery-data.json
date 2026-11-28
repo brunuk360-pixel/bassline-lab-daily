@@ -2321,6 +2321,46 @@
       "source": "https://www.youtube.com/watch?v=qke-jOUqSXU",
       "evidence": "Defected Records official upload",
       "checked": "2026-11-28"
+    },
+    {
+      "title": "Praise You",
+      "artist": "Fatboy Slim",
+      "originalUrl": "https://music.youtube.com/search?q=Fatboy%20Slim%20Praise%20You",
+      "source": "https://www.youtube.com/watch?v=ruAi4VBoBSM",
+      "evidence": "Official video; artist catalogue https://www.fatboyslim.net/songs/praise-you/",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Block Rockin' Beats",
+      "artist": "The Chemical Brothers",
+      "originalUrl": "https://music.youtube.com/search?q=The%20Chemical%20Brothers%20Block%20Rockin'%20Beats",
+      "source": "https://www.youtube.com/watch?v=iTxOKsyZ0Lw",
+      "evidence": "Official music video; artist site https://www.thechemicalbrothers.com/music-videos/block-rockin-beats-video",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Scary Monsters and Nice Sprites",
+      "artist": "Skrillex",
+      "originalUrl": "https://music.youtube.com/search?q=Skrillex%20Scary%20Monsters%20and%20Nice%20Sprites",
+      "source": "https://www.youtube.com/watch?v=WSeNSzJ2-Jw",
+      "evidence": "Official audio identity corroborated at https://song.link/y/WSeNSzJ2-Jw",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Billie Jean",
+      "artist": "Michael Jackson",
+      "originalUrl": "https://music.youtube.com/search?q=Michael%20Jackson%20Billie%20Jean",
+      "source": "https://www.youtube.com/watch?v=Zi_XLOBDo_Y",
+      "evidence": "Official video by michaeljacksonVEVO; https://katchtv.com/watch/Zi_XLOBDo_Y",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Dancing Queen",
+      "artist": "ABBA",
+      "originalUrl": "https://music.youtube.com/search?q=ABBA%20Dancing%20Queen",
+      "source": "https://www.youtube.com/watch?v=xFrGuyw1V8s",
+      "evidence": "AbbaVEVO official video; Universal Music article https://www.universal-music.co.jp/abba/news/2025-07-04/",
+      "checked": "2026-11-28"
     }
   ],
   "dailyEditorial": {
