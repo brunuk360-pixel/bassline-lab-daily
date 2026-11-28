@@ -124,6 +124,21 @@ const server=http.createServer((req,res)=>{
  await page.click('.sl-player button[aria-label="Compact player details"]');assert.equal(await page.evaluate(()=>window.__qaPlayerFrame===document.querySelector(".sl-player iframe")),true,"compact preserves iframe");await page.click('.sl-player button[aria-label="Expand player details"]');await page.click(".sl-p-queue summary");await page.click(".sl-p-options button:nth-child(2)");assert.equal(await page.$eval(".sl-p-options button:nth-child(2)",b=>b.getAttribute("aria-pressed")),"true");await page.click(".sl-p-options button:first-child");await page.click(".sl-p-queue summary");await page.click('.sl-player button[aria-label="Next selection"]');assert.notEqual(await page.$eval(".sl-player iframe",f=>f.src),src);
  await page.click('.sl-player button[aria-label="Stop and close player"]');assert.equal(await page.$(".sl-player iframe"),null);
  });
+ await check("Persistent player queue editing preserves active iframe",async()=>{
+ await nav("Today");
+ await page.evaluate(()=>{const ids=["allnight","baddadan","fire","backbone"];const records=ids.map(id=>{const r=window.__slDiscovery.items.find(x=>x[0]===id);return {id:r[0],title:r[1],artist:r[2],url:r[6]}});window.SUBLEVELPlayer.play(records[0],records)});
+ await page.waitForSelector(".sl-player iframe");await page.evaluate(()=>window.__qaEditFrame=document.querySelector(".sl-player iframe"));
+ await page.$eval(".sl-p-queue",n=>n.open=true);
+ const before=await page.$$eval(".sl-p-queue-select",nodes=>nodes.map(n=>n.textContent.replace(/^\d+\. /,"")));
+ await page.click(".sl-p-queue-row:nth-child(3) .sl-p-queue-edit:first-child");
+ const after=await page.$$eval(".sl-p-queue-select",nodes=>nodes.map(n=>n.textContent.replace(/^\d+\. /,"")));assert.deepEqual(after,[before[0],before[2],before[1],before[3]]);
+ await page.click(".sl-p-queue-row:nth-child(4) .sl-p-queue-edit:last-child");
+ assert.equal(await page.$$eval(".sl-p-queue-select",n=>n.length),3);
+ assert.equal(await page.evaluate(()=>window.__qaEditFrame===document.querySelector(".sl-player iframe")),true);
+ const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem("sublevel.player.queue.v1")));assert.deepEqual(saved.items.map(r=>r.id),["allnight","fire","baddadan"]);
+ assert.equal(await page.$eval(".sl-player",n=>n.scrollWidth>n.clientWidth+2),false);
+ await page.click('.sl-player button[aria-label="Stop and close player"]');
+ });
  await check("Listen here catalogue and real play button",async()=>{
  await nav("Today");await page.waitForSelector(".sl-d-playable-entry");await page.click(".sl-d-playable-entry");await page.waitForSelector('.sl-discovery-dialog[data-room="playable"][open]');
  const count=await page.$$eval(".sl-d-results .sl-p-launch",x=>x.length);assert.ok(count>=17,"expected expanded playable catalogue");
