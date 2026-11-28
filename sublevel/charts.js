@@ -30,18 +30,52 @@ function directory(){const panel=make("details","sl-chart-directory");panel.appe
  const select=make("select","sl-chart-select");select.setAttribute("aria-label","Chart genre");
  const rooms=(feed.rooms||[]).map(r=>r[0]);const names=[...rooms,...feed.sources.map(s=>s[0]).filter(n=>!rooms.some(r=>norm(r)===norm(n)))];for(const name of names){const o=make("option",null,name);o.value=name;select.append(o)}select.value=rooms[0]||"UK Dance";
  const area=make("div","sl-chart-area");const draw=()=>area.replaceChildren(chartPanel(select.value));select.addEventListener("change",draw);panel.append(select,area);draw();return panel}
+// Reuse the native genre tabs and their original click handlers. The old
+// Top 10 list remains intact but is hidden while the source-dated chart is open.
+let roomName="",chartSelected=null;
+const tabName=b=>b.textContent.trim().replace(/\s+/g," ");
+const isTop=b=>/^(?:top\s*10|top ten|archive picks)$/i.test(tabName(b));
+const isDiscover=b=>/^discover\s*10$/i.test(tabName(b));
+const selected=b=>b.matches(".active,.on,.selected,.current,[aria-selected='true'],[aria-pressed='true'],[data-state='active']");
+function roomTitle(){const room=app.querySelector(".roomhead");return room?.querySelector(".roomcopy h1")?.textContent.trim()||room?.querySelector("h1")?.textContent.trim()||""}
+function clearRoomChart(){delete app.dataset.slChartMode;app.querySelector(".sl-chart-room")?.remove()}
+app.addEventListener("click",event=>{
+ const tab=event.target.closest?.(".tabs button");
+ const name=roomTitle();
+ if(!tab||!name||!app.contains(tab))return;
+ roomName=name;chartSelected=isTop(tab)||tab.dataset.slChartTop==="true";
+ if(!chartSelected)clearRoomChart();
+ // The native handler still runs, so its existing active-state styling and
+ // navigation remain authoritative. Mount after that handler redraws the room.
+ schedule();
+},true);
 function mount(){
  const active=document.querySelector(".bottom button.active");const genreList=app.querySelector(".signature-genres");if(genreList&&!genreList.querySelector(".sl-chart-directory"))genreList.prepend(directory());else if(active?.dataset.navLabel==="Genres"&&!app.querySelector(".roomhead")&&!app.querySelector(".sl-chart-directory"))app.prepend(directory());
  const explore=app.querySelector(".sl-d-explore");if(explore&&!explore.querySelector(".sl-chart-directory"))explore.append(directory());
- const room=app.querySelector(".roomhead");if(!room)return;
- const name=room.querySelector(".roomcopy h1")?.textContent.trim()||room.querySelector("h1")?.textContent.trim();if(!name)return;
- // Only retitle the existing chart tab, leaving its track controls and saved IDs intact.
- const tabs=app.querySelector(".tabs");if(tabs){
- for(const b of tabs.querySelectorAll("button")){if(/^(top\s*10|top ten)$/i.test(b.textContent.trim())){b.textContent="Archive picks";b.dataset.slArchive="true"}}
- }
- const previous=app.querySelector(".sl-chart-room");if(previous?.dataset.chartGenre===name&&previous.previousElementSibling===room)return;
- previous?.remove();const panel=make("details","sl-chart-room");panel.dataset.chartGenre=name;panel.append(make("summary","sl-chart-summary","Current chart / source →"),chartPanel(name));room.after(panel);
+ const name=roomTitle();
+ if(!name){roomName="";chartSelected=null;clearRoomChart();return}
+ if(roomName!==name){roomName=name;chartSelected=null;clearRoomChart()}
+ const tabs=app.querySelector(".tabs");
+ if(!tabs){clearRoomChart();return}
+ const buttons=Array.from(tabs.querySelectorAll("button"));
+ const top=buttons.find(b=>b.dataset.slChartTop==="true"||isTop(b)),discover=buttons.find(isDiscover);
+ if(!top){clearRoomChart();return}
+ top.dataset.slChartTop="true";
+ if(tabName(top)!=="Top 10")top.textContent="Top 10";
+ if(discover&&discover.parentElement===top.parentElement&&discover.nextElementSibling!==top)discover.after(top);
+ // On first entry use the native selected tab. Subsequent user choices are
+ // captured above and survive native DOM rebuilds without duplicating panels.
+ if(chartSelected===null)chartSelected=selected(top)&&!buttons.some(b=>b!==top&&selected(b));
+ if(!chartSelected){clearRoomChart();return}
+ app.dataset.slChartMode="top";
+ const previous=app.querySelector(".sl-chart-room");
+ if(previous?.dataset.chartGenre===name&&previous.previousElementSibling===tabs)return;
+ previous?.remove();
+ const panel=make("div","sl-chart-room sl-chart-inline");panel.dataset.chartGenre=name;
+ panel.setAttribute("aria-label",name+" Top 10");
+ panel.append(chartPanel(name));tabs.after(panel);
 }
+
 let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{pending=false;mount()})}};
 new MutationObserver(schedule).observe(app,{childList:true,subtree:true});schedule()
 })()
