@@ -35,7 +35,7 @@ function directory(){const panel=make("details","sl-chart-directory");panel.appe
 let roomName="",chartSelected=null;
 const tabName=b=>b.textContent.trim().replace(/\s+/g," ");
 const isTop=b=>/^(?:top\s*10|top ten|archive picks)$/i.test(tabName(b));
-const isDiscover=b=>/^discover\s*10$/i.test(tabName(b));
+const isDiscover=b=>norm(tabName(b))==="discover10";
 const selected=b=>b.matches(".active,.on,.selected,.current,[aria-selected='true'],[aria-pressed='true'],[data-state='active']");
 function roomTitle(){const room=app.querySelector(".roomhead");return room?.querySelector(".roomcopy h1")?.textContent.trim()||room?.querySelector("h1")?.textContent.trim()||""}
 function clearRoomChart(){delete app.dataset.slChartMode;app.querySelector(".sl-chart-room")?.remove()}
