@@ -1385,6 +1385,67 @@
           "artist": "Teriyaki Boyz"
         }
       ]
+    },
+    {
+      "id": "grime-live",
+      "genre": "140 / Deep Dubstep / Grime",
+      "source": "BeatStats LIVE — latest Beatport genre track chart",
+      "url": "https://www.beatstats.com/tracks/home/list?genre=95&live=1",
+      "checked": "2026-11-28",
+      "status": "verified",
+      "note": "Combined global retailer category, not a standalone UK grime chart. Source checked 28 November; ranks may change.",
+      "rows": [
+        {
+          "rank": 1,
+          "artist": "Banditt, Zero (UK)",
+          "title": "Dubstep Not 140"
+        },
+        {
+          "rank": 2,
+          "artist": "Simula",
+          "title": "Avarice"
+        },
+        {
+          "rank": 3,
+          "artist": "Casey Club",
+          "title": "Mortified"
+        },
+        {
+          "rank": 4,
+          "artist": "Flava D, Stush, Peekaboo",
+          "title": "Energy"
+        },
+        {
+          "rank": 5,
+          "artist": "Skepta, Fred again.., PlaqueBoyMax",
+          "title": "Victory Lap"
+        },
+        {
+          "rank": 6,
+          "artist": "Riko Dan, Flava D, Hamdi",
+          "title": "Dubstep Proper"
+        },
+        {
+          "rank": 7,
+          "artist": "Simula",
+          "title": "Bare Riddim"
+        },
+        {
+          "rank": 8,
+          "artist": "LYNY",
+          "title": "Disc Jockey"
+        },
+        {
+          "rank": 9,
+          "artist": "Top Cat, Sir Spyro",
+          "title": "Sharp"
+        },
+        {
+          "rank": 10,
+          "artist": "Visages",
+          "title": "Chat Too Much"
+        }
+      ]
     }
   ],
   "sources": [
@@ -1519,7 +1580,8 @@
     ],
     [
       "140 / Deep Dubstep / Grime",
-      "https://www.beatport.com/genre/140-deep-dubstep-grime/95/top-100"
+      "https://www.beatstats.com/tracks/home/list?genre=95&live=1",
+      "grime-live"
     ],
     [
       "Lounge / Chill Out",
@@ -1595,7 +1657,7 @@
     [
       "Grime",
       "140 / Deep Dubstep / Grime",
-      "Combined genre chart."
+      "Combined Beatport genre chart via BeatStats LIVE; not a standalone grime ranking."
     ],
     [
       "R&B",
