@@ -2136,5 +2136,39 @@
       "evidence": "Becky Hill Official artist channel music video",
       "checked": "2026-11-28"
     }
-  }
+  },
+  "reviewedNativeEmbeds": [
+    {
+      "title": "No Problem",
+      "artist": "Chase & Status",
+      "originalUrl": "https://music.youtube.com/search?q=Chase%20%26%20Status%20No%20Problem",
+      "source": "https://www.youtube.com/watch?v=Sss9aNbtEpA",
+      "evidence": "https://ukf.com/read/tbt-chase-status-no-problem/",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "If We Ever",
+      "artist": "High Contrast",
+      "originalUrl": "https://music.youtube.com/search?q=High%20Contrast%20If%20We%20Ever",
+      "source": "https://www.youtube.com/watch?v=Pz1W1OLkw14",
+      "evidence": "Hospital Records listing; https://www.youtube.com/watch?v=Pz1W1OLkw14",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "Memory Lane",
+      "artist": "Netsky",
+      "originalUrl": "https://music.youtube.com/search?q=Netsky%20Memory%20Lane",
+      "source": "https://www.youtube.com/watch?v=DpYdXERlkFk",
+      "evidence": "Hospital Records verified channel; https://www.youtube.com/watch?v=DpYdXERlkFk",
+      "checked": "2026-11-28"
+    },
+    {
+      "title": "All Night",
+      "artist": "Camo & Krooked",
+      "originalUrl": "https://music.youtube.com/search?q=Camo%20%26%20Krooked%20All%20Night",
+      "source": "https://www.youtube.com/watch?v=iQfwIhnEe8s",
+      "evidence": "Hospital Records official video; https://www.youtube.com/watch?v=iQfwIhnEe8s",
+      "checked": "2026-11-28"
+    }
+  ]
 }
