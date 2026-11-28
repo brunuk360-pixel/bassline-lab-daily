@@ -66,8 +66,18 @@ const server=http.createServer((req,res)=>{
  await clickStable(".sl-d-entry");await page.waitForSelector(".sl-discovery-dialog[open]");assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
  const edition=await page.evaluate(()=>{const D=window.__slDiscovery,today=new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());const f=D.editorialFeature;if(f?.date!==today||f.ids.length!==10)return null;return {expected:f.ids.map(id=>D.items.find(r=>r[0]===id)?.[1]),actual:[...document.querySelectorAll(".sl-discovery-dialog .sl-d-list")][0]&&[...document.querySelectorAll(".sl-discovery-dialog .sl-d-list:first-of-type .sl-d-record h3")].slice(0,10).map(x=>x.textContent),firstList:[...document.querySelector(".sl-discovery-dialog .sl-d-list")?.querySelectorAll(".sl-d-record h3")||[]].map(x=>x.textContent)}});
  if(edition)assert.deepEqual(edition.firstList,edition.expected,"today's editorial release order");
+ const shelf=await page.evaluate(()=>{const rows=[...document.querySelectorAll(".sl-d-daily-shelf>.sl-d-daily-row")];return {count:rows.length,unique:new Set(rows.map(n=>n.querySelector(".sl-d-daily-detail").getAttribute("aria-label"))).size,archiveInline:!!document.querySelector(".sl-d-catalogue"),visibleExtras:[...document.querySelectorAll(".sl-d-daily-more")].every(d=>!d.open),controls:rows.every(n=>[...n.querySelectorAll(".sl-d-daily-controls button")].every(b=>b.getBoundingClientRect().height>=44)),art:rows.every(n=>{const i=n.querySelector(".sl-d-small-cover");return !i||Object.values(window.__slDiscovery.artwork).includes(i.getAttribute("src"))})}});
+ assert.equal(shelf.count,10);assert.equal(shelf.unique,10);assert.ok(!shelf.archiveInline&&shelf.visibleExtras&&shelf.controls&&shelf.art,"Compact verified daily shelf without expanded archive or guide");
+ for(const width of [320,390,430]){await page.setViewport({width,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await settle();assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false,width+" daily shelf overflow");}
+ await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});await settle();
+
  const listen=await page.evaluate(()=>{const b=[...document.querySelectorAll(".sl-discovery-dialog button")].find(x=>x.textContent.includes("Start listening"));if(!b)return false;b.click();return true});assert.ok(listen);
  await page.waitForSelector(".sl-d-queue");assert.ok(await page.$(".sl-d-queue-row"));
+ assert.equal(await page.$eval(".sl-d-queue",d=>d.open),false,"Listening queue starts collapsed");
+ assert.equal(await page.$eval(".sl-d-queue-row",n=>n.getClientRects().length),0,"Queue rows initially hidden");
+ await clickStable(".sl-d-queue summary");assert.equal(await page.$eval(".sl-d-queue",d=>d.open),true);assert.ok(await page.$eval(".sl-d-queue-row",n=>n.getClientRects().length>0));
+ await clickStable(".sl-d-queue summary");assert.equal(await page.$eval(".sl-d-queue",d=>d.open),false);
+
  assert.ok(await page.$(".sl-d-release-hero h1"));assert.equal(await page.evaluate(()=>document.querySelectorAll(".sl-d-release-meta dt").length),3);assert.equal(await page.$eval(".sl-discovery-dialog",d=>d.scrollWidth>d.clientWidth+2),false);
  await page.click(".sl-d-close");await page.waitForFunction(()=>!document.querySelector(".sl-discovery-dialog")?.open);
  });
@@ -322,6 +332,7 @@ const server=http.createServer((req,res)=>{
  await nav("Today");
  await page.evaluate(()=>{const ids=["allnight","baddadan","fire","backbone"];const records=ids.map(id=>{const r=window.__slDiscovery.items.find(x=>x[0]===id);return {id:r[0],title:r[1],artist:r[2],url:r[6]}});window.SUBLEVELPlayer.play(records[0],records)});
  await page.waitForSelector(".sl-player iframe");await page.evaluate(()=>window.__qaEditFrame=document.querySelector(".sl-player iframe"));
+ assert.equal(await page.$eval(".sl-p-queue",n=>n.open),false,"New persistent player session queue starts collapsed");
  await page.$eval(".sl-p-queue",n=>n.open=true);
  const before=await page.$$eval(".sl-p-queue-select",nodes=>nodes.map(n=>n.textContent.replace(/^\d+\. /,"")));
  await page.click(".sl-p-queue-row:nth-child(3) .sl-p-queue-edit:first-child");
