@@ -119,6 +119,8 @@ def home():
       WHERE m.active GROUP BY m.id,m.handle HAVING count(f.id)>=5
       ORDER BY score DESC,votes DESC,m.handle LIMIT 20""")
     return render_template("page.html",view="home",tracks=tracks,chart=chart,genre=genre,genres=GENRES)
+@app.get("/community-guide")
+def community_guide():return render_template("page.html",view="guide")
 @app.get("/join")
 def join_page():return render_template("page.html",view="join")
 @app.post("/join")
@@ -197,6 +199,20 @@ def rate(track_id):
     db().execute("""INSERT INTO feedback(track,author,rating,body) VALUES(%s,%s,%s,%s)
     ON CONFLICT(track,author) DO UPDATE SET rating=EXCLUDED.rating,body=EXCLUDED.body,status='pending',created=now()""",(track_id,uid,rating,body))
     flash("Feedback sent for review. Only approved ratings count.");return redirect(url_for("track",track_id=track_id))
+@app.post("/track/<int:track_id>/withdraw")
+def withdraw_track(track_id):
+    uid=member();limit("withdraw",20,uid)
+    # An owner can withdraw their own pending or published recording only.
+    changed=one("UPDATE tracks SET status='hidden' WHERE id=%s AND owner=%s RETURNING id",(track_id,uid))
+    if not changed:abort(404)
+    flash("Track withdrawn from public discovery and rankings. Your linked release has not been deleted.")
+    return redirect(url_for("profile",handle=g.user["handle"]))
+@app.post("/track/<int:track_id>/withdraw-feedback")
+def withdraw_feedback(track_id):
+    uid=member();limit("withdraw-feedback",20,uid);accessible_track(track_id)
+    db().execute("DELETE FROM feedback WHERE track=%s AND author=%s",(track_id,uid))
+    flash("Your feedback and rating have been removed.")
+    return redirect(url_for("track",track_id=track_id))
 @app.post("/track/<int:track_id>/report")
 def report(track_id):
     uid=member();limit("report",10,uid);accessible_track(track_id)
@@ -239,6 +255,7 @@ def delete_account():
 @app.errorhandler(401)
 @app.errorhandler(403)
 @app.errorhandler(404)
+@app.errorhandler(413)
 @app.errorhandler(429)
 def error(e):return render_template("page.html",view="error",error=e),e.code
 
