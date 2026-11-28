@@ -54,5 +54,27 @@ def resolve_embeds(data):
     for key,id in {"allnight":"3FToEEIBUkUpZvnYuemi4h","backbone":"3HrHhTWonBqF4mDasi8xvC","baddadan":"2ZWmmrWUgDBcPSLihBMvhg"}.items():
         if any(r[0]==key for r in data["items"]):
             entries[key]={"provider":"spotify","kind":"track","id":id,"source":"https://open.spotify.com/track/"+id}
+    # Reviewed exact provider pages, not search result guesses. Use release kind
+    # for albums rather than substituting their title track.
+    reviewed={
+        "disconnect":("spotify","track","3VFaV7Mw0di4XFE84eHnrC"),
+        "blind-faith":("spotify","track","3a6DcFuex0LLYBJgQrglXR"),
+        "breathe-remix":("spotify","track","5gE6g5E0CKVestTOca0ZGN"),
+        "everlasting":("spotify","track","44RYb3cMlUwn8AFboEMGUl"),
+        "memory":("spotify","track","4jDHaCGAxHIqEWihIJQHZQ"),
+        "gold":("spotify","track","06tTkvSWZkBEdvq2zceVrq"),
+        "ultra":("spotify","track","422w50EAk1fhpXrqOsYlpv"),
+        "apex":("spotify","track","18IVOQQ6apJcij5vHgWmEz"),
+        "fp-crush":("spotify","album","1WwZwdTICfaZI51BIIEN9z"),
+        "burial-untrue":("spotify","album","1iRPiEYHIX2zpF8lkW54SK"),
+        "burial-debut":("spotify","album","1KMYOAJMs0U1rObvPuGsJE"),
+        "fire":("youtube","video","Gffc7aHcP3k"),
+        "movearound":("youtube","video","g2vm79u5E1I"),
+    }
+    ids={r[0] for r in data["items"]}
+    for key,(provider,kind,id) in reviewed.items():
+        if key not in ids or key in entries:continue
+        source=("https://open.spotify.com/"+kind+"/"+id if provider=="spotify" else "https://www.youtube.com/watch?v="+id)
+        entries[key]={"provider":provider,"kind":kind,"id":id,"source":source}
     print("Official embed identities resolved:",len(entries),"of",len(data["items"]),flush=True)
     return entries
