@@ -34,7 +34,9 @@
         {
           "rank": 5,
           "title": "DANCING ON MY OWN",
-          "artist": "ROBYN"
+          "artist": "ROBYN",
+          "embedUrl": "https://open.spotify.com/track/1FlJgDVsg00v8ZVB6njanE",
+          "url": "https://open.spotify.com/track/1FlJgDVsg00v8ZVB6njanE"
         },
         {
           "rank": 6,
@@ -951,12 +953,16 @@
         {
           "rank": 2,
           "title": "RAINDANCE",
-          "artist": "DAVE/TEMS"
+          "artist": "DAVE/TEMS",
+          "embedUrl": "https://open.spotify.com/track/5XDOInNwslPcQM8xv2rUkL",
+          "url": "https://open.spotify.com/track/5XDOInNwslPcQM8xv2rUkL"
         },
         {
           "rank": 3,
           "title": "NO SCRUBS",
-          "artist": "TLC"
+          "artist": "TLC",
+          "embedUrl": "https://open.spotify.com/track/4fgeZ3ItvsqGpBQrqu7re6",
+          "url": "https://open.spotify.com/track/4fgeZ3ItvsqGpBQrqu7re6"
         },
         {
           "rank": 4,
@@ -976,7 +982,9 @@
         {
           "rank": 7,
           "title": "SURE THING",
-          "artist": "MIGUEL"
+          "artist": "MIGUEL",
+          "embedUrl": "https://open.spotify.com/track/0JXXNGljqupsJaZsgSbMZV",
+          "url": "https://open.spotify.com/track/0JXXNGljqupsJaZsgSbMZV"
         },
         {
           "rank": 8,
@@ -986,7 +994,9 @@
         {
           "rank": 9,
           "title": "SAVE YOUR TEARS",
-          "artist": "WEEKND"
+          "artist": "WEEKND",
+          "embedUrl": "https://open.spotify.com/track/0nbqlUHhCJrmWHVGGczfIc",
+          "url": "https://open.spotify.com/track/0nbqlUHhCJrmWHVGGczfIc"
         },
         {
           "rank": 10,
