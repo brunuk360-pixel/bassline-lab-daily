@@ -39,7 +39,9 @@
           "title": "DANCING ON MY OWN",
           "artist": "ROBYN",
           "embedUrl": "https://open.spotify.com/track/1FlJgDVsg00v8ZVB6njanE",
-          "url": "https://open.spotify.com/track/1FlJgDVsg00v8ZVB6njanE"
+          "url": "https://open.spotify.com/track/1FlJgDVsg00v8ZVB6njanE",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/4d/32/29/4d3229e6-018a-2f3b-5213-a6fcc50a7085/00602527428949.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/dancing-on-my-own/1444873630?i=1444873822&uo=4"
         },
         {
           "rank": 6,
@@ -164,7 +166,10 @@
         {
           "rank": 5,
           "title": "Let Love In (Extended Mix)",
-          "artist": "Mirko & Meex"
+          "artist": "Mirko & Meex",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/0f/51/22/0f512253-933d-912d-d1c1-90d9c7bee565/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/let-love-in-extended-mix/6814870740?i=6814870741&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/let-love-in-extended-mix/6814870740?i=6814870741"
         },
         {
           "rank": 6,
@@ -303,7 +308,10 @@
         {
           "rank": 6,
           "title": "Resonanz",
-          "artist": "Oliver Huntemann"
+          "artist": "Oliver Huntemann",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/5a/8a/67/5a8a6790-5607-9c32-f66a-d1695017fa96/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/resonanz/6819739505?i=6819739508&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/resonanz/6819739505?i=6819739508"
         },
         {
           "rank": 7,
@@ -367,7 +375,10 @@
         {
           "rank": 6,
           "title": "Into The Heat (TshegoTMM & Vencer Cafe Garage Remix)",
-          "artist": "Tracksuit Society"
+          "artist": "Tracksuit Society",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a8/d9/3f/a8d93f7d-83c2-09ac-b36c-19667ec815f5/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/into-the-heat-tshegotmm-vencer-cafe-garage-remix/6828005461?i=6828005464&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/into-the-heat-tshegotmm-vencer-cafe-garage-remix/6828005461?i=6828005464"
         },
         {
           "rank": 7,
@@ -431,7 +442,10 @@
         {
           "rank": 6,
           "title": "Ileke (Extended)",
-          "artist": "Pablo Fierro"
+          "artist": "Pablo Fierro",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/43/dd/b8/43ddb812-62d7-6160-f470-01849a70670d/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/ileke-extended/6822013410?i=6822013411&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/ileke-extended/6822013410?i=6822013411"
         },
         {
           "rank": 7,
@@ -607,19 +621,25 @@
           "rank": 2,
           "title": "Smokescreen",
           "artist": "Zero T",
-          "url": "https://www.traxsource.com/track/12796032/smokescreen"
+          "url": "https://www.traxsource.com/track/12796032/smokescreen",
+          "art": "https://geo-static.traxsource.com/files/images/46b78969bad9716e3eae08b4275fc796.jpg",
+          "artSource": "https://www.traxsource.com/title/2374508/seventeen"
         },
         {
           "rank": 3,
           "title": "The Alchemist (Original Mix)",
           "artist": "Jamie Van Goulden",
-          "url": "https://www.traxsource.com/track/14453898/the-alchemist-original-mix"
+          "url": "https://www.traxsource.com/track/14453898/the-alchemist-original-mix",
+          "art": "https://geo-static.traxsource.com/files/images/9c55fe4a61c68329f7de56ac17b6b7cd.jpg",
+          "artSource": "https://www.traxsource.com/title/2737753/keep-off-the-grass-ep"
         },
         {
           "rank": 4,
           "title": "That Thing",
           "artist": "Unknown Artist",
-          "url": "https://www.traxsource.com/track/13746399/that-thing"
+          "url": "https://www.traxsource.com/track/13746399/that-thing",
+          "art": "https://geo-static.traxsource.com/files/images/179c050e19f2cca60d614e983eca0532.jpg",
+          "artSource": "https://www.traxsource.com/title/2579159/archives-volume-1"
         },
         {
           "rank": 5,
@@ -634,7 +654,9 @@
           "rank": 6,
           "title": "Happy Feelings (Original Mix)",
           "artist": "Soultec",
-          "url": "https://www.traxsource.com/track/13657951/happy-feelings-original-mix"
+          "url": "https://www.traxsource.com/track/13657951/happy-feelings-original-mix",
+          "art": "https://i.scdn.co/image/ab67616d00004851973df1cf524adc503be7f8ea",
+          "artSource": "https://drumandbassuk.com/artist/soultec/happy-feelings-situations-52240"
         },
         {
           "rank": 7,
@@ -655,14 +677,18 @@
           "rank": 9,
           "title": "BACK 2 LIFE (Extended Mix)",
           "artist": "Sigma, Soul II Soul, Capo Lee, Zimma, Liv Campbell",
-          "url": "https://www.traxsource.com/track/14741001/back-2-life-extended-mix"
+          "url": "https://www.traxsource.com/track/14741001/back-2-life-extended-mix",
+          "art": "https://www.beatstats.com/images/track/large/29130923.jpg?version=36652",
+          "artSource": "https://www.beatstats.com/track/back-2-life/29130923?genre=0&period=2"
         },
         {
           "rank": 10,
           "title": "Brown Paper Bag",
           "artist": "Roni Size, Reprazent",
           "url": "https://www.traxsource.com/track/13652303/brown-paper-bag",
-          "embedUrl": "https://open.spotify.com/track/164ZHERUnHHzv8gwYhfbYE"
+          "embedUrl": "https://open.spotify.com/track/164ZHERUnHHzv8gwYhfbYE",
+          "art": "https://i.scdn.co/image/ab67616d00004851baa1c20e97965712546d462d",
+          "artSource": "https://drumandbassuk.com/artist/reprazent/brown-paper-bag-remixes-51494"
         }
       ]
     },
@@ -1336,7 +1362,10 @@
         {
           "rank": 5,
           "title": "Speedway",
-          "artist": "Commodo"
+          "artist": "Commodo",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/6a/58/84/6a58849f-c249-2d04-1be7-a227d66382e3/cover.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/speedway/6802389027?i=6802389504&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/speedway/6802389027?i=6802389504"
         },
         {
           "rank": 6,
@@ -1467,7 +1496,10 @@
         {
           "rank": 5,
           "title": "Eyes Cut Deeper",
-          "artist": "Subtronics & Inéz"
+          "artist": "Subtronics & Inéz",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d6/9d/98/d69d9804-90d8-4374-3cc5-6100400ae9fb/663918949559.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/eyes-cut-deeper/1890056751?i=1890056754&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/eyes-cut-deeper/1890056751?i=1890056754"
         },
         {
           "rank": 6,
@@ -1595,7 +1627,10 @@
         {
           "rank": 5,
           "artist": "Sammy Virji & Skepta",
-          "title": "Cops & Robbers"
+          "title": "Cops & Robbers",
+          "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/86/00/65/8600654e-2c65-0bf1-879d-f14e226a1d4f/25UMGIM69812.rgb.jpg/400x400bb.jpg",
+          "artSource": "https://music.apple.com/gb/album/cops-robbers/1814574193?i=1814574286&uo=4",
+          "embedUrl": "https://music.apple.com/gb/album/cops-robbers/1814574193?i=1814574286"
         },
         {
           "rank": 6,
@@ -1892,5 +1927,5 @@
       "Broader DJ-play category, not trip-hop-only; sample: 85 DJs and 77 sets."
     ]
   ],
-  "lookupCursor": 72
+  "lookupCursor": 84
 }
