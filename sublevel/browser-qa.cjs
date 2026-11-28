@@ -49,7 +49,7 @@ const server=http.createServer((req,res)=>{
  for(const room of rooms){
    await page.select(".sl-chart-select",room);await settle();
    const expected=await page.evaluate(name=>{const f=window.__slCharts,room=f.rooms.find(r=>r[0]===name),source=f.sources.find(s=>s[0]===room[1]),chart=f.charts.find(c=>c.id===source[2]);return chart.rows.map(r=>r.title)},room);
-   const actual=await page.$eval(".sl-chart-directory .sl-chart-row strong",rows=>rows.map(r=>r.textContent));
+   const actual=await page.evaluate(()=>Array.from(document.querySelectorAll(".sl-chart-directory .sl-chart-row strong"),r=>r.textContent));
    assert.equal(actual.length,10,room);
    assert.deepEqual(actual,expected,room+" ranking order");
    assert.equal(await overflow(),false,room+" horizontal overflow");
