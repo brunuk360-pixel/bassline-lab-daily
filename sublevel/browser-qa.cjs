@@ -48,7 +48,11 @@ const server=http.createServer((req,res)=>{
  assert.equal(rooms.length,20);
  for(const room of rooms){
    await page.select(".sl-chart-select",room);await settle();
-   assert.equal(await page.$eval(".sl-chart-directory .sl-chart-row",rows=>rows.length),10,room);
+   const expected=await page.evaluate(name=>{const f=window.__slCharts,room=f.rooms.find(r=>r[0]===name),source=f.sources.find(s=>s[0]===room[1]),chart=f.charts.find(c=>c.id===source[2]);return chart.rows.map(r=>r.title)},room);
+   const actual=await page.$eval(".sl-chart-directory .sl-chart-row strong",rows=>rows.map(r=>r.textContent));
+   assert.equal(actual.length,10,room);
+   assert.deepEqual(actual,expected,room+" ranking order");
+   assert.equal(await overflow(),false,room+" horizontal overflow");
    assert.ok(await page.$eval(".sl-chart-directory .sl-chart-status",n=>n.textContent.trim().length>0),room);
  }
  });
