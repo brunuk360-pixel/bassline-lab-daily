@@ -99,7 +99,55 @@ app.addEventListener("click",event=>{
  // navigation remain authoritative. Mount after that handler redraws the room.
  schedule();
 },true);
+// Record of the Day rotation: only source-ranked hits with actual art and
+// an official in-site player. Never overwrite the original daily selection.
+let recordBag=[],recordSeen=new Set(),recordLast=null;
+function recordHitPool(){
+ const seen=new Set(),pool=[];
+ for(const chart of feed.charts){
+  if(!["verified","weekly"].includes(chart.status))continue;
+  for(const r of chart.rows){
+   if(!Number.isInteger(r.rank)||r.rank<1||r.rank>10||!r.art||!r.artSource||!r.title||!r.artist)continue;
+   const key=norm(r.title)+"|"+norm(r.artist);
+   const track={id:"chart:"+chart.id+":"+r.title+":"+r.artist,title:r.title,artist:r.artist,url:r.url||r.embedUrl||r.embedSpec?.source||chart.url,embedUrl:r.embedUrl,alternateEmbedUrl:r.alternateEmbedUrl,embedSpec:r.embedSpec,art:r.art};
+   if(seen.has(key)||!window.SUBLEVELPlayer?.available(track))continue;
+   seen.add(key);pool.push({key,track,chart,rank:r.rank})
+  }
+ }
+ return pool
+}
+function recordRotation(){
+ const original=app.querySelector(".night-home .ed-rotation .ed-record:not(.sl-rod-hit)");
+ if(!original||original.parentElement.querySelector(".sl-rod-controls"))return;
+ const pool=recordHitPool();if(!pool.length)return;
+ const wrap=make("div","sl-rod-controls"),shuffle=make("button","sl-rod-shuffle","⤨ Random hit"),restore=make("button","sl-rod-restore","↶ Today's record");
+ shuffle.type=restore.type="button";restore.hidden=true;
+ shuffle.setAttribute("aria-label","Choose another top ten chart hit");
+ const output=make("section","sl-rod-output");output.setAttribute("aria-live","polite");output.hidden=true;
+ function draw(hit){
+  const {track,chart,rank}=hit,card=make("article","ed-record sl-rod-hit");
+  card.dataset.recordKey=hit.key;card.dataset.chartId=chart.id;card.dataset.rank=String(rank);
+  const img=make("img","sl-rod-cover");img.src=track.art;img.alt=track.title+" release artwork";img.addEventListener("error",()=>img.remove(),{once:true});
+  const copy=make("div","sl-rod-copy");copy.append(make("span","sl-rod-kicker","RECORD OF THE DAY / RANDOM HIT"),make("strong",null,track.title),make("small",null,track.artist),make("small","sl-rod-rank","#"+rank+" · "+chart.genre));
+  card.append(img,copy);
+  const actions=make("div","sl-rod-actions");actions.append(window.SUBLEVELPlayer.action(track,[track]),link("Chart source ↗",chart.url));
+  const meta=make("p","sl-rod-date",chart.source+" · "+(chart.from?chart.from+" to "+chart.through:"Checked "+chart.checked));
+  output.replaceChildren(card,actions,meta);original.classList.add("sl-rod-hidden");output.hidden=false;restore.hidden=false
+ }
+ shuffle.addEventListener("click",()=>{
+  const live=recordHitPool();
+  let remaining=live.filter(h=>!recordSeen.has(h.key));
+  if(!remaining.length){recordSeen.clear();remaining=live}
+  if(remaining.length>1)remaining=remaining.filter(h=>h.key!==recordLast);
+  if(!remaining.length)return;
+  const hit=remaining[Math.floor(Math.random()*remaining.length)];
+  recordSeen.add(hit.key);recordLast=hit.key;draw(hit)
+ });
+ restore.addEventListener("click",()=>{output.hidden=true;output.replaceChildren();original.classList.remove("sl-rod-hidden");restore.hidden=true});
+ wrap.append(shuffle,restore);original.after(wrap,output)
+}
 function mount(){
+ recordRotation();
  const active=document.querySelector(".bottom button.active");const genreList=app.querySelector(".signature-genres");if(genreList&&!genreList.querySelector(".sl-chart-directory"))genreList.prepend(directory());else if(active?.dataset.navLabel==="Genres"&&!app.querySelector(".roomhead")&&!app.querySelector(".sl-chart-directory"))app.prepend(directory());
  const explore=app.querySelector(".sl-d-explore");if(explore&&!explore.querySelector(".sl-chart-directory"))explore.append(directory());
  const name=roomTitle();
