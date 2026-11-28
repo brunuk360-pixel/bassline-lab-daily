@@ -628,7 +628,8 @@
           "artist": "Zero T",
           "url": "https://www.traxsource.com/track/12796032/smokescreen",
           "art": "https://geo-static.traxsource.com/files/images/46b78969bad9716e3eae08b4275fc796.jpg",
-          "artSource": "https://www.traxsource.com/title/2374508/seventeen"
+          "artSource": "https://www.traxsource.com/title/2374508/seventeen",
+          "reviewedBandcamp": "https://integralrecords.bandcamp.com/track/smokescreen"
         },
         {
           "rank": 3,
@@ -661,7 +662,8 @@
           "artist": "Soultec",
           "url": "https://www.traxsource.com/track/13657951/happy-feelings-original-mix",
           "art": "https://i.scdn.co/image/ab67616d00004851973df1cf524adc503be7f8ea",
-          "artSource": "https://drumandbassuk.com/artist/soultec/happy-feelings-situations-52240"
+          "artSource": "https://drumandbassuk.com/artist/soultec/happy-feelings-situations-52240",
+          "reviewedBandcamp": "https://soultecmusic.bandcamp.com/track/happy-feelings"
         },
         {
           "rank": 7,
