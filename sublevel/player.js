@@ -42,7 +42,7 @@ function editQueue(list,currentIndex,target,operation){
  return {items,index:items.findIndex(r=>r.id===current.id)}
 }
 function playerChoices(r,reviewed){
- const choices=[reviewed,fromURL(r?.embedUrl),fromURL(r?.alternateEmbedUrl),fromURL(r?.url)].filter(e=>e&&frame(e));
+ const choices=[reviewed,fromURL(r?.embedUrl),fromURL(r?.alternateEmbedUrl),r?.embedSpec?.provider==="bandcamp"&&/^https:\/\/[a-z0-9-]+\.bandcamp\.com\/track\/[\w.-]+\/?$/.test(r.embedSpec.source)&&r.embedSpec.kind==="track"?r.embedSpec:null,fromURL(r?.url)].filter(e=>e&&frame(e));
  const used=new Set();
  return choices.filter(e=>{const k=frame(e).src;if(used.has(k))return false;used.add(k);return true});
 }
