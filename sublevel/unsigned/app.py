@@ -74,7 +74,7 @@ def protect():
         if not g.user:session.clear()
 @app.after_request
 def headers(response):
-    response.headers["Content-Security-Policy"]="default-src 'none'; style-src 'self'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'; script-src 'self'; frame-src https://w.soundcloud.com https://www.youtube-nocookie.com https://bandcamp.com"
+    response.headers["Content-Security-Policy"]="default-src 'none'; style-src 'self'; img-src 'self' https://crate-music.onrender.com; form-action 'self'; base-uri 'none'; frame-ancestors 'none'; script-src 'self'; frame-src https://w.soundcloud.com https://www.youtube-nocookie.com https://bandcamp.com"
     response.headers["X-Content-Type-Options"]="nosniff"
     response.headers["Referrer-Policy"]="no-referrer"
     response.headers["Permissions-Policy"]="camera=(), microphone=(), geolocation=()"
