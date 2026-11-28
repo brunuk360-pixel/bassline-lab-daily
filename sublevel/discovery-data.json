@@ -1447,6 +1447,56 @@
       "source": "https://music.apple.com/gb/album/pimp-ep/6820636776",
       "evidence": "https://music.apple.com/gb/album/pimp-ep/6820636776?uo=4",
       "checked": "2026-11-28"
+    },
+    "axel-wrong": {
+      "title": "Wrong Intent",
+      "artist": "Axel Karakasis",
+      "provider": "apple",
+      "kind": "album",
+      "id": "6827241121",
+      "source": "https://music.apple.com/gb/album/wrong-intent-single/6827241121",
+      "evidence": "https://music.apple.com/gb/album/wrong-intent-single/6827241121?uo=4",
+      "checked": "2026-11-28"
+    },
+    "rendher-circles": {
+      "title": "Circles Thru My Mind",
+      "artist": "Rendher",
+      "provider": "apple",
+      "kind": "album",
+      "id": "6822793175",
+      "source": "https://music.apple.com/gb/album/circles-thru-my-mind-single/6822793175",
+      "evidence": "https://music.apple.com/gb/album/circles-thru-my-mind-single/6822793175?uo=4",
+      "checked": "2026-11-28"
+    },
+    "nightshift-translation": {
+      "title": "Translation",
+      "artist": "Nightshift",
+      "provider": "apple",
+      "kind": "album",
+      "id": "6837596750",
+      "source": "https://music.apple.com/gb/album/translation-single/6837596750",
+      "evidence": "https://music.apple.com/gb/album/translation-single/6837596750?uo=4",
+      "checked": "2026-11-28"
+    },
+    "kenlai-eclipse": {
+      "title": "Eclipse",
+      "artist": "Kenlai",
+      "provider": "apple",
+      "kind": "album",
+      "id": "6836568575",
+      "source": "https://music.apple.com/gb/album/eclipse-single/6836568575",
+      "evidence": "https://music.apple.com/gb/album/eclipse-single/6836568575?uo=4",
+      "checked": "2026-11-28"
+    },
+    "hedust-ketacid": {
+      "title": "Ketacid",
+      "artist": "HedustMA, NBS000",
+      "provider": "apple",
+      "kind": "album",
+      "id": "6823775562",
+      "source": "https://music.apple.com/gb/album/ketacid-single/6823775562",
+      "evidence": "https://music.apple.com/gb/album/ketacid-single/6823775562?uo=4",
+      "checked": "2026-11-28"
     }
   },
   "reviewedArtwork": {
@@ -1634,6 +1684,60 @@
       "releaseUrl": "https://desolatmusicgroup.bandcamp.com/album/pimp",
       "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/31/65/e2/3165e248-9f2e-6d42-26b1-a257a199499e/cover.jpg/400x400bb.jpg",
       "source": "https://music.apple.com/gb/album/pimp-ep/6820636776?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "axel-wrong": {
+      "title": "Wrong Intent",
+      "artist": "Axel Karakasis",
+      "releaseUrl": "https://axelkarakasis.bandcamp.com/album/wrong-intent",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/fa/a6/76/faa6761c-287f-d7cf-feab-919cb97a42c2/cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/wrong-intent-single/6827241121?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "rendher-circles": {
+      "title": "Circles Thru My Mind",
+      "artist": "Rendher",
+      "releaseUrl": "https://deeperfect.bandcamp.com/album/circles-thru-my-mind",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a3/87/16/a3871691-42da-6171-e49a-8ba03f5e2fa7/5063857789257_cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/circles-thru-my-mind-single/6822793175?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "nightshift-translation": {
+      "title": "Translation",
+      "artist": "Nightshift",
+      "releaseUrl": "https://thirdmovement.bandcamp.com/album/translation",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f4/b0/ea/f4b0eaff-ff17-9488-c155-d58938fc391e/8717472381729.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/translation-single/6837596750?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "burial-untrue": {
+      "title": "Untrue",
+      "artist": "Burial",
+      "releaseUrl": "https://burial.bandcamp.com/album/untrue",
+      "art": "https://coverartarchive.org/release-group/fddedc4f-7a2e-3d7d-9ec5-1705c416f3f4/front-500",
+      "source": "https://musicbrainz.org/release-group/fddedc4f-7a2e-3d7d-9ec5-1705c416f3f4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "kenlai-eclipse": {
+      "title": "Eclipse",
+      "artist": "Kenlai",
+      "releaseUrl": "https://subnautique.bandcamp.com/album/eclipse",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5b/9d/47/5b9d4771-cb2a-89b4-d142-6a5cf642cb2c/5063857875394_cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/eclipse-single/6836568575?uo=4",
+      "checked": "2026-11-28",
+      "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
+    },
+    "hedust-ketacid": {
+      "title": "Ketacid",
+      "artist": "HedustMA, NBS000",
+      "releaseUrl": "https://ovnimoonrecords.bandcamp.com/album/ketacid",
+      "art": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/cf/8f/6a/cf8f6ac1-871a-2363-9c42-b04e9e08d9e8/708208258475_cover.jpg/400x400bb.jpg",
+      "source": "https://music.apple.com/gb/album/ketacid-single/6823775562?uo=4",
       "checked": "2026-11-28",
       "evidence": "Exact catalogue or documented album relationship; image response verified by 28 Nov build."
     }
