@@ -18,7 +18,7 @@ class CommunityTests(unittest.TestCase):
         self.assertIsNone(player_spec("https://artist.bandcamp.com/track/music","https://bandcamp.com/EmbeddedPlayer/album=123/"))
         self.assertTrue(player_spec("https://artist.bandcamp.com/track/music","https://bandcamp.com/EmbeddedPlayer/track=123/")["src"].startswith("https://bandcamp.com/EmbeddedPlayer/track=123/"))
     def test_post_requires_csrf(self):
-        for path in ["/join","/login","/logout","/profile","/submit","/track/1/feedback","/track/1/report","/moderation/unlock","/moderation/track/1","/account/delete","/track/1/withdraw","/track/1/withdraw-feedback"]:
+        for path in ["/join","/login","/logout","/profile","/submit","/track/1/feedback","/track/1/report","/moderation/unlock","/moderation/track/1","/account/delete","/account/password","/account/export","/track/1/withdraw","/track/1/withdraw-feedback"]:
             self.assertEqual(self.client.post(path).status_code,403,path)
     def test_login_form_security_headers(self):
         response=self.client.get("/login")
@@ -42,6 +42,6 @@ class CommunityTests(unittest.TestCase):
         self.assertIn(b"not a complete privacy notice",response.data)
     def test_guest_cannot_withdraw(self):
         with self.client.session_transaction() as sess:sess["csrf"]="test-csrf"
-        for path in ("/track/1/withdraw","/track/1/withdraw-feedback"):
+        for path in ("/track/1/withdraw","/track/1/withdraw-feedback","/account/password","/account/export"):
             self.assertEqual(self.client.post(path,data={"csrf":"test-csrf"}).status_code,401)
 if __name__=="__main__":unittest.main()
