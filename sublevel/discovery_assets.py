@@ -26,6 +26,9 @@ def get_art(url):
         host=urlparse(url).hostname or ""
         if not (host.endswith(".bandcamp.com") or host=="www.hospitalrecords.com"): return ""
         with urlopen(Request(url,headers={"User-Agent":"Mozilla/5.0 (compatible; SUBLEVEL Editorial/1.1; https://crate-music.onrender.com/)","Accept":"text/html"}),timeout=7) as res:
+            final=urlparse(res.geturl())
+            original=urlparse(url)
+            if final.scheme!="https" or final.netloc!=original.netloc or final.path.rstrip("/")!=original.path.rstrip("/"):return ""
             parser=Meta();raw=res.read(2200000).decode("utf-8","replace");parser.feed(raw)
         # Bandcamp may provide the cover via release metadata rather than OpenGraph.
         for match in re.finditer(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',raw,re.I|re.S):
@@ -40,8 +43,14 @@ def get_art(url):
         for img in parser.images:
             src=urljoin(url,img)
             p=urlparse(src)
-            if img and p.scheme=="https" and (p.hostname or "").endswith((".bcbits.com",".shopify.com",".bandcamp.com")):
-                return src
+            if not img or not trusted_cover_url(src):continue
+            # Bandcamp release covers use the a-prefixed artwork ID, not
+            # the user/avatar image IDs or general label graphics.
+            if host.endswith(".bandcamp.com") and not ((p.hostname or "").endswith(".bcbits.com") and re.fullmatch(r"/img/a\d+_\d+\.(?:jpg|png|webp)",p.path,re.I)):continue
+            try:
+                with urlopen(Request(src,headers={"Accept":"image/*"}),timeout=4) as art:
+                    if art.headers.get("Content-Type","").startswith("image/") and art.read(16):return src
+            except Exception:continue
     except Exception: pass
     return ""
 
@@ -117,6 +126,14 @@ APPLE_TARGETS={
  "soulintent-corruptions":("Soul Intent","Corruptions Of Form","album"),
  "kenlai-eclipse":("Kenlai","Eclipse","album"),
  "hedust-ketacid":("HedustMA, NBS000","Ketacid","album"),
+ "hoax":("Hoax","Genesis","album"),
+ "owl":("Owl","Spectral Shadows EP","album"),
+ "elys":("Elys","Serenity","album"),
+ "ghost":("Ghost Snares","Protected EP","album"),
+ "lemon":("Lemon Ride","Impression EP","album"),
+ "kusht-quest":("Kusht","Quest","album"),
+ "siwotha-fall":("Siwotha You & Luna Sage","NACH DEM FALL","album"),
+ "toya-ngia":("Toya Delazy & Neekeetone","Ngiakuthanda","song"),
 }
 def exact_store_title(found,title,entity):
     if normalize(found)==normalize(title):return True
@@ -136,7 +153,7 @@ def apple_cover(spec):
             # Storefronts sometimes append the release format, not a different mix.
             if not exact_store_title(name,title,entity) or normalize(item.get("artistName",""))!=normalize(artist):continue
             art=item.get("artworkUrl100","")
-            source=item.get("trackViewUrl") or item.get("collectionViewUrl","")
+            source=item.get("trackViewUrl" if entity=="song" else "collectionViewUrl","")
             if not (urlparse(art).scheme=="https" and (urlparse(art).hostname or "").endswith(".mzstatic.com")):continue
             if urlparse(source).hostname not in ("music.apple.com","itunes.apple.com"):continue
             # Larger rendering of the same catalogue image, never a different image.
@@ -170,16 +187,24 @@ def cover_manifest(data):
         for row in data["items"] if row[0] in data["artwork"]
         and row[0] in data["artworkSources"] and trusted_cover_url(data["artwork"][row[0]])}
 
-def load_discovery(root):
-    data=json.loads((root/"discovery-data.json").read_text(encoding="utf-8"))
-    unique=list(dict.fromkeys(row[6] for row in data["items"]))
+def load_release_covers(data):
+    data["artwork"]={}
+    data["artworkSources"]={}
+    apply_reviewed_covers(data)
+    missing=[row for row in data["items"] if row[0] not in data["artwork"]]
+    unique=list(dict.fromkeys(row[6] for row in missing))
     with ThreadPoolExecutor(max_workers=8) as pool:
         images=dict(zip(unique,pool.map(get_art,unique)))
-    data["artwork"]={row[0]:images[row[6]] for row in data["items"] if images[row[6]]}
-    data["artworkSources"]={row[0]:row[6] for row in data["items"] if images[row[6]]}
-    # Durable manifest: verified release identities survive transient provider failures.
-    # Reviewed metadata takes precedence over a new, potentially different lookup.
-    apply_reviewed_covers(data)
+    for row in missing:
+        if images[row[6]]:
+            data["artwork"][row[0]]=images[row[6]]
+            data["artworkSources"][row[0]]=row[6]
+    print("Reviewed covers retained:",len(data["items"])-len(missing),"; release pages checked:",len(unique),flush=True)
+
+def load_discovery(root):
+    data=json.loads((root/"discovery-data.json").read_text(encoding="utf-8"))
+    # Reviewed images are not re-fetched on every daily build.
+    load_release_covers(data)
     group_cache={}
     deadline=time.monotonic()+24
     for k,(artist,title) in ALBUMS.items():
@@ -196,6 +221,7 @@ def load_discovery(root):
     # Bound requests per build and keep previous source coverage independent of
     # the availability of a secondary service.
     targets=[(k,v) for k,v in APPLE_TARGETS.items() if k not in data["artwork"] and any(row[0]==k for row in data["items"])]
+    data["exactAppleSources"]={}
     apple_count=0
     for offset in range(0,len(targets),3):
         batch=targets[offset:offset+3]
@@ -204,6 +230,8 @@ def load_discovery(root):
                 if art:
                     data["artwork"][key]=art
                     data["artworkSources"][key]=source
+                    entity=APPLE_TARGETS[key][2]
+                    data["exactAppleSources"][key]={"source":source,"kind":"track" if entity=="song" else "album"}
                     apple_count+=1
         if offset+3<len(targets):time.sleep(3.1)
     print("Apple exact-match cover additions:",apple_count)
