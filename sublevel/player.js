@@ -118,10 +118,10 @@ function adjacent(d){for(let i=index+d;i>=0&&i<items.length;i+=d)if(!playableOnl
 function refreshControls(){previous.disabled=adjacent(-1)<0;next.disabled=adjacent(1)<0;playableButton.textContent="Skip external-only: "+(playableOnly?"on":"off");playableButton.setAttribute("aria-pressed",String(playableOnly))}
 function renderProvider(r,e){
  const spec=frame(e);host.replaceChildren();activeID=r.id;activeProvider=e;
- original.href=r.url;original.textContent="Open original release ↗";
+ original.href=r.url;original.textContent=urlOf(r.url)?.hostname==="music.youtube.com"&&urlOf(r.url)?.pathname==="/search"?"Search YouTube Music ↗":"Open original release ↗";
  if(e?.source&&e.source!==r.url){providerLink.href=e.source;providerLink.textContent="Open "+(spec?.name||"provider")+" ↗";providerLink.hidden=false}else{providerLink.hidden=true;providerLink.removeAttribute("href")}
  if(spec){const f=make("iframe","sl-p-embed");f.src=spec.src;f.title=spec.name+" player — "+r.title;f.height=String(spec.height);f.allow="autoplay; encrypted-media; fullscreen; picture-in-picture";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";host.append(f);notice.textContent=spec.name==="Apple Music"?"Press play to preview. Full tracks require eligible Apple Music access. Availability depends on the provider.":"Press play in the "+spec.name+" player. Availability and playback length are controlled by the provider."}
- else notice.textContent="No verified embedded source for this selection. Use the original release link or choose the next record.";
+ else notice.textContent="No verified in-site source yet. You can search for this recording using the link below, or choose the next record.";
  const options=choices(r);providerButtons.replaceChildren();providerButtons.hidden=options.length<2;
  for(const item of options){const selected=frame(item).src===spec?.src;const b=button(frame(item).name,()=>{if(!selected){renderProvider(r,item);refreshQueue()}},"sl-p-button sl-p-provider");b.setAttribute("aria-pressed",String(selected));providerButtons.append(b)}
 }
@@ -154,9 +154,12 @@ function nativeRecord(row){
  // can become %27 when an href is resolved by the browser).
  const searchIdentity=value=>{const u=urlOf(value);if(!u||u.hostname!=="music.youtube.com"||u.pathname!=="/search"||u.hash||[...u.searchParams.keys()].some(k=>k!=="q")||u.searchParams.getAll("q").length!==1)return null;return u.searchParams.get("q")};
  const query=searchIdentity(url);
- const reviewed=(data?.reviewedNativeEmbeds||[]).find(v=>v.title===title&&(v.originalUrl===url||(query!==null&&searchIdentity(v.originalUrl)===query)));
- if(reviewed&&identityText(artist).startsWith(identityText(reviewed.artist))){
-  const track={id:"native:"+reviewed.title+":"+reviewed.artist,title,artist:reviewed.artist,url,embedUrl:reviewed.source};
+ const matches=v=>v.title===title&&(v.originalUrl===url||(query!==null&&searchIdentity(v.originalUrl)===query))&&identityText(artist).startsWith(identityText(v.artist));
+ const reviewed=(data?.reviewedNativeEmbeds||[]).find(matches);
+ const apple=(data?.reviewedNativeApple||[]).find(v=>matches(v)&&fromURL(v.source)?.provider==="apple"&&fromURL(v.source)?.kind==="track");
+ const preferred=reviewed||apple;
+ if(preferred){
+  const track={id:"native:"+preferred.title+":"+preferred.artist,title,artist:preferred.artist,url,embedUrl:preferred.source,alternateEmbedUrl:reviewed&&apple?apple.source:undefined};
   if(available(track))return track
  }
  const exact=r=>identityText(r.title)===identityText(title)&&identityText(r.artist)===identityText(artist);
@@ -176,7 +179,7 @@ function enhanceNative(app){
  for(const row of nativeRows(app)){
   const a=row.querySelector("a.play[href]");if(!a)continue;
   const r=nativeRecord(row),can=!!r&&available(r);
-  if(can){a.dataset.slNativePlay="true";a.setAttribute("aria-label","Play "+r.title+" here");a.title="Play here"}else if(a.dataset.slNativePlay){delete a.dataset.slNativePlay;a.removeAttribute("aria-label");a.removeAttribute("title")}
+  if(can){a.dataset.slNativePlay="true";a.setAttribute("aria-label","Play "+r.title+" here");a.title="Play here"}else if(r){delete a.dataset.slNativePlay;a.setAttribute("aria-label","Find playback for "+r.title);a.title="No verified embed yet — open listening options"}
  }
 }
 doc.addEventListener("click",e=>{
@@ -184,7 +187,9 @@ doc.addEventListener("click",e=>{
  const a=e.target.closest?.("#app .tracks:not(.sl-chart-native-list) a.play[href]");
  const app=doc.getElementById("app");if(!a||!app?.querySelector(".roomhead")||a.closest(".sl-chart-inline"))return;
  const row=a.closest(".track"),r=row&&nativeRecord(row);
- if(!r||!available(r))return;
+ if(!r)return;
+ // Keep the primary play action on-site, even when a verified source is missing.
+ // The player explicitly presents the original search link as an optional fallback.
  e.preventDefault();e.stopImmediatePropagation();
  play(r,nativeRows(app).map(nativeRecord).filter(Boolean))
 },true);
