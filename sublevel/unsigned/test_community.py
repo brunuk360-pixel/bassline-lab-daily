@@ -56,4 +56,15 @@ class CommunityTests(unittest.TestCase):
         self.assertEqual(response.headers["Cache-Control"],"no-store")
         self.assertIn(b'name="csrf"',response.data)
         self.assertIn(b"no email reset",response.data)
+    def test_screen_navigation_on_home_and_guide(self):
+        with patch("app.rows",return_value=[]):
+            for path in ("/","/community-guide","/login","/recover"):
+                response=self.client.get(path)
+                self.assertEqual(response.status_code,200)
+                self.assertIn(b'class="screen-nav"',response.data)
+                self.assertIn(b'href="/#rankings"',response.data)
+                self.assertIn(b'https://crate-music.onrender.com/',response.data)
+                if path!="/":self.assertIn(b'class="screen-back"',response.data)
+                else:self.assertIn(b'class="hero-photo"',response.data)
+                self.assertIn("img-src 'self' https://crate-music.onrender.com",response.headers["Content-Security-Policy"])
 if __name__=="__main__":unittest.main()
