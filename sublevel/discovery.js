@@ -343,7 +343,16 @@ file.addEventListener("change",async()=>{try{
  info.append(create("span","sl-d-kicker","LISTENING ROOM / "+r.tag),create("h1",null,r.title),create("p","sl-d-release-artist",r.artist));
  const metadata=create("dl","sl-d-release-meta");for(const [key,value] of [["Genre",r.genre],["Release date",r.date||"Not verified"],["Playback",window.SUBLEVELPlayer?.available(r)?"Official embedded source":"External source"]]){const field=create("div");field.append(create("dt",null,key),create("dd",null,value));metadata.append(field)}info.append(metadata);
  const primary=create("div","sl-d-actions sl-d-release-primary");if(window.SUBLEVELPlayer?.available(r))primary.append(window.SUBLEVELPlayer.action(r,queue.map(byId).filter(Boolean)));primary.append(link("Open original release ↗",r.url,"sl-d-button sl-d-primary"),saveButton(r.id));info.append(primary);hero.append(info);content.append(hero);
- const editorial=create("section","sl-d-release-editorial");editorial.append(create("span","sl-d-kicker","EDITORIAL NOTES"),create("p",null,r.note));content.append(editorial,playlistPicker(r.id));
+ const editorial=create("section","sl-d-release-editorial");editorial.append(create("span","sl-d-kicker","EDITORIAL NOTES"),create("p",null,r.note));content.append(editorial);
+ const facts=D.releaseFacts?.[r.id];
+ if(facts?.title===r.title&&facts.artist===r.artist&&facts.source===r.url&&Array.isArray(facts.tracks)){
+  const details=create("section","sl-d-release-tracklist");details.append(create("span","sl-d-kicker","FROM THE RELEASE PAGE"),create("h2",null,"Tracklist"));
+  if(facts.label)details.append(create("p","sl-d-muted","Label · "+facts.label));
+  const tracks=create("ol","sl-d-release-tracks");
+  facts.tracks.forEach(([title,duration],i)=>{const row=create("li");row.append(create("span","sl-d-track-number",String(i+1).padStart(2,"0")),create("strong",null,title),create("time",null,duration));tracks.append(row)});
+  details.append(tracks);if(facts.credits)details.append(create("p","sl-d-muted",facts.credits));details.append(link("Release tracklist & credits ↗",facts.source,"sl-d-art-credit"));content.append(details);
+ }
+ content.append(playlistPicker(r.id));
  const sources=create("details","sl-d-release-sources");sources.append(create("summary",null,"Find this release on other services"));const actions=create("div","sl-d-actions");actions.append(link("Search Spotify ↗",search(r.artist+" "+r.title)),link("Search YouTube Music ↗","https://music.youtube.com/search?q="+encodeURIComponent(r.artist+" "+r.title)),link("Search Apple Music ↗","https://music.apple.com/gb/search?term="+encodeURIComponent(r.artist+" "+r.title)));sources.append(actions,create("p","sl-d-muted","Search results may include different versions. Embedded playback and preview length depend on the provider."));content.append(sources);
  if(queue.length>1){const pager=create("div","sl-d-pager");const prev=button("← Previous",()=>move(-1)),next=button("Next →",()=>move(1));prev.disabled=position<=0;next.disabled=position>=queue.length-1;pager.append(prev,create("span",null,(position+1)+" / "+queue.length),next);content.append(pager)}
  content.append(queuePanel());
