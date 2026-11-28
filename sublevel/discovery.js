@@ -27,6 +27,82 @@ try{const raw=JSON.parse(localStorage.getItem(storeKey)||"null");if(raw)for(cons
 function persist(){try{localStorage.setItem(storeKey,JSON.stringify(state))}catch{persistent=false}}
 let dialog,content,heading,back,lastFocus,stack=[],current,queue=[],position=0,notice,pendingNav=null;
 function announce(txt){if(notice)notice.textContent=txt}
+ // Browser history is shared by discovery rooms and the native page shell.
+ // No URL changes, no browser traps; the first entry remains the normal exit.
+ const historyKey="sublevelNavigationV1",historySession=Date.now().toString(36)+Math.random().toString(36).slice(2);
+ let restoringHistory=false,closingHistory=false,nativePending=false;
+ const navNorm=s=>(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+ const readNative=()=>{
+  const nav=document.querySelector(".bottom button.active")?.dataset.navLabel||"Today";
+  const room=app.querySelector(".roomhead .roomcopy h1,.roomhead h1")?.textContent.trim()||"";
+  const selected=[...app.querySelectorAll(".roomhead ~ .tabs button,#app .tabs button")].find(b=>b.matches(".active,.on,.selected,.current,[aria-selected=true],[aria-pressed=true]"));
+  const tab=room?(app.dataset.slChartMode==="top"?"top10":app.dataset.slGenreExtra||navNorm(selected?.textContent)||"discover10"):"";
+  return {nav,room,tab,scroll:window.scrollY}
+ };
+ const stateEntry=()=>{const s=history.state?.[historyKey];return s?.session===historySession?s:null};
+ const saveEntry=(entry,replace=false)=>{
+  try{history[replace?"replaceState":"pushState"]({...history.state,[historyKey]:{session:historySession,...entry}},"");return true}catch{return false}
+ };
+ const sameNative=(a,b)=>a&&b&&a.nav===b.nav&&a.room===b.room&&a.tab===b.tab;
+ const nativeEntry=()=>({native:readNative(),depth:0});
+ const snapshot=()=>({...current,queue:[...queue],position,scroll:dialog?.scrollTop||0});
+ const saveRoom=(replace=false)=>{
+  const prev=stateEntry(),native=prev?.native||readNative(),depth=replace?(prev?.depth||1):(prev?.depth||0)+1;
+  return saveEntry({native,depth,room:snapshot(),stack:stack.map(p=>({...p,queue:[...(p.queue||[])]}))},replace)
+ };
+ const updateBeforeRoom=()=>{
+  if(restoringHistory)return;
+  if(dialog?.open&&current&&stateEntry()?.depth)saveRoom(true);
+  else saveEntry(nativeEntry(),true)
+ };
+ const frame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
+ async function waitFor(read){for(let i=0;i<40;i++){const result=read();if(result)return result;await frame()}return null}
+ async function restoreNative(route){
+  if(!route||sameNative(readNative(),route)){if(route)window.scrollTo(0,route.scroll||0);return}
+  const navButton=()=>[...document.querySelectorAll(".bottom button")].find(b=>b.dataset.navLabel===route.nav);
+  navButton()?.click();await frame();await frame();
+  if(route.room){
+   let title=()=>app.querySelector(".roomhead .roomcopy h1,.roomhead h1")?.textContent.trim();
+   if(navNorm(title())!==navNorm(route.room)){
+    const card=await waitFor(()=>[...app.querySelectorAll(".genre")].find(n=>navNorm(n.querySelector(".genre-name")?.textContent)===navNorm(route.room)));
+    card?.click();await waitFor(()=>navNorm(title())===navNorm(route.room));
+   }
+   const tab=await waitFor(()=>[...app.querySelectorAll(".tabs button")].find(b=>navNorm(b.textContent)===route.tab));
+   if(tab&&readNative().tab!==route.tab)tab.click()
+  }
+  await frame();window.scrollTo(0,route.scroll||0)
+ }
+ function goBack(){
+  if(stateEntry()?.depth){history.back();return}
+  if(stack.length){const p=stack.pop();queue=p.queue||[];position=p.position||0;render(p.mode,p.arg);dialog.scrollTop=p.scroll||0}else dialog.close()
+ }
+ function closeRooms(dest=null){
+  pendingNav=dest;const depth=stateEntry()?.depth||0;
+  if(depth){closingHistory=true;history.go(-depth)}else dialog.close()
+ }
+ window.addEventListener("popstate",async()=>{
+  const entry=stateEntry();restoringHistory=true;
+  try{
+   if(entry?.depth&&entry.room){
+    if(!dialog?.open){open(entry.room.mode);if(!dialog?.open)return}
+    stack=entry.stack||[];queue=entry.room.queue||[];position=entry.room.position||0;
+    render(entry.room.mode,entry.room.arg);dialog.scrollTop=entry.room.scroll||0
+   }else{
+    const dest=closingHistory?pendingNav:null;closingHistory=false;pendingNav=null;
+    if(dialog?.open){dialog.close();await new Promise(resolve=>setTimeout(resolve,0))}
+    await restoreNative(entry?.native);
+    if(dest){const b=[...document.querySelectorAll(".bottom button")].find(n=>n.dataset.navLabel===dest);b?.click();await frame();await frame();saveEntry(nativeEntry());window.scrollTo(0,0)}
+   }
+  }finally{restoringHistory=false}
+ });
+ // Capture only known native navigation controls, not playback, saves or form actions.
+ document.addEventListener("click",e=>{
+  if(restoringHistory||dialog?.open||nativePending||!e.target.closest?.(".bottom button[data-nav-label],#app .genre,#app .roomhead button,#app .tabs button"))return;
+  const before=readNative();saveEntry({native:before,depth:0},true);nativePending=true;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{nativePending=false;if(restoringHistory||dialog?.open)return;const after=readNative();if(!sameNative(before,after))saveEntry({native:after,depth:0})}))
+ },true);
+ saveEntry(nativeEntry(),true);
+
 
 const L=window.SUBLEVELListening,validIDs=new Set(records.map(r=>r.id)),listenKey="sublevel.listening.v1";
 let listening=L.sanitize({},validIDs);
@@ -330,7 +406,7 @@ function render(mode,arg){
  const tab=tabs.some(t=>t[0]===arg)?arg:"overview";
  titleBlock("SUBLEVEL / PERSONAL LIBRARY","My Music Journey","Your music, discoveries and producer community in one place.");
  const nav=create("nav","sl-library-tabs");nav.setAttribute("aria-label","Library sections");
- for(const [id,name] of tabs){const b=button(name,()=>{render("journey",id)},"sl-library-tab");if(id===tab)b.setAttribute("aria-current","page");nav.append(b)}content.append(nav);
+ for(const [id,name] of tabs){const b=button(name,()=>show("journey",id),"sl-library-tab");if(id===tab)b.setAttribute("aria-current","page");nav.append(b)}content.append(nav);
  const saved=state.saved.map(byId).filter(Boolean),history=state.history.map(byId).filter(Boolean);
  if(!persistent)content.append(create("p","sl-d-muted","Browser storage unavailable; changes last only for this session."));
  function profileCard(){const card=create("section","sl-library-account");card.append(create("span","sl-d-kicker","UNSIGNED / PRODUCER COMMUNITY"),create("h3",null,"Your producer profile"),create("p","sl-d-muted","Manage your community profile, submissions and feedback using your separate Unsigned account."));const actions=create("div","sl-d-actions");actions.append(link("Open community →","https://sublevel-unsigned-xvpf.onrender.com/","sl-d-button sl-d-primary"),link("Sign in","https://sublevel-unsigned-xvpf.onrender.com/login"),link("Join beta","https://sublevel-unsigned-xvpf.onrender.com/join"));card.append(actions);return card}
@@ -338,7 +414,7 @@ function render(mode,arg){
  if(tab==="overview"){
  content.append(collectionStats());const resume=resumePanel();if(resume)content.append(resume);
  const shortcuts=create("div","sl-library-shortcuts");
- for(const [id,name,count] of [["collection","Saved music",saved.length],["playlists","Playlists",listening.playlists.length],["following","Following",state.artists.length+state.labels.length],["history","Recently explored",history.length]]){const b=button("",()=>render("journey",id),"sl-library-shortcut");b.append(create("span",null,name),create("strong",null,String(count)),create("span",null,"→"));shortcuts.append(b)}content.append(shortcuts);
+ for(const [id,name,count] of [["collection","Saved music",saved.length],["playlists","Playlists",listening.playlists.length],["following","Following",state.artists.length+state.labels.length],["history","Recently explored",history.length]]){const b=button("",()=>show("journey",id),"sl-library-shortcut");b.append(create("span",null,name),create("strong",null,String(count)),create("span",null,"→"));shortcuts.append(b)}content.append(shortcuts);
  section("Recommended for you");content.append(personalized(),profileCard());
  }else if(tab==="collection"){collection()}
  else if(tab==="playlists"){section("Your playlists");content.append(playlistLibrary());const resume=resumePanel();if(resume)content.append(resume)}
@@ -400,14 +476,14 @@ file.addEventListener("change",async()=>{try{
  }
  content.append(create("footer","sl-d-footer","SUBLEVEL / INDEPENDENT MUSIC DISCOVERY"));
 }
-function startListening(id,list){if(current)stack.push({...current,queue:[...queue],position,scroll:dialog.scrollTop});queue=L.session({ids:list.filter(Boolean).map(r=>r.id)},validIDs).ids;position=queue.indexOf(id);if(position<0){queue=[id];position=0}render("listen",id)}
+function startListening(id,list){updateBeforeRoom();if(current)stack.push({...current,queue:[...queue],position,scroll:dialog.scrollTop});queue=L.session({ids:list.filter(Boolean).map(r=>r.id)},validIDs).ids;position=queue.indexOf(id);if(position<0){queue=[id];position=0}render("listen",id);if(!restoringHistory)saveRoom()}
 function move(delta){const p=position+delta;if(p<0||p>=queue.length)return;position=p;render("listen",queue[p])}
-function show(mode,arg,replace=false){if(current&&!replace)stack.push({...current,queue:[...queue],position,scroll:dialog.scrollTop});render(mode,arg)}
-function open(mode="hub"){if(!dialog){dialog=create("dialog","sl-discovery-dialog");if(typeof dialog.show!=="function"){dialog=null;return;}dialog.setAttribute("aria-labelledby","sl-discovery-heading");const bar=create("header","sl-d-bar");back=button("← Close",()=>{if(stack.length){const p=stack.pop();queue=p.queue||[];position=p.position||0;render(p.mode,p.arg);dialog.scrollTop=p.scroll||0}else dialog.close()},"sl-d-back");heading=create("strong",null,"Discover more");heading.id="sl-discovery-heading";const close=button("×",()=>dialog.close(),"sl-d-close");close.setAttribute("aria-label","Close discovery");bar.append(back,heading,close);
+function show(mode,arg,replace=false){updateBeforeRoom();if(current&&!replace)stack.push({...current,queue:[...queue],position,scroll:dialog.scrollTop});render(mode,arg);if(!restoringHistory)saveRoom(replace&&!!stateEntry()?.depth)}
+function open(mode="hub"){if(!dialog){dialog=create("dialog","sl-discovery-dialog");if(typeof dialog.show!=="function"){dialog=null;return;}dialog.setAttribute("aria-labelledby","sl-discovery-heading");const bar=create("header","sl-d-bar");back=button("← Close",goBack,"sl-d-back");heading=create("strong",null,"Discover more");heading.id="sl-discovery-heading";const close=button("×",()=>closeRooms(),"sl-d-close");close.setAttribute("aria-label","Close discovery");bar.append(back,heading,close);
  const nav=create("nav","sl-d-screen-nav");nav.setAttribute("aria-label","Discovery navigation");
- const go=name=>{pendingNav=name;dialog.close()};
+ const go=name=>closeRooms(name);
  nav.append(button("⌂ Home",()=>go("Today"),"sl-d-nav-button"),button("Explore",()=>show("hub"),"sl-d-nav-button"),button("Library",()=>show("journey"),"sl-d-nav-button"),button("Genres",()=>go("Genres"),"sl-d-nav-button"));
- bar.append(nav);content=create("main","sl-d-content");notice=create("div","sl-d-notice");notice.setAttribute("role","status");dialog.append(bar,content,notice);document.body.append(dialog);dialog.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();dialog.close()}});dialog.addEventListener("close",()=>{app.inert=false;document.querySelector(".bottom")?.removeAttribute("inert");document.body.classList.remove("sl-discovery-lock");stack=[];current=null;const dest=pendingNav;pendingNav=null;if(dest){const target=Array.from(document.querySelectorAll(".bottom button")).find(b=>b.dataset.navLabel===dest);if(target){target.click();window.scrollTo(0,0);target.focus();return}}lastFocus?.focus?.({preventScroll:true})})}
+ bar.append(nav);content=create("main","sl-d-content");notice=create("div","sl-d-notice");notice.setAttribute("role","status");dialog.append(bar,content,notice);document.body.append(dialog);dialog.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();goBack()}});dialog.addEventListener("close",()=>{app.inert=false;document.querySelector(".bottom")?.removeAttribute("inert");document.body.classList.remove("sl-discovery-lock");stack=[];current=null;const dest=pendingNav;pendingNav=null;if(dest){const target=Array.from(document.querySelectorAll(".bottom button")).find(b=>b.dataset.navLabel===dest);if(target){target.click();window.scrollTo(0,0);target.focus();return}}lastFocus?.focus?.({preventScroll:true})})}
  if(!dialog.open){lastFocus=document.activeElement;stack=[];current=null;document.body.classList.add("sl-discovery-lock");try{dialog.show();app.inert=true;document.querySelector(".bottom")?.setAttribute("inert","");back.focus()}catch{document.body.classList.remove("sl-discovery-lock");return}}show(mode)}
 function mount(){const home=app.querySelector(".night-home"),explore=app.querySelector(".xgrid");if(home&&!home.querySelector(".sl-d-entry")){const b=button("",()=>open("daily"),"sl-d-entry");const picks=daily(),artRecord=picks.find(r=>r.art&&r.artSource),photo=create("img","sl-d-dig-image");photo.alt="";photo.decoding="async";photo.src=artRecord?.art||"section-art/warehouse.jpg";photo.dataset.artKind=artRecord?"release":"scene";photo.addEventListener("error",()=>{if(photo.dataset.artKind==="release"){photo.dataset.artKind="scene";photo.src="section-art/warehouse.jpg"}else photo.hidden=true});const copy=create("span","sl-d-dig-copy");copy.append(create("span","sl-d-kicker","SUBLEVEL / DAILY DISCOVERY"),create("strong",null,"The Daily Dig"),create("small",null,picks.length+" records · "+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",timeZone:"Europe/London"})),create("span","sl-d-dig-cta","Explore today’s selection →"));b.append(photo,copy);const lead=home.querySelector(".stream-listen");if(lead)lead.after(b);else home.append(b)}
  if(home&&!home.querySelector(".sl-d-playable-entry")&&window.SUBLEVELPlayer){const count=records.filter(r=>window.SUBLEVELPlayer.available(r)).length;if(count){const b=button("Listen here · "+count+" releases →",()=>open("playable"),"sl-d-button sl-d-playable-entry");const dailyEntry=home.querySelector(".sl-d-entry");if(dailyEntry)dailyEntry.after(b);else home.append(b)}}
